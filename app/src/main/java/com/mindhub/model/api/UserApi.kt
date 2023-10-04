@@ -2,7 +2,7 @@ package com.mindhub.model.api
 
 import com.mindhub.model.entities.User
 import com.mindhub.services.Config
-import com.mindhub.services.CurrentUser
+import com.mindhub.services.UserInfo
 import io.ktor.client.call.body
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
@@ -42,7 +42,7 @@ object UserApi {
             throw Exception(response.body<ApiError>().message)
         }
 
-        CurrentUser = response.body<User>()
+        UserInfo = response.body<User>()
     }
 
     suspend fun register(params: RegisterRequest) {
@@ -56,6 +56,6 @@ object UserApi {
         }
 
         println(response.bodyAsText())
-        CurrentUser = response.body<User>()
+        UserInfo = response.body<User>()
     }
 }

@@ -38,6 +38,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.mindhub.model.entities.Badge
+import com.mindhub.model.entities.User
 import com.mindhub.services.UserInfo
 import com.mindhub.ui.theme.MindHubTheme
 import com.mindhub.view.layouts.SpacedColumn
@@ -68,7 +69,10 @@ fun EditProfile(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        SpacedColumn(spacing = 8,
+        SpacedColumn(
+            spacing = 8,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxHeight()
                 .padding(32.dp)
@@ -169,10 +173,15 @@ fun EditProfile(
 @Preview(showBackground = true)
 @Composable
 fun EditProfilePreview() {
-    UserInfo.name = "User"
-    UserInfo.username = "username"
-    UserInfo.email = "user@gmail.com"
-    UserInfo.achievement = Badge("A")
+    UserInfo = User(
+        name = "User",
+        username = "username",
+        email = "user@gmail.com",
+        xp = 0,
+        currentBadge = 0,
+        expertises = listOf(),
+        token = ""
+    )
 
     MindHubTheme {
         EditProfile(
