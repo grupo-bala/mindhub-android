@@ -41,6 +41,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.mindhub.model.entities.Badge
 import com.mindhub.model.entities.Expertise
+import com.mindhub.model.entities.User
 import com.mindhub.services.UserInfo
 import com.mindhub.ui.theme.MindHubTheme
 import com.mindhub.view.destinations.EditProfileDestination
@@ -110,14 +111,14 @@ fun Profile(
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         MeasureUnconstrainedViewWidth(viewToMeasure = {
-                            Text(text = UserInfo.name)
+                            Text(text = UserInfo!!.name)
                         }) { width ->
                             Box(
                                 modifier = Modifier
                                     .fillMaxWidth(),
                                 contentAlignment = Alignment.Center
                             ) {
-                                Text(text = UserInfo.name)
+                                Text(text = UserInfo!!.name)
                                 IconButton(
                                     onClick = { navigator.navigate(EditProfileDestination) },
                                     modifier = Modifier.padding(start = width + 32.dp)
@@ -133,7 +134,7 @@ fun Profile(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(8.dp, alignment = Alignment.CenterHorizontally)
                         ) {
-                            Text(text = "@${UserInfo.username}")
+                            Text(text = "@${UserInfo!!.username}")
 
                             Divider(
                                 modifier = Modifier
@@ -141,7 +142,7 @@ fun Profile(
                                     .width(2.dp)
                             )
 
-                            Text(text = "${UserInfo.xp} XP")
+                            Text(text = "${UserInfo!!.xp} XP")
 
                             Divider(
                                 modifier = Modifier
@@ -149,7 +150,7 @@ fun Profile(
                                     .width(2.dp)
                             )
 
-                            Text(text = UserInfo.achievement!!.title)
+                            Text(text = UserInfo!!.currentBadge.title)
                         }
                     }
                 }
@@ -161,7 +162,7 @@ fun Profile(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally)
                 ) {
-                    for (expertise in UserInfo.expertises!!) {
+                    for (expertise in UserInfo!!.expertises) {
                         InputChip(
                             selected = false,
                             onClick = {},
@@ -194,11 +195,15 @@ fun Profile(
 @Preview(showBackground = true)
 @Composable
 fun ProfilePreview() {
-    UserInfo.name = "User"
-    UserInfo.username = "username"
-    UserInfo.email = "user@gmail.com"
-    UserInfo.achievement = Badge("aprendiz")
-    UserInfo.expertises = listOf(Expertise("Matemática"), Expertise("Física"), Expertise("Biologia"))
+    UserInfo = User(
+        name = "User",
+        username = "username",
+        email = "user@gmail.com",
+        xp = 727,
+        currentBadge = Badge("Aprendiz"),
+        expertises = listOf(Expertise("Matemática"), Expertise("Geografia"), Expertise("Química")),
+        token = ""
+    )
 
     MindHubTheme {
         Profile(

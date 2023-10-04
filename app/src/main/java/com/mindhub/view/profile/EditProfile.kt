@@ -38,6 +38,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.mindhub.model.entities.Badge
+import com.mindhub.model.entities.Expertise
 import com.mindhub.model.entities.User
 import com.mindhub.services.UserInfo
 import com.mindhub.ui.theme.MindHubTheme
@@ -131,7 +132,7 @@ fun EditProfile(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     OutlinedTextField(
-                        value = viewModel.achievement!!.title,
+                        value = viewModel.badge.title,
                         readOnly = true,
                         label = { Text(text = "Conquista") },
                         onValueChange = {},
@@ -142,8 +143,8 @@ fun EditProfile(
                 }
 
                 DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-                    for (achievement in viewModel.achievements) {
-                        DropdownMenuItem(text = { Text(achievement.title) }, onClick = { viewModel.achievement = achievement })
+                    for (badge in viewModel.badges) {
+                        DropdownMenuItem(text = { Text(badge.title) }, onClick = { viewModel.badge = badge })
                     }
                 }
             }
@@ -177,9 +178,9 @@ fun EditProfilePreview() {
         name = "User",
         username = "username",
         email = "user@gmail.com",
-        xp = 0,
-        currentBadge = 0,
-        expertises = listOf(),
+        xp = 727,
+        currentBadge = Badge("Aprendiz"),
+        expertises = listOf(Expertise("Matemática"), Expertise("Geografia"), Expertise("Química")),
         token = ""
     )
 
