@@ -8,10 +8,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mindhub.model.api.ExpertiseApi
 import com.mindhub.model.api.RegisterRequest
-import com.mindhub.model.api.RegisterResponse
 import com.mindhub.model.api.UserApi
 import com.mindhub.model.entities.Expertise
-import com.mindhub.model.entities.User
 import kotlinx.coroutines.launch
 
 class ExpertiseViewModel() : ViewModel() {
@@ -46,16 +44,18 @@ class ExpertiseViewModel() : ViewModel() {
         }
     }
     fun register(
-        user: User,
+        name: String,
+        email: String,
+        username: String,
         password: String,
-        onSuccess: (RegisterResponse) -> Unit,
+        onSuccess: () -> Unit,
         onFailure: (String?) -> Unit
     ) {
         viewModelScope.launch {
             try {
                 isLoading = true
-                val res = UserApi.register(RegisterRequest(user.name, user.email, user.username, password, selectedExpertises))
-                onSuccess(res)
+                val res = UserApi.register(RegisterRequest(name, email, username, password, selectedExpertises))
+                onSuccess()
             } catch (e: Exception) {
                 onFailure(e.message)
             }

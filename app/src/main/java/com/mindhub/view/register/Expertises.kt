@@ -27,7 +27,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.mindhub.model.entities.User
 import com.mindhub.services.ErrorParser
 import com.mindhub.ui.theme.MindHubTheme
 import com.mindhub.view.composables.Suspended
@@ -42,7 +41,9 @@ import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 @Destination
 @Composable
 fun Expertises(
-    user: User,
+    name: String,
+    email: String,
+    username: String,
     password: String,
     navigator: DestinationsNavigator
 ) {
@@ -105,7 +106,9 @@ fun Expertises(
             Button(
                 onClick = {
                     viewModel.register(
-                        user,
+                        name,
+                        email,
+                        username,
                         password,
                         onSuccess = { navigator.navigate(AskDestination) },
                         onFailure = { viewModel.feedback = ErrorParser.from(it) }
@@ -133,7 +136,9 @@ fun Expertises(
 fun ExpertisePreview() {
     MindHubTheme {
         Expertises(
-            User("", "", ""),
+            "",
+            "",
+            "",
             "",
             EmptyDestinationsNavigator
         )

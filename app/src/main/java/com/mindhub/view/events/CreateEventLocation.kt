@@ -47,7 +47,10 @@ import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 @Destination
 @Composable
 fun CreateEventLocation(
-    navigator: DestinationsNavigator
+    navigator: DestinationsNavigator,
+    title: String,
+    content: String,
+    timestamp: String,
 ) {
     Surface(
         modifier = Modifier
@@ -136,6 +139,6 @@ fun CreateEventLocation(
 @Composable
 fun CreateEventLocationPreview() {
     MindHubTheme {
-        CreateEventLocation(navigator = EmptyDestinationsNavigator)
+        CreateEventLocation(navigator = EmptyDestinationsNavigator, "", "", "")
     }
 }

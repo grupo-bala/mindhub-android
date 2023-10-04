@@ -209,8 +209,6 @@ fun CreateEventInfo(
                     readOnly = true,
                     interactionSource = timeInteraction
                 )
-
-
             }
         }
     }

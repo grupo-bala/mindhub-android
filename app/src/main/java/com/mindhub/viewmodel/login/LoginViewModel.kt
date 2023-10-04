@@ -6,7 +6,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mindhub.model.api.LoginRequest
-import com.mindhub.model.api.LoginResponse
 import com.mindhub.model.api.UserApi
 import kotlinx.coroutines.launch
 
@@ -16,13 +15,13 @@ class LoginViewModel : ViewModel() {
     var feedback by mutableStateOf("")
     var isLoading by mutableStateOf(false)
 
-    fun login(onSuccess: (LoginResponse) -> Unit, onFailure: (String?) -> Unit) {
+    fun login(onSuccess: () -> Unit, onFailure: (String?) -> Unit) {
         viewModelScope.launch {
             try {
                 isLoading = true
                 feedback = ""
-                val res = UserApi.login(LoginRequest(email, password))
-                onSuccess(res)
+                UserApi.login(LoginRequest(email, password))
+                onSuccess()
             } catch (e: Exception) {
                 onFailure(e.message)
             }

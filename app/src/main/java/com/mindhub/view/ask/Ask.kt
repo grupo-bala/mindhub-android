@@ -7,6 +7,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.mindhub.services.CurrentUser
 import com.ramcosta.composedestinations.annotation.Destination
 
 @Destination
@@ -17,7 +18,7 @@ fun Ask() {
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            Text(text = "Placeholder")
+            Text(text = CurrentUser!!.username)
         }
     }
 }

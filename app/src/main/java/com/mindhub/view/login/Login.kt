@@ -97,7 +97,10 @@ fun Login(
                         onSuccess = {
                             navigator.navigate(AskDestination)
                         },
-                        onFailure = { viewModel.feedback = ErrorParser.from(it) }
+                        onFailure = {
+                            println(it)
+                            viewModel.feedback = ErrorParser.from(it)
+                        }
                     )
                 },
                 modifier = Modifier.fillMaxWidth()

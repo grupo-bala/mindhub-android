@@ -1,20 +1,23 @@
 package com.mindhub.model.api
 
+import com.mindhub.model.entities.User
 import com.mindhub.services.Config
+import com.mindhub.services.CurrentUser
 import io.ktor.client.call.body
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.HttpResponse
+import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class LoginRequest(val username: String, val password: String)
-
-@Serializable
-data class LoginResponse(val token: String)
+data class LoginRequest(
+    val username: String,
+    val password: String
+)
 
 @Serializable
 data class RegisterRequest(
@@ -29,7 +32,7 @@ data class RegisterRequest(
 data class RegisterResponse(val token: String)
 
 object UserApi {
-    suspend fun login(params: LoginRequest): LoginResponse {
+    suspend fun login(params: LoginRequest) {
         val response: HttpResponse = Api.post("${Config.API_PREFIX}/auth/login") {
             contentType(ContentType.Application.Json)
             setBody(params)
@@ -39,10 +42,10 @@ object UserApi {
             throw Exception(response.body<ApiError>().message)
         }
 
-        return response.body()
+        CurrentUser = response.body<User>()
     }
 
-    suspend fun register(params: RegisterRequest): RegisterResponse {
+    suspend fun register(params: RegisterRequest) {
         val response: HttpResponse = Api.post("${Config.API_PREFIX}/user") {
             contentType(ContentType.Application.Json)
             setBody(params)
@@ -52,6 +55,7 @@ object UserApi {
             throw Exception(response.body<ApiError>().message)
         }
 
-        return response.body()
+        println(response.bodyAsText())
+        CurrentUser = response.body<User>()
     }
 }

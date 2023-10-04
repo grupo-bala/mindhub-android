@@ -24,7 +24,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.mindhub.model.entities.User
 import com.mindhub.ui.theme.MindHubTheme
 import com.mindhub.view.destinations.ExpertisesDestination
 import com.mindhub.view.destinations.LoginDestination
@@ -114,7 +113,9 @@ fun Register(
                 onClick = {
                     navigator.navigate(
                         ExpertisesDestination(
-                            user = User(viewModel.name, viewModel.email, viewModel.username),
+                            name = viewModel.name,
+                            email = viewModel.email,
+                            username = viewModel.username,
                             password = viewModel.password
                         )
                     )
