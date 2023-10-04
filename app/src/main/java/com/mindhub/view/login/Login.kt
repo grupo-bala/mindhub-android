@@ -51,6 +51,8 @@ fun Login(
     ) {
         SpacedColumn(
             spacing = 8,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxHeight()
                 .padding(48.dp)
