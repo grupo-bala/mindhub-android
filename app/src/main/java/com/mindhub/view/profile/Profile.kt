@@ -44,28 +44,12 @@ import com.mindhub.model.entities.Expertise
 import com.mindhub.model.entities.User
 import com.mindhub.services.UserInfo
 import com.mindhub.ui.theme.MindHubTheme
+import com.mindhub.view.composables.MeasureViewWidth
 import com.mindhub.view.destinations.EditProfileDestination
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 
-@Composable
-fun MeasureUnconstrainedViewWidth(
-    viewToMeasure: @Composable () -> Unit,
-    content: @Composable (measuredWidth: Dp) -> Unit,
-) {
-    SubcomposeLayout() { constraints ->
-        val measuredWidth = subcompose("viewToMeasure", viewToMeasure)[0]
-            .measure(Constraints()).width.toDp()
-
-        val contentPlaceable = subcompose("content") {
-            content(measuredWidth)
-        }[0].measure(constraints)
-        layout(contentPlaceable.width, contentPlaceable.height) {
-            contentPlaceable.place(0, 0)
-        }
-    }
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Destination
@@ -110,7 +94,7 @@ fun Profile(
                     Column(
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        MeasureUnconstrainedViewWidth(viewToMeasure = {
+                        MeasureViewWidth(viewToMeasure = {
                             Text(text = UserInfo!!.name)
                         }) { width ->
                             Box(
@@ -150,7 +134,7 @@ fun Profile(
                                     .width(2.dp)
                             )
 
-                            Text(text = UserInfo!!.currentBadge.title)
+                            Text(text = UserInfo!!.currentBadge)
                         }
                     }
                 }
@@ -200,7 +184,7 @@ fun ProfilePreview() {
         username = "username",
         email = "user@gmail.com",
         xp = 727,
-        currentBadge = Badge("Aprendiz"),
+        currentBadge = "Aprendiz",
         expertises = listOf(Expertise("Matemática"), Expertise("Geografia"), Expertise("Química")),
         token = ""
     )
