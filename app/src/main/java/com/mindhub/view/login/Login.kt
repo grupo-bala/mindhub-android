@@ -30,6 +30,7 @@ import com.mindhub.services.ErrorParser
 import com.mindhub.ui.theme.MindHubTheme
 import com.mindhub.view.composables.Suspended
 import com.mindhub.view.destinations.AskDestination
+import com.mindhub.view.destinations.ProfileDestination
 import com.mindhub.view.destinations.RegisterDestination
 import com.mindhub.view.layouts.SpacedColumn
 import com.mindhub.viewmodel.login.LoginViewModel
@@ -95,7 +96,7 @@ fun Login(
                 onClick = {
                     viewModel.login(
                         onSuccess = {
-                            navigator.navigate(AskDestination)
+                            navigator.navigate(ProfileDestination)
                         },
                         onFailure = {
                             println(it)
