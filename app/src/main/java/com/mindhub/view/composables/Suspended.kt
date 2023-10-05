@@ -1,9 +1,13 @@
 package com.mindhub.view.composables
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
@@ -18,11 +22,17 @@ fun Suspended(
     content: @Composable () -> Unit,
 ) {
     if (isLoading) {
-        CircularProgressIndicator(
-            color = color,
-            strokeWidth = strokeWidth,
-            modifier = Modifier.size(loadingSize)
-        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            CircularProgressIndicator(
+                color = color,
+                strokeWidth = strokeWidth,
+                modifier = Modifier.size(loadingSize)
+            )
+        }
     } else {
         content()
     }
