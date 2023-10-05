@@ -31,6 +31,7 @@ import com.mindhub.services.ErrorParser
 import com.mindhub.ui.theme.MindHubTheme
 import com.mindhub.view.composables.Suspended
 import com.mindhub.view.destinations.AskDestination
+import com.mindhub.view.destinations.ProfileDestination
 import com.mindhub.view.layouts.SpacedColumn
 import com.mindhub.viewmodel.register.ExpertiseViewModel
 import com.ramcosta.composedestinations.annotation.Destination
@@ -110,7 +111,7 @@ fun Expertises(
                         email,
                         username,
                         password,
-                        onSuccess = { navigator.navigate(AskDestination) },
+                        onSuccess = { navigator.navigate(ProfileDestination) },
                         onFailure = { viewModel.feedback = ErrorParser.from(it) }
                     )
                 },
