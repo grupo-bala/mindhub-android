@@ -8,7 +8,7 @@ data class User(
     var email: String,
     var username: String,
     var xp: Int,
-    var currentBadge: Badge,
+    var currentBadge: String,
     var expertises: List<Expertise>,
     var token: String
 )
