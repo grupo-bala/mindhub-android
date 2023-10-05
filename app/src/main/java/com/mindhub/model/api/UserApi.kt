@@ -1,9 +1,12 @@
 package com.mindhub.model.api
 
+import com.mindhub.model.entities.Expertise
 import com.mindhub.model.entities.User
 import com.mindhub.services.Config
 import com.mindhub.services.UserInfo
 import io.ktor.client.call.body
+import io.ktor.client.request.headers
+import io.ktor.client.request.patch
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.HttpResponse
@@ -26,6 +29,14 @@ data class RegisterRequest(
     val username: String,
     val password: String,
     val expertises: List<String>
+)
+
+@Serializable
+data class UpdateRequest(
+    val name: String,
+    val email: String,
+    val expertises: List<Expertise>,
+// TODO:    val badge: String
 )
 
 @Serializable
@@ -57,5 +68,21 @@ object UserApi {
 
         println(response.bodyAsText())
         UserInfo = response.body<User>()
+    }
+
+    suspend fun update(params: UpdateRequest) {
+        println("ENVIANDO")
+        println(params)
+        println("name: ${UserInfo!!.username}")
+
+        val response: HttpResponse = Api.patch("${Config.API_PREFIX}/user/${UserInfo!!.username}") {
+            contentType(ContentType.Application.Json)
+            headers {
+                append("Authorization", "Bearer ${UserInfo!!.token}")
+            }
+            setBody(params)
+        }
+
+        println("STATUS: ${response.status}")
     }
 }
