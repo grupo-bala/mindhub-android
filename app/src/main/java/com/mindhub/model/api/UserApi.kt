@@ -42,8 +42,14 @@ data class UpdateRequest(
 @Serializable
 data class RegisterResponse(val token: String)
 
-object UserApi {
-    suspend fun login(params: LoginRequest) {
+interface UserProvider {
+    suspend fun login(params: LoginRequest)
+    suspend fun register(params: RegisterRequest)
+    suspend fun update(params: UpdateRequest)
+}
+
+object UserApi : UserProvider {
+    override suspend fun login(params: LoginRequest) {
         val response: HttpResponse = Api.post("${Config.API_PREFIX}/auth/login") {
             contentType(ContentType.Application.Json)
             setBody(params)
@@ -56,7 +62,7 @@ object UserApi {
         UserInfo = response.body<User>()
     }
 
-    suspend fun register(params: RegisterRequest) {
+    override suspend fun register(params: RegisterRequest) {
         val response: HttpResponse = Api.post("${Config.API_PREFIX}/user") {
             contentType(ContentType.Application.Json)
             setBody(params)
@@ -70,7 +76,7 @@ object UserApi {
         UserInfo = response.body<User>()
     }
 
-    suspend fun update(params: UpdateRequest) {
+    override suspend fun update(params: UpdateRequest) {
         println("ENVIANDO")
         println(params)
         println("name: ${UserInfo!!.username}")
@@ -85,4 +91,42 @@ object UserApi {
 
         println("STATUS: ${response.status}")
     }
+}
+
+object UserFakeApi : UserProvider {
+    private val users = mutableListOf<User>()
+    override suspend fun login(params: LoginRequest) {
+        UserInfo = users.find { it.email == params.username && params.password == "123" }
+            ?: throw Exception()
+    }
+
+    override suspend fun register(params: RegisterRequest) {
+        if (users.find { it.username == params.username } != null) {
+            throw Exception()
+        }
+
+        users.add(
+            User(
+                name = params.name,
+                email = params.email,
+                username = params.username,
+                xp = 0,
+                currentBadge = "",
+                expertises = listOf(),
+                token = ""
+            )
+        )
+    }
+
+    override suspend fun update(params: UpdateRequest) {
+        val user = users.find { it.username == UserInfo!!.username }
+            ?: throw Exception()
+
+        user.name = params.name
+        user.email = params.email
+        user.expertises = params.expertises
+
+        UserInfo = user
+    }
+
 }

@@ -10,8 +10,14 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class GetAllResponse(val expertises: List<Expertise>)
-object ExpertiseApi {
-    suspend fun getExpertise(title: String): Expertise {
+
+interface ExpertiseProvider {
+    suspend fun getExpertise(title: String): Expertise
+    suspend fun getAllExpertises(): List<Expertise>
+}
+
+object ExpertiseApi : ExpertiseProvider {
+    override suspend fun getExpertise(title: String): Expertise {
         val response: HttpResponse = Api.get("${Config.API_PREFIX}/expertise/$title")
 
         if (response.status != HttpStatusCode.OK) {
@@ -21,7 +27,7 @@ object ExpertiseApi {
         return response.body()
     }
 
-    suspend fun getAllExpertises(): List<Expertise> {
+    override suspend fun getAllExpertises(): List<Expertise> {
         val response: HttpResponse = Api.get("${Config.API_PREFIX}/expertise")
 
         if (response.status != HttpStatusCode.OK) {
@@ -29,5 +35,34 @@ object ExpertiseApi {
         }
 
         return response.body<GetAllResponse>().expertises
+    }
+}
+
+object ExpertiseFakeApi : ExpertiseProvider {
+    private val expertises = listOf(
+        Expertise("Matemática"),
+        Expertise("Português"),
+        Expertise("Ciências"),
+        Expertise("História"),
+        Expertise("Geografia"),
+        Expertise("Inglês"),
+        Expertise("Física"),
+        Expertise("Química"),
+        Expertise("Educação Física"),
+        Expertise("Biologia"),
+        Expertise("Filosofia"),
+        Expertise("Sociologia"),
+        Expertise("Artes"),
+        Expertise("Música"),
+        Expertise("Línguas Estrangeiras"),
+        Expertise("Programação"),
+        Expertise("Robótica")
+    )
+    override suspend fun getExpertise(title: String): Expertise {
+        return expertises.find { it.title == title } ?: throw Exception()
+    }
+
+    override suspend fun getAllExpertises(): List<Expertise> {
+        return expertises
     }
 }
