@@ -96,7 +96,7 @@ object UserFakeApi : UserProvider {
                 email = "admin@admin.com",
                 username = "admin",
                 xp = 0,
-                currentBadge = "",
+                currentBadge = Badge("Aprendiz"),
                 expertises = listOf(
                     Expertise("Matemática"),
                     Expertise("Física"),
