@@ -1,5 +1,6 @@
 package com.mindhub.model.api
 
+import com.mindhub.model.entities.Badge
 import com.mindhub.model.entities.Expertise
 import com.mindhub.model.entities.User
 import com.mindhub.services.Config
@@ -36,7 +37,7 @@ data class UpdateRequest(
     val name: String,
     val email: String,
     val expertises: List<Expertise>,
-// TODO:    val badge: String
+    val badge: Badge
 )
 
 @Serializable
@@ -77,10 +78,6 @@ object UserApi : UserProvider {
     }
 
     override suspend fun update(params: UpdateRequest) {
-        println("ENVIANDO")
-        println(params)
-        println("name: ${UserInfo!!.username}")
-
         val response: HttpResponse = Api.patch("${Config.API_PREFIX}/user/${UserInfo!!.username}") {
             contentType(ContentType.Application.Json)
             headers {
@@ -88,8 +85,6 @@ object UserApi : UserProvider {
             }
             setBody(params)
         }
-
-        println("STATUS: ${response.status}")
     }
 }
 
@@ -127,7 +122,7 @@ object UserFakeApi : UserProvider {
             email = params.email,
             username = params.username,
             xp = 0,
-            currentBadge = "",
+            currentBadge = Badge("Aprendiz"),
             expertises = params.expertises.map { Expertise(it) },
             token = ""
         )
@@ -143,6 +138,7 @@ object UserFakeApi : UserProvider {
         user.name = params.name
         user.email = params.email
         user.expertises = params.expertises
+        user.currentBadge = params.badge
 
         UserInfo = user
     }
