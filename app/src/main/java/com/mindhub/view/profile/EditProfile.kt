@@ -1,6 +1,5 @@
 package com.mindhub.view.profile
 
-import android.graphics.Paint.Align
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
@@ -32,7 +31,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -58,6 +56,8 @@ import com.mindhub.services.UserInfo
 import com.mindhub.ui.theme.MindHubTheme
 import com.mindhub.view.composables.Suspended
 import com.mindhub.view.layouts.SpacedColumn
+import com.mindhub.viewmodel.badge.BadgeViewModel
+import com.mindhub.viewmodel.expertise.ExpertiseViewModel
 import com.mindhub.viewmodel.profile.EditProfileViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -69,30 +69,30 @@ import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 fun EditProfile(
     navigator: DestinationsNavigator,
 ) {
-    val viewModel: EditProfileViewModel = viewModel()
-    var hasFailure by remember {
-        mutableStateOf(false)
-    }
-    var isMenuExpanded by remember {
+    val editProfileViewModel: EditProfileViewModel = viewModel()
+    val expertiseViewModel: ExpertiseViewModel = viewModel()
+    val badgeViewModel: BadgeViewModel = viewModel()
+
+    var isBadgesMenuExpanded by remember {
         mutableStateOf(false)
     }
     var isExpertisesMenuExpanded by remember {
         mutableStateOf(false)
     }
 
-    val badgesInteraction = remember { MutableInteractionSource() }.also {
+    val badgesMenuInteraction = remember { MutableInteractionSource() }.also {
         if (it.collectIsPressedAsState().value) {
-            isMenuExpanded = true
+            isBadgesMenuExpanded = true
         }
     }
-    val expertisesInteraction = remember { MutableInteractionSource() }.also {
+    val expertisesMenuInteraction = remember { MutableInteractionSource() }.also {
         if (it.collectIsPressedAsState().value) {
             isExpertisesMenuExpanded = true
         }
     }
 
-    viewModel.loadExpertises()
-    viewModel.loadBadges()
+    expertiseViewModel.loadExpertises()
+    badgeViewModel.loadBadges()
 
     Surface(
         modifier = Modifier
@@ -122,20 +122,20 @@ fun EditProfile(
             Spacer(modifier = Modifier.height(32.dp))
 
             OutlinedTextField(
-                value = viewModel.name,
+                value = editProfileViewModel.name,
                 label = { Text(text = "Nome") },
                 placeholder = { Text(text = "Digite o seu nome") },
-                onValueChange = { viewModel.name = it },
+                onValueChange = { editProfileViewModel.name = it },
                 modifier = Modifier.fillMaxWidth()
             )
 
             Spacer(modifier = Modifier.height(8.dp))
 
             OutlinedTextField(
-                value = viewModel.email,
+                value = editProfileViewModel.email,
                 label = { Text(text = "Email") },
                 placeholder = { Text(text = "Digite o seu email") },
-                onValueChange = { viewModel.email = it },
+                onValueChange = { editProfileViewModel.email = it },
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -151,21 +151,22 @@ fun EditProfile(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     OutlinedTextField(
-                        value = viewModel.badge,
+                        value = badgeViewModel.selectedBadge.title,
                         readOnly = true,
                         label = { Text(text = "Conquista") },
                         onValueChange = {},
                         trailingIcon = { Icon(imageVector = Icons.Default.ArrowDropDown, contentDescription = null) },
-                        interactionSource = badgesInteraction,
+                        interactionSource = badgesMenuInteraction,
                         modifier = Modifier.fillMaxWidth()
                     )
                 }
 
-                DropdownMenu(expanded = isMenuExpanded, onDismissRequest = { isMenuExpanded = false }) {
-                    for (badge in viewModel.badges) {
-                        DropdownMenuItem(text = { Text(badge) }, onClick = {
-                            viewModel.badge = badge
-                            isMenuExpanded = false
+                DropdownMenu(expanded = isBadgesMenuExpanded, onDismissRequest = { isBadgesMenuExpanded = false }) {
+                    for (badge in badgeViewModel.unlockedBadges) {
+                        DropdownMenuItem(text = { Text(text = badge.title) }, onClick = {
+                            badgeViewModel.selectedBadge = badge
+
+                            isBadgesMenuExpanded = false
                         })
                     }
                 }
@@ -174,7 +175,7 @@ fun EditProfile(
             Spacer(modifier = Modifier.height(8.dp))
 
             OutlinedTextField(
-                value = viewModel.selectedExpertises.fold("") { acc, curr ->
+                value = expertiseViewModel.selectedExpertises.fold("") { acc, curr ->
                     if (acc.isEmpty()) {
                         curr.title
                     } else {
@@ -185,7 +186,7 @@ fun EditProfile(
                 label = { Text(text = "Expertises") },
                 onValueChange = {},
                 trailingIcon = { Icon(imageVector = Icons.Default.Create, contentDescription = null) },
-                interactionSource = expertisesInteraction,
+                interactionSource = expertisesMenuInteraction,
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -197,7 +198,7 @@ fun EditProfile(
                     onDismissRequest = { isExpertisesMenuExpanded = false }
                 ) {
                     Suspended(
-                        isLoading = viewModel.expertises.size < 1,
+                        isLoading = expertiseViewModel.expertises.size < 1,
                         loadingSize = 64.dp,
                         strokeWidth = 4.dp,
                         color = MaterialTheme.colorScheme.onBackground
@@ -215,10 +216,10 @@ fun EditProfile(
                                     vertical = 32.dp
                                 ),
                         ) {
-                            viewModel.expertises.forEach {
+                            expertiseViewModel.expertises.forEach {
                                 InputChip(
-                                    selected = viewModel.isSelected(it.title),
-                                    onClick = { viewModel.toggleExpertise(it) },
+                                    selected = expertiseViewModel.isSelected(it),
+                                    onClick = { expertiseViewModel.toggleExpertise(it) },
                                     label = { Text(text = it.title) },
                                 )
                             }
@@ -227,31 +228,18 @@ fun EditProfile(
                 }
             }
 
-            if (!hasFailure) {
-                Spacer(modifier = Modifier.height(32.dp))
-            } else {
-                Text(
-                    text = "Algo de errado aconteceu!",
-                    color = MaterialTheme.colorScheme.error,
-                    fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(vertical = 8.dp)
-                )
-            }
+            Spacer(modifier = Modifier.height(32.dp))
 
             Button(
                 onClick = {
-                    viewModel.update(
+                    editProfileViewModel.update(
+                        badgeViewModel.selectedBadge,
+                        expertiseViewModel.selectedExpertises,
                         onSuccess = {
-                            UserInfo!!.email = viewModel.email
-                            UserInfo!!.name = viewModel.name
-                            UserInfo!!.currentBadge = viewModel.badge
-                            UserInfo!!.expertises = viewModel.selectedExpertises
-
                             navigator.popBackStack()
                         },
                         onFailure = {
-                            hasFailure = true
+                            TODO("No errors are defined in the fake api")
                         }
                     )
                 },
@@ -278,7 +266,7 @@ fun EditProfilePreview() {
         username = "username",
         email = "user@gmail.com",
         xp = 727,
-        currentBadge ="Aprendiz",
+        currentBadge = Badge("Aprendiz"),
         expertises = listOf(Expertise("Matemática"), Expertise("Geografia"), Expertise("Química")),
         token = ""
     )
