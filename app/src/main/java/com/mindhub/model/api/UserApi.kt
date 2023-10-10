@@ -18,7 +18,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class LoginRequest(
-    val username: String,
+    val email: String,
     val password: String
 )
 
@@ -94,9 +94,26 @@ object UserApi : UserProvider {
 }
 
 object UserFakeApi : UserProvider {
-    private val users = mutableListOf<User>()
+    private val users = mutableListOf<User>().also {
+        it.add(
+            User(
+                name = "Administrador",
+                email = "admin@admin.com",
+                username = "admin",
+                xp = 0,
+                currentBadge = "",
+                expertises = listOf(
+                    Expertise("Matemática"),
+                    Expertise("Física"),
+                    Expertise("Inglês")
+                ),
+                token = ""
+            )
+        )
+    }
+
     override suspend fun login(params: LoginRequest) {
-        UserInfo = users.find { it.email == params.username && params.password == "123" }
+        UserInfo = users.find { it.email == params.email && params.password == "123" }
             ?: throw Exception()
     }
 
@@ -105,17 +122,18 @@ object UserFakeApi : UserProvider {
             throw Exception()
         }
 
-        users.add(
-            User(
-                name = params.name,
-                email = params.email,
-                username = params.username,
-                xp = 0,
-                currentBadge = "",
-                expertises = listOf(),
-                token = ""
-            )
+        val user = User(
+            name = params.name,
+            email = params.email,
+            username = params.username,
+            xp = 0,
+            currentBadge = "",
+            expertises = params.expertises.map { Expertise(it) },
+            token = ""
         )
+
+        users.add(user)
+        UserInfo = user
     }
 
     override suspend fun update(params: UpdateRequest) {

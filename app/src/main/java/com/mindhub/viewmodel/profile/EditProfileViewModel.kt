@@ -8,8 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mindhub.model.api.ExpertiseApi
 import com.mindhub.model.api.UpdateRequest
-import com.mindhub.model.api.UserApi
-import com.mindhub.model.entities.Badge
+import com.mindhub.model.api.UserFakeApi
 import com.mindhub.model.entities.Expertise
 import com.mindhub.services.UserInfo
 import kotlinx.coroutines.launch
@@ -75,7 +74,7 @@ class EditProfileViewModel() : ViewModel() {
             try {
                 isLoading = true
 
-                val res = UserApi.update(UpdateRequest(name, email, selectedExpertises))
+                val res = UserFakeApi.update(UpdateRequest(name, email, selectedExpertises))
 
                 onSuccess()
             } catch (e: Exception) {

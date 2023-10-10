@@ -6,9 +6,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mindhub.model.api.ExpertiseApi
+import com.mindhub.model.api.ExpertiseFakeApi
 import com.mindhub.model.api.RegisterRequest
-import com.mindhub.model.api.UserApi
+import com.mindhub.model.api.UserFakeApi
 import com.mindhub.model.entities.Expertise
 import kotlinx.coroutines.launch
 
@@ -38,7 +38,7 @@ class ExpertiseViewModel() : ViewModel() {
         if (!isExpertisesLoaded) {
             viewModelScope.launch {
                 try {
-                    expertises.addAll(ExpertiseApi.getAllExpertises())
+                    expertises.addAll(ExpertiseFakeApi.getAllExpertises())
                 } catch (_: Exception) { }
             }
         }
@@ -54,7 +54,7 @@ class ExpertiseViewModel() : ViewModel() {
         viewModelScope.launch {
             try {
                 isLoading = true
-                val res = UserApi.register(RegisterRequest(name, email, username, password, selectedExpertises))
+                val res = UserFakeApi.register(RegisterRequest(name, email, username, password, selectedExpertises))
                 onSuccess()
             } catch (e: Exception) {
                 onFailure(e.message)

@@ -58,6 +58,7 @@ object ExpertiseFakeApi : ExpertiseProvider {
         Expertise("Programação"),
         Expertise("Robótica")
     )
+
     override suspend fun getExpertise(title: String): Expertise {
         return expertises.find { it.title == title } ?: throw Exception()
     }
