@@ -29,7 +29,7 @@ data class RegisterRequest(
     val email: String,
     val username: String,
     val password: String,
-    val expertises: List<String>
+    val expertises: List<Expertise>
 )
 
 @Serializable
@@ -123,7 +123,7 @@ object UserFakeApi : UserProvider {
             username = params.username,
             xp = 0,
             currentBadge = Badge("Aprendiz"),
-            expertises = params.expertises.map { Expertise(it) },
+            expertises = params.expertises.map { it },
             token = ""
         )
 
