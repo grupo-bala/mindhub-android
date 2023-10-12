@@ -16,7 +16,7 @@ class ExpertiseViewModel() : ViewModel() {
 
     fun loadExpertises() {
         if (!isExpertisesLoaded) {
-            for (expertise in UserInfo!!.expertises) {
+            for (expertise in UserInfo?.expertises ?: listOf()) {
                 selectedExpertises.add(expertise)
             }
 
