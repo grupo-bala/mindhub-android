@@ -25,6 +25,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.InputChip
 import androidx.compose.material3.MaterialTheme
@@ -141,33 +142,39 @@ fun EditProfile(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            Column(modifier = Modifier
-                .fillMaxWidth()
+            ExposedDropdownMenuBox(
+                expanded = isBadgesMenuExpanded,
+                onExpandedChange = { }
             ) {
-                Row(
+                OutlinedTextField(
+                    value = badgeViewModel.selectedBadge.title,
+                    readOnly = true,
+                    label = { Text(text = "Conquista") },
+                    onValueChange = {},
+                    trailingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.ArrowDropDown,
+                            contentDescription = null
+                        )
+                    },
+                    interactionSource = badgesMenuInteraction,
+                    modifier = Modifier.fillMaxWidth().menuAnchor()
+                )
+
+                DropdownMenu(
+                    expanded = isBadgesMenuExpanded,
+                    onDismissRequest = { isBadgesMenuExpanded = false },
                     modifier = Modifier
-                        .fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
+                        .exposedDropdownSize(matchTextFieldWidth = true)
                 ) {
-                    OutlinedTextField(
-                        value = badgeViewModel.selectedBadge.title,
-                        readOnly = true,
-                        label = { Text(text = "Conquista") },
-                        onValueChange = {},
-                        trailingIcon = { Icon(imageVector = Icons.Default.ArrowDropDown, contentDescription = null) },
-                        interactionSource = badgesMenuInteraction,
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                }
-
-                DropdownMenu(expanded = isBadgesMenuExpanded, onDismissRequest = { isBadgesMenuExpanded = false }) {
                     for (badge in badgeViewModel.unlockedBadges) {
-                        DropdownMenuItem(text = { Text(text = badge.title) }, onClick = {
-                            badgeViewModel.selectedBadge = badge
-
-                            isBadgesMenuExpanded = false
-                        })
+                        DropdownMenuItem(
+                            text = { Text(badge.title) },
+                            onClick = {
+                                badgeViewModel.selectedBadge = badge
+                                isBadgesMenuExpanded = false
+                            }
+                        )
                     }
                 }
             }
