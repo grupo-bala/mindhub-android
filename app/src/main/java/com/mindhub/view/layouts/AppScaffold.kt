@@ -20,19 +20,27 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.mindhub.ui.theme.MindHubTheme
 import com.mindhub.view.composables.NavBar
 import com.mindhub.view.composables.TopBar
+import com.mindhub.view.destinations.AskDestination
+import com.mindhub.view.destinations.ProfileDestination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
+import com.ramcosta.composedestinations.spec.Direction
 
-enum class Views(val icon: ImageVector) {
-    ASK(Icons.Filled.Email),
-    FEED(Icons.Filled.Info),
-    MAP(Icons.Filled.Place),
-    USER(Icons.Filled.AccountCircle)
+enum class Views(val icon: ImageVector, val destination: Direction) {
+    ASK(Icons.Filled.Email, AskDestination),
+    FEED(Icons.Filled.Info, AskDestination),
+    MAP(Icons.Filled.Place, AskDestination),
+    USER(Icons.Filled.AccountCircle, ProfileDestination)
 }
 
 @Composable
 fun AppScaffold(
     currentView: Views,
+    navigator: DestinationsNavigator,
     topAppBar: @Composable () -> Unit = { TopBar() },
-    bottomAppBar: @Composable (Views) -> Unit = { NavBar(currentView) },
+    bottomAppBar: @Composable (Views) -> Unit = {
+        NavBar(currentView = currentView, navigator = navigator)
+    },
     content: @Composable () -> Unit
 ) {
     Scaffold(
@@ -58,7 +66,8 @@ fun AppScaffold(
 fun AppScaffoldPreview() {
     MindHubTheme {
         AppScaffold (
-            currentView = Views.ASK
+            currentView = Views.ASK,
+            navigator = EmptyDestinationsNavigator
         ){
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
