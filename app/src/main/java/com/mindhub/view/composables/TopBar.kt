@@ -28,7 +28,7 @@ fun TopBar() {
                 Text(
                     text = "MindHub",
                     textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.titleLarge,
+                    style = MaterialTheme.typography.titleMedium,
                 )
             },
         )
