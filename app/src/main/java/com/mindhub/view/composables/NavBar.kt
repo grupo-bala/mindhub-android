@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -15,17 +16,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.rememberNavController
 import com.mindhub.ui.theme.MindHubTheme
 import com.mindhub.view.layouts.AppScaffold
 import com.mindhub.view.layouts.Views
-
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 @Composable
 fun NavBar(
-    currentView: Views
+    currentView: Views,
+    navigator: DestinationsNavigator
 ) {
     BottomAppBar(
         containerColor = MaterialTheme.colorScheme.primary,
-        modifier = Modifier.height(64.dp)
+        modifier = Modifier.height(52.dp)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -34,16 +38,18 @@ fun NavBar(
                 .fillMaxWidth()
         ) {
             for (view in Views.entries) {
-                Icon(
-                    imageVector = view.icon,
-                    contentDescription = null,
-                    tint = if (view == currentView) {
-                        MaterialTheme.colorScheme.onPrimary
-                    } else {
-                        MaterialTheme.colorScheme.onPrimary
-                            .copy(alpha = 0.5f)
-                    }
-                )
+                IconButton(onClick = { navigator.navigate(view.destination) }) {
+                    Icon(
+                        imageVector = view.icon,
+                        contentDescription = null,
+                        tint = if (view == currentView) {
+                            MaterialTheme.colorScheme.onPrimary
+                        } else {
+                            MaterialTheme.colorScheme.onPrimary
+                                .copy(alpha = 0.5f)
+                        }
+                    )
+                }
             }
         }
     }
@@ -54,7 +60,8 @@ fun NavBar(
 fun NavBarPreview() {
     MindHubTheme {
         AppScaffold(
-            currentView = Views.ASK
+            currentView = Views.ASK,
+            navigator = EmptyDestinationsNavigator
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
