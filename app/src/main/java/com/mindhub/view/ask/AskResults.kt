@@ -19,11 +19,18 @@ import com.mindhub.view.layouts.AppScaffold
 import com.mindhub.view.layouts.SpacedColumn
 import com.mindhub.view.layouts.Views
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 
 @Destination
 @Composable
-fun AskResults() {
-    AppScaffold(currentView = Views.ASK) {
+fun AskResults(
+    navigator: DestinationsNavigator
+) {
+    AppScaffold(
+        currentView = Views.ASK,
+        navigator = navigator
+    ) {
         SpacedColumn(
             verticalAlignment = Alignment.Top,
             horizontalAlignment = Alignment.Start,
@@ -49,6 +56,8 @@ fun AskResults() {
 @Composable
 fun AskResultsPreview() {
     MindHubTheme {
-        AskResults()
+        AskResults(
+            navigator = EmptyDestinationsNavigator
+        )
     }
 }

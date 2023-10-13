@@ -1,5 +1,7 @@
 package com.mindhub.view.ask
 
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -11,6 +13,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -21,16 +24,24 @@ import com.mindhub.model.entities.Badge
 import com.mindhub.model.entities.User
 import com.mindhub.services.UserInfo
 import com.mindhub.ui.theme.MindHubTheme
+import com.mindhub.view.destinations.AskResultsDestination
 import com.mindhub.view.layouts.AppScaffold
 import com.mindhub.view.layouts.SpacedColumn
 import com.mindhub.view.layouts.Views
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Destination
 @Composable
-fun Ask() {
-    AppScaffold(currentView = Views.ASK) {
+fun Ask(
+    navigator: DestinationsNavigator
+) {
+    AppScaffold(
+        currentView = Views.ASK,
+        navigator = navigator
+    ) {
         SpacedColumn(
             spacing = 16,
             verticalAlignment = Alignment.CenterVertically,
@@ -48,10 +59,18 @@ fun Ask() {
                 modifier = Modifier.padding(horizontal = 24.dp)
             )
 
+            val askInteraction = remember { MutableInteractionSource() }.also {
+                if (it.collectIsFocusedAsState().value) {
+                    navigator.navigate(AskResultsDestination)
+                }
+            }
+
             OutlinedTextField(
                 leadingIcon = { Icon(imageVector = Icons.Filled.Search, contentDescription = null) },
                 placeholder = { Text(text = "Digite a sua dúvida") },
                 value = "",
+                readOnly = true,
+                interactionSource = askInteraction,
                 onValueChange = {}
             )
 
@@ -76,6 +95,8 @@ fun AskPreview() {
     )
 
     MindHubTheme {
-        Ask()
+        Ask(
+            navigator = EmptyDestinationsNavigator
+        )
     }
 }

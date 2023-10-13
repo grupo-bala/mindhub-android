@@ -43,8 +43,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mindhub.services.ErrorParser
 import com.mindhub.ui.theme.MindHubTheme
 import com.mindhub.view.composables.Suspended
+import com.mindhub.view.destinations.AskDestination
 import com.mindhub.view.destinations.LoginDestination
-import com.mindhub.view.destinations.ProfileDestination
 import com.mindhub.view.layouts.SpacedColumn
 import com.mindhub.viewmodel.expertise.ExpertiseViewModel
 import com.mindhub.viewmodel.register.RegisterViewModel
@@ -210,7 +210,7 @@ fun Register(
                 onClick = {
                     registerViewModel.register(
                         expertiseViewModel.selectedExpertises,
-                        onSuccess = { navigator.navigate(ProfileDestination) },
+                        onSuccess = { navigator.navigate(AskDestination) },
                         onFailure = { registerViewModel.feedback = ErrorParser.from(it) }
                     )
                 },
