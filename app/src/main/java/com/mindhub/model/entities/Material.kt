@@ -4,8 +4,9 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Material(
-    var user: String,
+    var id: Int,
+    var user: User,
     var title: String,
     var content: String,
-    var expertise: List<Expertise>
+    var expertise: Expertise
 )
