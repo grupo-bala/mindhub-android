@@ -1,7 +1,7 @@
 package com.mindhub.view.register
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsPressedAsState
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -66,7 +66,7 @@ fun Register(
     }
 
     val expertisesMenuInteraction = remember { MutableInteractionSource() }.also {
-        if (it.collectIsPressedAsState().value) {
+        if (it.collectIsFocusedAsState().value) {
             isExpertisesMenuExpanded = true
         }
     }
@@ -214,6 +214,7 @@ fun Register(
                         onFailure = { registerViewModel.feedback = ErrorParser.from(it) }
                     )
                 },
+                enabled = registerViewModel.isFilled() && expertiseViewModel.isFilled(),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(text = "Confirmar")

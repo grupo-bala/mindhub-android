@@ -43,4 +43,8 @@ class ExpertiseViewModel() : ViewModel() {
     fun isSelected(expertise: Expertise): Boolean {
         return selectedExpertises.contains(expertise)
     }
+
+    fun isFilled(): Boolean {
+        return selectedExpertises.size > 0
+    }
 }

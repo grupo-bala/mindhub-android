@@ -24,6 +24,10 @@ class RegisterViewModel : ViewModel() {
         onSuccess: () -> Unit,
         onFailure: (String?) -> Unit
     ) {
+        if (!validate()) {
+            return
+        }
+
         viewModelScope.launch {
             try {
                 isLoading = true
@@ -35,5 +39,22 @@ class RegisterViewModel : ViewModel() {
 
             isLoading = false
         }
+    }
+
+    fun isFilled(): Boolean {
+        return name != "" && username != "" && email != "" && password != "" && passwordConfirmation != ""
+    }
+    fun validate(): Boolean {
+        if (!isFilled()) {
+            feedback = "Preenha todos os campos"
+            return false
+        }
+
+        if (password != passwordConfirmation) {
+            feedback = "As senhas não coincidem"
+            return false
+        }
+
+        return true
     }
 }
