@@ -8,5 +8,6 @@ data class Ask(
     val title: String,
     val content: String,
     val expertise: Expertise,
+    val score: Int,
     val user: User
 )
