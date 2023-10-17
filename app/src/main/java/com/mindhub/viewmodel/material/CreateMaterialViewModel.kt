@@ -1,7 +1,6 @@
 package com.mindhub.viewmodel.material
 
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -9,7 +8,6 @@ import androidx.lifecycle.viewModelScope
 import com.mindhub.model.api.MaterialCreateRequest
 import com.mindhub.model.api.MaterialFakeApi
 import com.mindhub.model.entities.Expertise
-import com.mindhub.model.entities.Material
 import com.mindhub.services.UserInfo
 import com.mindhub.viewmodel.post.PostViewModelInterface
 import kotlinx.coroutines.launch
