@@ -1,6 +1,5 @@
 package com.mindhub.view.composables
 
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Column
@@ -63,7 +62,6 @@ fun PostInputs(
 
     Surface(
         modifier = Modifier
-            .fillMaxSize()
             .verticalScroll(rememberScrollState()),
     ) {
         SpacedColumn(
@@ -75,18 +73,18 @@ fun PostInputs(
                 .padding(bottom = 16.dp)
         ) {
             OutlinedTextField(
-                value = viewModel.getTitle() ?: "",
+                value = viewModel.title ?: "",
                 label = { Text(text = "Título") },
                 placeholder = { Text(text = "Digite o título") },
-                onValueChange = { viewModel.setTitle(it) },
+                onValueChange = { viewModel.title = it },
                 modifier = Modifier.fillMaxWidth()
             )
 
             OutlinedTextField(
-                value = viewModel.getContent() ?: "",
+                value = viewModel.content ?: "",
                 label = { Text(text = "Descrição") },
                 placeholder = { Text(text = "Digite a descrição") },
-                onValueChange = { viewModel.setContent(it) },
+                onValueChange = { viewModel.content = it },
                 modifier = Modifier
                     .height(450.dp)
                     .fillMaxWidth()
@@ -100,7 +98,7 @@ fun PostInputs(
                     onExpandedChange = { }
                 ) {
                     OutlinedTextField(
-                        value = viewModel.getExpertise() ?: "",
+                        value = viewModel.expertise.title ?: "",
                         readOnly = true,
                         label = { Text(text = "Categoria") },
                         onValueChange = {},
@@ -127,7 +125,7 @@ fun PostInputs(
                             DropdownMenuItem(
                                 text = { Text(expertise.title) },
                                 onClick = {
-                                    viewModel.setExpertise(expertise)
+                                    viewModel.expertise = expertise
                                     isMenuExpanded = false
                                 }
                             )
