@@ -5,38 +5,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mindhub.model.api.MaterialCreateRequest
 import com.mindhub.model.api.MaterialFakeApi
+import com.mindhub.model.api.MaterialRequest
 import com.mindhub.model.entities.Expertise
 import com.mindhub.services.UserInfo
 import com.mindhub.viewmodel.post.PostViewModelInterface
 import kotlinx.coroutines.launch
 
 class CreateMaterialViewModel: ViewModel(), PostViewModelInterface {
-    private var materialTitle by mutableStateOf("")
-        override fun setTitle(title: String) {
-            this.materialTitle = title
-        }
-        override fun getTitle(): String {
-            return materialTitle
-        }
-
-    private var materialContent by mutableStateOf("")
-        override fun setContent(content: String) {
-            this.materialContent = content
-        }
-
-        override fun getContent(): String {
-            return materialContent
-        }
-
-    private var materialExpertise by mutableStateOf(Expertise(""))
-        override fun getExpertise(): String {
-            return this.materialExpertise.title
-        }
-        override fun setExpertise(expertise: Expertise) {
-            this.materialExpertise = expertise
-        }
+    override var title by mutableStateOf("")
+    override var content by mutableStateOf("")
+    override var expertise by mutableStateOf(Expertise(""))
 
     fun create(
         onSuccess: () -> Unit,
@@ -45,10 +24,10 @@ class CreateMaterialViewModel: ViewModel(), PostViewModelInterface {
         viewModelScope.launch {
             try {
                 MaterialFakeApi.create(
-                    MaterialCreateRequest(
-                        title = materialTitle,
-                        content = materialContent,
-                        expertise = materialExpertise,
+                    MaterialRequest(
+                        title = title,
+                        content = content,
+                        expertise = expertise,
                         user = UserInfo!!
                     )
                 )
