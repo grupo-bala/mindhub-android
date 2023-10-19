@@ -16,6 +16,7 @@ data class MaterialRequest(
 interface MaterialProvider {
     suspend fun create(material: MaterialRequest)
     suspend fun update(materialId: Int, materialUpdated: MaterialRequest)
+    suspend fun remove(materialId: Int)
     suspend fun getOne(id: Int): Material
     suspend fun get(title: String): List<Material>
 }
@@ -42,6 +43,12 @@ object MaterialFakeApi: MaterialProvider {
         material.content = materialUpdated.content
         material.title = materialUpdated.title
         material.expertise = materialUpdated.expertise
+    }
+
+    override suspend fun remove(materialId: Int) {
+        if (!materials.removeIf { it.id == materialId }) {
+            throw Exception()
+        }
     }
 
     override suspend fun getOne(id: Int): Material {
