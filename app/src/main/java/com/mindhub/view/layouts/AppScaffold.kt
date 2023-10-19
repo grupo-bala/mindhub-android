@@ -20,16 +20,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.mindhub.ui.theme.MindHubTheme
 import com.mindhub.view.composables.NavBar
 import com.mindhub.view.composables.TopBar
-import com.mindhub.view.destinations.AskDestination
+import com.mindhub.view.destinations.AskHomeDestination
 import com.mindhub.view.destinations.ProfileDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 import com.ramcosta.composedestinations.spec.Direction
 
 enum class Views(val icon: ImageVector, val destination: Direction) {
-    ASK(Icons.Filled.Email, AskDestination),
-    FEED(Icons.Filled.Info, AskDestination),
-    MAP(Icons.Filled.Place, AskDestination),
+    ASK(Icons.Filled.Email, AskHomeDestination),
+    FEED(Icons.Filled.Info, AskHomeDestination),
+    MAP(Icons.Filled.Place, AskHomeDestination),
     USER(Icons.Filled.AccountCircle, ProfileDestination)
 }
 
