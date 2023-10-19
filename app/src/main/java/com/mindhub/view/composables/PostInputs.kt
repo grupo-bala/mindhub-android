@@ -79,16 +79,6 @@ fun PostInputs(
                 modifier = Modifier.fillMaxWidth()
             )
 
-            OutlinedTextField(
-                value = viewModel.content ?: "",
-                label = { Text(text = "Descrição") },
-                placeholder = { Text(text = "Digite a descrição") },
-                onValueChange = { viewModel.content = it },
-                modifier = Modifier
-                    .height(450.dp)
-                    .fillMaxWidth()
-            )
-
             Column(
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -118,7 +108,7 @@ fun PostInputs(
                         onDismissRequest = { isMenuExpanded = false },
                         modifier = Modifier
                             .exposedDropdownSize(matchTextFieldWidth = true)
-                            .height(184.dp)
+                            .height(280.dp)
                     ) {
                         for (expertise in expertiseViewModel.expertises) {
                             DropdownMenuItem(
@@ -132,6 +122,16 @@ fun PostInputs(
                     }
                 }
             }
+
+            OutlinedTextField(
+                value = viewModel.content ?: "",
+                label = { Text(text = "Descrição") },
+                placeholder = { Text(text = "Digite a descrição") },
+                onValueChange = { viewModel.content = it },
+                modifier = Modifier
+                    .height(450.dp)
+                    .fillMaxWidth()
+            )
 
             extraContent()
         }
