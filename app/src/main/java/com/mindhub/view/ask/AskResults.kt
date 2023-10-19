@@ -139,11 +139,11 @@ fun AskResultsPreview() {
     LaunchedEffect(key1 = true) {
         coroutine.launch {
             val user = User("", "", "", 0, Badge(""), listOf(), "")
-            AskFakeApi.create(Ask(0, "Matemática 1", "teste", Expertise("teste"), 76, user));
-            AskFakeApi.create(Ask(0, "Matemática 2", "teste", Expertise("teste"), 76, user));
-            AskFakeApi.create(Ask(0, "Química", "teste", Expertise("teste"), 76, user));
-            AskFakeApi.create(Ask(0, "Física", "teste", Expertise("teste"), 76, user));
-            AskFakeApi.create(Ask(0, "Geografia", "teste", Expertise("teste"), 76, user));
+            AskFakeApi.create(Ask(0, "Matemática 1", "teste", 76, user, Expertise("teste")));
+            AskFakeApi.create(Ask(0, "Matemática 2", "teste", 76, user, Expertise("teste")));
+            AskFakeApi.create(Ask(0, "Matemática 3", "teste", 76, user, Expertise("teste")));
+            AskFakeApi.create(Ask(0, "Matemática 4", "teste", 76, user, Expertise("teste")));
+            AskFakeApi.create(Ask(0, "Matemática 5", "teste", 76, user, Expertise("teste")));
         }
     }
 

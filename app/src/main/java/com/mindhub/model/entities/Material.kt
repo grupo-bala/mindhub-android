@@ -4,9 +4,10 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Material(
-    var id: Int,
-    var user: User,
-    var title: String,
-    var content: String,
+    override var id: Int,
+    override var user: User,
+    override var title: String,
+    override var content: String,
+    override var score: Int,
     var expertise: Expertise
-)
+) : Post

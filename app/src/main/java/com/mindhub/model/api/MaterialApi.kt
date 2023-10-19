@@ -31,7 +31,8 @@ object MaterialFakeApi: MaterialProvider {
             title = material.title,
             content = material.content,
             expertise = material.expertise,
-            user = material.user
+            user = material.user,
+            score = 10
         ))
     }
 

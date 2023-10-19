@@ -4,10 +4,10 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Ask(
-    val id: Int,
-    val title: String,
-    val content: String,
-    val expertise: Expertise,
-    val score: Int,
-    val user: User
-)
+    override var id: Int,
+    override var title: String,
+    override var content: String,
+    override var score: Int,
+    override var user: User,
+    var expertise: Expertise
+) : Post
