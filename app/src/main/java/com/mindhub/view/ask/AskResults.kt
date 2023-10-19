@@ -1,41 +1,95 @@
 package com.mindhub.view.ask
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.mindhub.model.api.AskFakeApi
 import com.mindhub.model.entities.Ask
 import com.mindhub.model.entities.Badge
 import com.mindhub.model.entities.Expertise
 import com.mindhub.model.entities.User
 import com.mindhub.ui.theme.MindHubTheme
+import com.mindhub.view.composables.NavBar
 import com.mindhub.view.composables.PostItem
+import com.mindhub.view.composables.Suspended
 import com.mindhub.view.layouts.AppScaffold
 import com.mindhub.view.layouts.SpacedColumn
 import com.mindhub.view.layouts.Views
+import com.mindhub.viewmodel.ask.AskViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
+import kotlinx.coroutines.launch
 
 @Destination
 @Composable
 fun AskResults(
     navigator: DestinationsNavigator
 ) {
+    val viewModel: AskViewModel = viewModel()
+
     AppScaffold(
         currentView = Views.ASK,
-        navigator = navigator
+        navigator = navigator,
+        bottomAppBar = {
+            Column {
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(MaterialTheme.shapes.large)
+                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                        .padding(16.dp)
+                ) {
+                    Column {
+                        Text(
+                            text = "Não é o que você procura?",
+                            color = MaterialTheme.colorScheme.onSurface,
+                            style = MaterialTheme.typography.labelLarge
+                        )
+
+                        Text(
+                            text = "Faça a sua pergunta",
+                            color = MaterialTheme.colorScheme.onSurface,
+                            style = MaterialTheme.typography.titleLarge
+                        )
+                    }
+
+                    IconButton(onClick = { /*TODO*/ }) {
+                        Icon(
+                            imageVector = Icons.Filled.AddCircle,
+                            contentDescription = null,
+                            modifier = Modifier.size(64.dp)
+                        )
+                    }
+                }
+                NavBar(currentView = Views.ASK, navigator = navigator)
+            }
+        }
     ) {
         SpacedColumn(
             verticalAlignment = Alignment.Top,
@@ -47,8 +101,11 @@ fun AskResults(
             OutlinedTextField(
                 leadingIcon = { Icon(imageVector = Icons.Filled.Search, contentDescription = null) },
                 placeholder = { Text(text = "Digite a sua dúvida") },
-                value = "",
-                onValueChange = {},
+                value = viewModel.inputTitle,
+                onValueChange = {
+                    viewModel.inputTitle = it
+                    viewModel.get {  }
+                },
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -56,17 +113,18 @@ fun AskResults(
                 text = "Resultados",
                 style = MaterialTheme.typography.titleMedium
             )
-            val user = User("", "", "", 0, Badge(""), listOf(), "")
-            val values = listOf<Ask>(
-                Ask(0, "Teste 1", "teste", Expertise("teste"), 76, user),
-                Ask(1, "Teste 2", "teste teste", Expertise("teste"), 43, user),
-                Ask(2, "Teste 3", "teste teste teste", Expertise("teste"), 234, user),
-                Ask(3, "Teste 4", "teste teste teste teste", Expertise("teste"), -23, user),
-            )
 
-            LazyColumn {
-                items(values) {
-                    PostItem(title = it.title, description = it.content, score = it.score)
+            Suspended(
+                isLoading = viewModel.isLoading
+            ) {
+                if (viewModel.asks.isEmpty()) {
+                    Text(text = "Nenhum resultado foi encontrado")
+                } else {
+                    LazyColumn() {
+                        items(viewModel.asks) {
+                            PostItem(title = it.title, description = it.content, score = it.score)
+                        }
+                    }
                 }
             }
         }
@@ -76,6 +134,19 @@ fun AskResults(
 @Preview(showBackground = true)
 @Composable
 fun AskResultsPreview() {
+    val coroutine = rememberCoroutineScope()
+
+    LaunchedEffect(key1 = true) {
+        coroutine.launch {
+            val user = User("", "", "", 0, Badge(""), listOf(), "")
+            AskFakeApi.create(Ask(0, "Matemática 1", "teste", Expertise("teste"), 76, user));
+            AskFakeApi.create(Ask(0, "Matemática 2", "teste", Expertise("teste"), 76, user));
+            AskFakeApi.create(Ask(0, "Química", "teste", Expertise("teste"), 76, user));
+            AskFakeApi.create(Ask(0, "Física", "teste", Expertise("teste"), 76, user));
+            AskFakeApi.create(Ask(0, "Geografia", "teste", Expertise("teste"), 76, user));
+        }
+    }
+
     MindHubTheme {
         AskResults(
             navigator = EmptyDestinationsNavigator
