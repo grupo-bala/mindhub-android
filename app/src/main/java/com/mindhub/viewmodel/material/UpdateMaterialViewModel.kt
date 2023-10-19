@@ -40,4 +40,18 @@ class UpdateMaterialViewModel: ViewModel(), PostViewModelInterface {
             }
         }
     }
+
+    fun remove(
+        onSuccess: () -> Unit,
+        onFailure: (String?) -> Unit
+    ) {
+        viewModelScope.launch {
+            try {
+                MaterialFakeApi.remove(materialId = id)
+                onSuccess()
+            } catch (e: Exception) {
+                onFailure(e.message)
+            }
+        }
+    }
 }
