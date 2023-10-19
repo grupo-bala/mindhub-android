@@ -35,7 +35,7 @@ import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 @OptIn(ExperimentalMaterial3Api::class)
 @Destination
 @Composable
-fun Ask(
+fun AskHome(
     navigator: DestinationsNavigator
 ) {
     AppScaffold(
@@ -95,7 +95,7 @@ fun AskPreview() {
     )
 
     MindHubTheme {
-        Ask(
+        AskHome(
             navigator = EmptyDestinationsNavigator
         )
     }
