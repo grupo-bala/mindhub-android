@@ -6,21 +6,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material.icons.outlined.Email
-import androidx.compose.material.icons.outlined.Share
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mindhub.model.entities.Ask
@@ -30,6 +22,9 @@ import com.mindhub.model.entities.Material
 import com.mindhub.model.entities.Post
 import com.mindhub.model.entities.User
 import com.mindhub.ui.theme.MindHubTheme
+import com.mindhub.view.composables.chips.CommentsChip
+import com.mindhub.view.composables.chips.ScoreChip
+import com.mindhub.view.composables.chips.ShareChip
 import com.mindhub.view.layouts.SpacedColumn
 import io.ktor.util.reflect.instanceOf
 
@@ -59,42 +54,9 @@ fun PostView(
         Row(
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier
-                    .clip(MaterialTheme.shapes.small)
-                    .background(MaterialTheme.colorScheme.surfaceVariant)
-                    .padding(8.dp)
-            ) {
-                Icon(imageVector = Icons.Filled.KeyboardArrowUp, contentDescription = null)
-                Text(text = "${post.score}")
-                Icon(imageVector = Icons.Filled.KeyboardArrowDown, contentDescription = null)
-            }
-
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier
-                    .clip(MaterialTheme.shapes.small)
-                    .background(MaterialTheme.colorScheme.surfaceVariant)
-                    .padding(8.dp)
-            ) {
-                Icon(imageVector = Icons.Outlined.Email, contentDescription = null)
-                Text(text = "10")
-            }
-
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier
-                    .clip(MaterialTheme.shapes.small)
-                    .background(MaterialTheme.colorScheme.surfaceVariant)
-                    .padding(8.dp)
-            ) {
-                Icon(imageVector = Icons.Outlined.Share, contentDescription = null)
-                Text(text = "share")
-            }
+            ScoreChip(score = post.score)
+            CommentsChip(commentsQuantity = 10)
+            ShareChip()
         }
 
         Row(
@@ -108,7 +70,7 @@ fun PostView(
             )
 
             Spacer(modifier = Modifier.size(16.dp))
-            Text(text = "2 comentários", style = MaterialTheme.typography.labelLarge)
+            Text(text = "10 comentários", style = MaterialTheme.typography.labelLarge)
         }
     }
 }
