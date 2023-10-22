@@ -1,4 +1,4 @@
-package com.mindhub.view.composables
+package com.mindhub.view.composables.comment
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -78,7 +78,11 @@ fun CommentItem(
             modifier = Modifier.fillMaxWidth()
         ) {
             ScoreChip(score = comment.score)
-            CommentsChip(commentsQuantity = comment.replies.size)
+
+            if (comment.replies.isNotEmpty()) {
+                CommentsChip(commentsQuantity = comment.replies.size)
+            }
+
             Button(
                 onClick = { /*TODO*/ },
                 contentPadding = PaddingValues(0.dp),
