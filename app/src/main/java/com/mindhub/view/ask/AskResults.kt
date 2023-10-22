@@ -35,10 +35,11 @@ import com.mindhub.ui.theme.MindHubTheme
 import com.mindhub.view.composables.NavBar
 import com.mindhub.view.composables.PostItem
 import com.mindhub.view.composables.Suspended
+import com.mindhub.view.destinations.AskViewDestination
 import com.mindhub.view.layouts.AppScaffold
 import com.mindhub.view.layouts.SpacedColumn
 import com.mindhub.view.layouts.Views
-import com.mindhub.viewmodel.ask.AskViewModel
+import com.mindhub.viewmodel.ask.SearchAskViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
@@ -49,7 +50,7 @@ import kotlinx.coroutines.launch
 fun AskResults(
     navigator: DestinationsNavigator
 ) {
-    val viewModel: AskViewModel = viewModel()
+    val searchViewModel: SearchAskViewModel = viewModel()
 
     AppScaffold(
         currentView = Views.ASK,
@@ -101,10 +102,10 @@ fun AskResults(
             OutlinedTextField(
                 leadingIcon = { Icon(imageVector = Icons.Filled.Search, contentDescription = null) },
                 placeholder = { Text(text = "Digite a sua dúvida") },
-                value = viewModel.inputTitle,
+                value = searchViewModel.inputTitle,
                 onValueChange = {
-                    viewModel.inputTitle = it
-                    viewModel.get {  }
+                    searchViewModel.inputTitle = it
+                    searchViewModel.get {  }
                 },
                 modifier = Modifier.fillMaxWidth()
             )
@@ -115,14 +116,23 @@ fun AskResults(
             )
 
             Suspended(
-                isLoading = viewModel.isLoading
+                isLoading = searchViewModel.isLoading
             ) {
-                if (viewModel.asks.isEmpty()) {
+                if (searchViewModel.asks.isEmpty()) {
                     Text(text = "Nenhum resultado foi encontrado")
                 } else {
                     LazyColumn() {
-                        items(viewModel.asks) {
-                            PostItem(title = it.title, description = it.content, score = it.score)
+                        items(searchViewModel.asks) {
+                            PostItem(
+                                title = it.title,
+                                description = it.content,
+                                score = it.score,
+                                onClick = {
+                                    navigator.navigate(
+                                        AskViewDestination(it.id)
+                                    )
+                                }
+                            )
                         }
                     }
                 }
