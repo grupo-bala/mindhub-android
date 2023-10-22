@@ -83,7 +83,7 @@ fun AskHome(
 
 @Preview(showBackground = true)
 @Composable
-fun AskPreview() {
+fun AskHomePreview() {
     UserInfo = User(
         name = "Pedro",
         email = "pedro@gmail.com",
