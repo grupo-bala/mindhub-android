@@ -34,7 +34,7 @@ import com.mindhub.services.UserInfo
 import com.mindhub.ui.theme.MindHubTheme
 import com.mindhub.view.layouts.SpacedColumn
 import com.mindhub.viewmodel.expertise.ExpertiseViewModel
-import com.mindhub.viewmodel.material.CreateMaterialViewModel
+import com.mindhub.viewmodel.material.MaterialViewModel
 import com.mindhub.viewmodel.post.PostViewModelInterface
 import com.ramcosta.composedestinations.annotation.Destination
 
@@ -153,7 +153,7 @@ fun CreatePostPreview() {
         )
 
         PostInputs(
-            viewModel = CreateMaterialViewModel(),
+            viewModel = MaterialViewModel(),
         )
     }
 }
