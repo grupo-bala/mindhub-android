@@ -12,12 +12,12 @@ import com.mindhub.services.UserInfo
 import com.mindhub.viewmodel.post.PostViewModelInterface
 import kotlinx.coroutines.launch
 
-class CreateMaterialViewModel: ViewModel(), PostViewModelInterface {
+class MaterialViewModel: ViewModel(), PostViewModelInterface {
     override var title by mutableStateOf("")
     override var content by mutableStateOf("")
     override var expertise by mutableStateOf(Expertise(""))
 
-    fun create(
+    override fun create(
         onSuccess: () -> Unit,
         onFailure: (String?) -> Unit,
     ) {
@@ -37,5 +37,45 @@ class CreateMaterialViewModel: ViewModel(), PostViewModelInterface {
                 onFailure(e.message)
             }
         }
+    }
+
+    override fun update(
+        postId: Int,
+        onSuccess: () -> Unit,
+        onFailure: (String?) -> Unit,
+    ) {
+        viewModelScope.launch {
+            try {
+                MaterialFakeApi.update(
+                    postId, MaterialRequest(
+                        title = title,
+                        content = content,
+                        expertise = expertise,
+                        user = UserInfo!!
+                    )
+                )
+            } catch (e: Exception) {
+                onFailure(e.message)
+            }
+        }
+    }
+
+    override fun remove(
+        postId: Int,
+        onSuccess: () -> Unit,
+        onFailure: (String?) -> Unit,
+    ) {
+        viewModelScope.launch {
+            try {
+                MaterialFakeApi.remove(materialId = postId)
+                onSuccess()
+            } catch (e: Exception) {
+                onFailure(e.message)
+            }
+        }
+    }
+
+    override fun getType(): String {
+        return "material"
     }
 }
