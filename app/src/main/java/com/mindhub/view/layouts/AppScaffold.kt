@@ -37,7 +37,8 @@ enum class Views(val icon: ImageVector, val destination: Direction) {
 fun AppScaffold(
     currentView: Views,
     navigator: DestinationsNavigator,
-    topAppBar: @Composable () -> Unit = { TopBar() },
+    hasBackArrow: Boolean = false,
+    topAppBar: @Composable () -> Unit = { TopBar(navigator, hasBackArrow) },
     bottomAppBar: @Composable (Views) -> Unit = {
         NavBar(currentView = currentView, navigator = navigator)
     },
