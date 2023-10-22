@@ -15,7 +15,44 @@ interface CommentProvider {
 
 object CommentFakeApi : CommentProvider {
     private var id = 0
-    private val comments = mutableListOf<Comment>()
+    private val comments = mutableListOf<Comment>().also {
+        it.add(
+            Comment(
+                id = id++,
+                postId = 0,
+                username = "jjaum",
+                content = "Massa demais tu é doido",
+                isBestAnswer = true,
+                score = 4,
+                userScore = 0,
+                replies = listOf(
+                    Comment(
+                        id = id++,
+                        postId = 0,
+                        username = "ecrt34",
+                        content = "Bom demaise",
+                        isBestAnswer = false,
+                        score = 1,
+                        userScore = 0,
+                        replies = listOf()
+                    )
+                )
+            )
+        )
+
+        it.add(
+            Comment(
+                id = id++,
+                postId = 0,
+                username = "teste76",
+                content = "Lorem ipsum",
+                isBestAnswer = false,
+                score = -2,
+                userScore = 0,
+                replies = listOf()
+            )
+        )
+    }
     override suspend fun create(data: CreateCommentRequest) {
         val comment = Comment(
             id = id,
@@ -42,7 +79,5 @@ object CommentFakeApi : CommentProvider {
         comment.userScore = score
         comment.score += score
     }
-
-
 }
 
