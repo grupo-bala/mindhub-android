@@ -10,7 +10,7 @@ import com.mindhub.model.api.AskFakeApi
 import com.mindhub.model.entities.Ask
 import kotlinx.coroutines.launch
 
-class AskViewModel : ViewModel() {
+class SearchAskViewModel : ViewModel() {
     var asks = mutableStateListOf<Ask>()
     var inputTitle by mutableStateOf("")
     var isLoading by mutableStateOf(false)
