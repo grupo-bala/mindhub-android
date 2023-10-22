@@ -20,57 +20,27 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mindhub.ui.theme.MindHubTheme
+import com.mindhub.view.composables.PostCreate
 import com.mindhub.view.composables.PostInputs
-import com.mindhub.viewmodel.material.CreateMaterialViewModel
+import com.mindhub.viewmodel.material.MaterialViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Destination
 @Composable
 fun CreateMaterial(
     navigator: DestinationsNavigator
 ) {
-    val viewModel = CreateMaterialViewModel()
+    val viewModel = MaterialViewModel()
 
-    Surface(
-        modifier = Modifier
-            .fillMaxWidth()
-    ) {
-        Column(
-            modifier = Modifier.fillMaxHeight()
-        ) {
-            TopAppBar(
-                title = { Text(text = "Adicionar um material", style = MaterialTheme.typography.titleMedium) },
-                navigationIcon = {
-                    IconButton(onClick = {
-                        navigator.popBackStack()
-                    }) {
-                        Icon(imageVector = Icons.Filled.Close, contentDescription = null)
-                    }
-                },
-                actions = {
-                    Button(onClick = {
-                        viewModel.create(
-                            onSuccess = {
-                                TODO("Add navigator to material exhibition view")
-                            },
-                            onFailure = {
-                                TODO("No errors are defined in the fake api")
-                            }
-                        )
-                    }) {
-                        Text(text = "Publicar")
-                    }
-                }
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            PostInputs(viewModel = viewModel)
+    PostCreate(
+        navigator = navigator,
+        viewModel = viewModel,
+        onSuccess = {
+            TODO("Navigate to post view")
         }
-    }
+    )
 }
 
 @Preview(showBackground = true)
