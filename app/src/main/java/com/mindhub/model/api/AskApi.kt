@@ -1,6 +1,9 @@
 package com.mindhub.model.api
 
 import com.mindhub.model.entities.Ask
+import com.mindhub.model.entities.Badge
+import com.mindhub.model.entities.Expertise
+import com.mindhub.model.entities.User
 
 interface AskProvider {
     suspend fun create(ask: Ask)
@@ -9,7 +12,11 @@ interface AskProvider {
 }
 
 object AskFakeApi : AskProvider {
-    private val asks = mutableListOf<Ask>()
+    val asks = mutableListOf<Ask>().also {
+        val user = User("João", "joaum123@gmail.com", "jjaum", 0, Badge(""), listOf(), "")
+        it.add(Ask(0, "Matemática 1", "teste", 76, user, Expertise("teste")))
+    }
+
     override suspend fun create(ask: Ask) {
         asks.add(ask)
     }
