@@ -1,5 +1,6 @@
 package com.mindhub.view.composables
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -21,9 +22,14 @@ import com.mindhub.ui.theme.MindHubTheme
 fun PostItem(
     title: String,
     description: String,
-    score: Int
+    score: Int,
+    onClick: () -> Unit,
 ) {
-    Column {
+    Column(
+        modifier = Modifier.clickable {
+            onClick()
+        }
+    ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
@@ -64,7 +70,8 @@ fun PostItemPreview() {
         PostItem(
             title = "As principais funções matemáticas",
             description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit Lorem ipsum dolor sit amet, consectetur adipiscing elit... Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
-            score = 87
+            score = 87,
+            onClick = {}
         )
     }
 }
