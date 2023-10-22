@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SuggestionChip
@@ -29,13 +30,14 @@ import com.mindhub.view.layouts.SpacedColumn
 import io.ktor.util.reflect.instanceOf
 
 @Composable
-fun PostView(
+fun PostInfo(
     post: Post
 ) {
     SpacedColumn(
         spacing = 8,
         verticalAlignment = Alignment.CenterVertically,
-        horizontalAlignment = Alignment.Start
+        horizontalAlignment = Alignment.Start,
+        modifier = Modifier.padding(8.dp)
     ) {
         Text(text = post.title, style = MaterialTheme.typography.titleLarge)
         Text(text = "por ${post.user.username}", style = MaterialTheme.typography.labelLarge)
@@ -77,7 +79,7 @@ fun PostView(
 
 @Preview(showBackground = true)
 @Composable
-fun PostViewPreview() {
+fun PostInfoPreview() {
     val user = User("", "", "teste76", 0, Badge(""), listOf(), "")
     val ask = Ask(
         id = 0,
@@ -93,6 +95,6 @@ fun PostViewPreview() {
     )
 
     MindHubTheme {
-        PostView(post = ask)
+        PostInfo(post = ask)
     }
 }
