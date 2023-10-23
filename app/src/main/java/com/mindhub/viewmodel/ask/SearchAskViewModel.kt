@@ -14,6 +14,7 @@ class SearchAskViewModel : ViewModel() {
     var asks = mutableStateListOf<Ask>()
     var inputTitle by mutableStateOf("")
     var isLoading by mutableStateOf(false)
+    var isFirstSearch by mutableStateOf(true)
 
     fun get(
         onFailure: (String?) -> Unit

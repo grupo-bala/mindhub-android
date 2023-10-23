@@ -58,35 +58,37 @@ fun AskResults(
         navigator = navigator,
         bottomAppBar = {
             Column {
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(MaterialTheme.shapes.large)
-                        .background(MaterialTheme.colorScheme.surfaceVariant)
-                        .padding(16.dp)
-                ) {
-                    Column {
-                        Text(
-                            text = "Não é o que você procura?",
-                            color = MaterialTheme.colorScheme.onSurface,
-                            style = MaterialTheme.typography.labelLarge
-                        )
+                if (searchViewModel.asks.isEmpty() && !searchViewModel.isFirstSearch) {
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(MaterialTheme.shapes.large)
+                            .background(MaterialTheme.colorScheme.surfaceVariant)
+                            .padding(16.dp)
+                    ) {
+                        Column {
+                            Text(
+                                text = "Não é o que você procura?",
+                                color = MaterialTheme.colorScheme.onSurface,
+                                style = MaterialTheme.typography.labelLarge
+                            )
 
-                        Text(
-                            text = "Faça a sua pergunta",
-                            color = MaterialTheme.colorScheme.onSurface,
-                            style = MaterialTheme.typography.titleLarge
-                        )
-                    }
+                            Text(
+                                text = "Faça a sua pergunta",
+                                color = MaterialTheme.colorScheme.onSurface,
+                                style = MaterialTheme.typography.titleLarge
+                            )
+                        }
 
-                    IconButton(onClick = { navigator.navigate(AskCreateDestination(title = searchViewModel.inputTitle)) }) {
-                        Icon(
-                            imageVector = Icons.Filled.AddCircle,
-                            contentDescription = null,
-                            modifier = Modifier.size(64.dp)
-                        )
+                        IconButton(onClick = { navigator.navigate(AskCreateDestination(title = searchViewModel.inputTitle)) }) {
+                            Icon(
+                                imageVector = Icons.Filled.AddCircle,
+                                contentDescription = null,
+                                modifier = Modifier.size(64.dp)
+                            )
+                        }
                     }
                 }
                 NavBar(currentView = Views.ASK, navigator = navigator)
@@ -106,6 +108,7 @@ fun AskResults(
                 value = searchViewModel.inputTitle,
                 onValueChange = {
                     searchViewModel.inputTitle = it
+                    searchViewModel.isFirstSearch = false
                     searchViewModel.get {  }
                 },
                 modifier = Modifier.fillMaxWidth()
@@ -119,7 +122,9 @@ fun AskResults(
             Suspended(
                 isLoading = searchViewModel.isLoading
             ) {
-                if (searchViewModel.asks.isEmpty()) {
+                if (searchViewModel.isFirstSearch) {
+                    Text(text = "Pesquise a sua dúvida")
+                } else if (searchViewModel.asks.isEmpty()) {
                     Text(text = "Nenhum resultado foi encontrado")
                 } else {
                     LazyColumn() {
