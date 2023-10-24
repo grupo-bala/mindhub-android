@@ -9,7 +9,7 @@ import com.mindhub.model.api.AskFakeApi
 import com.mindhub.model.entities.Ask
 import com.mindhub.model.entities.Expertise
 import com.mindhub.model.entities.Post
-import com.mindhub.services.UserInfo
+import com.mindhub.common.services.UserInfo
 import com.mindhub.viewmodel.post.PostViewModelInterface
 import kotlinx.coroutines.launch
 

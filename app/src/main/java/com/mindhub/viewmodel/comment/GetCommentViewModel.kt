@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mindhub.model.api.CommentFakeApi
 import com.mindhub.model.entities.Comment
-import com.mindhub.services.ErrorParser
+import com.mindhub.common.services.ErrorParser
 import kotlinx.coroutines.launch
 
 class GetCommentViewModel : ViewModel() {

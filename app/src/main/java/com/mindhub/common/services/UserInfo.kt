@@ -1,4 +1,4 @@
-package com.mindhub.services
+package com.mindhub.common.services
 
 import com.mindhub.model.entities.User
 

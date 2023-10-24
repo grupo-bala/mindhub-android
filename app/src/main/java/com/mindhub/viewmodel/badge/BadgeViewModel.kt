@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mindhub.model.api.BadgeFakeApi
 import com.mindhub.model.entities.Badge
-import com.mindhub.services.UserInfo
+import com.mindhub.common.services.UserInfo
 import kotlinx.coroutines.launch
 
 class BadgeViewModel() : ViewModel() {

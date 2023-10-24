@@ -10,7 +10,7 @@ import com.mindhub.model.api.MaterialRequest
 import com.mindhub.model.entities.Expertise
 import com.mindhub.model.entities.Material
 import com.mindhub.model.entities.Post
-import com.mindhub.services.UserInfo
+import com.mindhub.common.services.UserInfo
 import com.mindhub.viewmodel.post.PostViewModelInterface
 import kotlinx.coroutines.launch
 

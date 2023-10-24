@@ -33,8 +33,8 @@ import com.mindhub.model.entities.Expertise
 import com.mindhub.model.entities.User
 import com.mindhub.ui.theme.MindHubTheme
 import com.mindhub.view.composables.NavBar
-import com.mindhub.view.composables.PostItem
 import com.mindhub.view.composables.Suspended
+import com.mindhub.view.composables.post.PostItem
 import com.mindhub.view.destinations.AskCreateDestination
 import com.mindhub.view.destinations.AskViewDestination
 import com.mindhub.view.layouts.AppScaffold

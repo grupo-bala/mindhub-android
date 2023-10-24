@@ -1,4 +1,4 @@
-package com.mindhub.services
+package com.mindhub.common.services
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TimePickerState

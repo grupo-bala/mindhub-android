@@ -1,4 +1,4 @@
-package com.mindhub.services
+package com.mindhub.common.services
 
 object ErrorParser {
     fun from(error: String?): String {

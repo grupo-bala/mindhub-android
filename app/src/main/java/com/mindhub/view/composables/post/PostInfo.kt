@@ -1,4 +1,4 @@
-package com.mindhub.view.composables
+package com.mindhub.view.composables.post
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

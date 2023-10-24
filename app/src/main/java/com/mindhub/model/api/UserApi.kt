@@ -3,8 +3,8 @@ package com.mindhub.model.api
 import com.mindhub.model.entities.Badge
 import com.mindhub.model.entities.Expertise
 import com.mindhub.model.entities.User
-import com.mindhub.services.Config
-import com.mindhub.services.UserInfo
+import com.mindhub.common.services.Config
+import com.mindhub.common.services.UserInfo
 import io.ktor.client.call.body
 import io.ktor.client.request.headers
 import io.ktor.client.request.patch

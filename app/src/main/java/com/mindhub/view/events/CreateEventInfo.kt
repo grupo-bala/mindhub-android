@@ -43,8 +43,8 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.mindhub.services.toBrazilianDateFormat
-import com.mindhub.services.toTimeFormat
+import com.mindhub.common.services.toBrazilianDateFormat
+import com.mindhub.common.services.toTimeFormat
 import com.mindhub.ui.theme.MindHubTheme
 import com.mindhub.view.layouts.SpacedColumn
 import com.ramcosta.composedestinations.annotation.Destination

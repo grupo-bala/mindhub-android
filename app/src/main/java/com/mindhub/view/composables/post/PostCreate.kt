@@ -1,4 +1,4 @@
-package com.mindhub.view.composables
+package com.mindhub.view.composables.post
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -9,31 +9,28 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.mindhub.model.entities.Post
 import com.mindhub.viewmodel.post.PostViewModelInterface
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PostUpdate(
+fun PostCreate(
     navigator: DestinationsNavigator,
     viewModel: PostViewModelInterface,
-    postId: Int,
-    onSuccess: () -> Unit,
-    extraFields: @Composable () -> Unit = {}
+    extraFields: @Composable () -> Unit = {},
+    onSuccess: (Post) -> Unit,
 ) {
     var feedbackError: String? = null
 
@@ -45,7 +42,7 @@ fun PostUpdate(
             modifier = Modifier.fillMaxHeight()
         ) {
             TopAppBar(
-                title = { Text(text = "Editar ${viewModel.getType()}", style = MaterialTheme.typography.titleMedium) },
+                title = { Text(text = "Adicionar um ${viewModel.getType()}", style = MaterialTheme.typography.titleMedium) },
                 navigationIcon = {
                     IconButton(onClick = {
                         navigator.popBackStack()
@@ -55,15 +52,14 @@ fun PostUpdate(
                 },
                 actions = {
                     Button(onClick = {
-                        viewModel.update(
-                            onSuccess = onSuccess,
+                        viewModel.create(
+                            onSuccess = { onSuccess(it) },
                             onFailure = {
                                 feedbackError = it
-                            },
-                            postId = postId
+                            }
                         )
                     }) {
-                        Text(text = "Alterar")
+                        Text(text = "Publicar")
                     }
                 }
             )
@@ -74,27 +70,6 @@ fun PostUpdate(
                 viewModel = viewModel,
                 extraContent = extraFields
             )
-
-            OutlinedButton(
-                onClick = { viewModel.remove(
-                    postId,
-                    onSuccess = {
-                        navigator.popBackStack()
-                    },
-                    onFailure = {
-                        feedbackError = it
-                    }
-                ) },
-                colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.error),
-                modifier = Modifier.padding(horizontal = 16.dp)
-            ) {
-                Text(
-                    text = "Remover material",
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.fillMaxWidth(),
-                    textAlign = TextAlign.Center
-                )
-            }
 
             if (feedbackError != null) {
                 Text(

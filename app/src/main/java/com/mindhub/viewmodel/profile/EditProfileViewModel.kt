@@ -1,18 +1,15 @@
 package com.mindhub.viewmodel.profile
 
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mindhub.model.api.ExpertiseApi
 import com.mindhub.model.api.UpdateRequest
-import com.mindhub.model.api.UserApi
 import com.mindhub.model.api.UserFakeApi
 import com.mindhub.model.entities.Badge
 import com.mindhub.model.entities.Expertise
-import com.mindhub.services.UserInfo
+import com.mindhub.common.services.UserInfo
 import kotlinx.coroutines.launch
 
 class EditProfileViewModel() : ViewModel() {

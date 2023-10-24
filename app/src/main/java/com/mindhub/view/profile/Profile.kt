@@ -39,7 +39,7 @@ import coil.request.ImageRequest
 import com.mindhub.model.entities.Badge
 import com.mindhub.model.entities.Expertise
 import com.mindhub.model.entities.User
-import com.mindhub.services.UserInfo
+import com.mindhub.common.services.UserInfo
 import com.mindhub.ui.theme.MindHubTheme
 import com.mindhub.view.composables.MeasureViewWidth
 import com.mindhub.view.destinations.EditProfileDestination

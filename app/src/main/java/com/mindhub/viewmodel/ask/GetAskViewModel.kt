@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mindhub.model.api.AskFakeApi
 import com.mindhub.model.entities.Post
-import com.mindhub.services.ErrorParser
+import com.mindhub.common.services.ErrorParser
 import com.mindhub.viewmodel.post.GetPostViewModel
 import kotlinx.coroutines.launch
 

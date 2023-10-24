@@ -1,7 +1,7 @@
 package com.mindhub.model.api
 
 import com.mindhub.model.entities.Expertise
-import com.mindhub.services.Config
+import com.mindhub.common.services.Config
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.statement.HttpResponse

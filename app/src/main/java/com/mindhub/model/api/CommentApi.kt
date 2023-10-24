@@ -1,7 +1,7 @@
 package com.mindhub.model.api
 
 import com.mindhub.model.entities.Comment
-import com.mindhub.services.UserInfo
+import com.mindhub.common.services.UserInfo
 
 data class CreateCommentRequest(
     val content: String,

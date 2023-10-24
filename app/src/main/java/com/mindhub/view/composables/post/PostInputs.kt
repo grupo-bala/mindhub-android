@@ -1,4 +1,4 @@
-package com.mindhub.view.composables
+package com.mindhub.view.composables.post
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.dp
 import com.mindhub.model.entities.Badge
 import com.mindhub.model.entities.Expertise
 import com.mindhub.model.entities.User
-import com.mindhub.services.UserInfo
+import com.mindhub.common.services.UserInfo
 import com.mindhub.ui.theme.MindHubTheme
 import com.mindhub.view.layouts.SpacedColumn
 import com.mindhub.viewmodel.expertise.ExpertiseViewModel

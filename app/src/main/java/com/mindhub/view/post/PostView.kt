@@ -23,7 +23,7 @@ import com.mindhub.model.entities.Badge
 import com.mindhub.model.entities.Expertise
 import com.mindhub.model.entities.User
 import com.mindhub.ui.theme.MindHubTheme
-import com.mindhub.view.composables.PostInfo
+import com.mindhub.view.composables.post.PostInfo
 import com.mindhub.view.composables.Suspended
 import com.mindhub.view.composables.comment.CommentsView
 import com.mindhub.view.layouts.AppScaffold

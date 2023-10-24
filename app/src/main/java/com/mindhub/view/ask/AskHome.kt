@@ -22,7 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mindhub.model.entities.Badge
 import com.mindhub.model.entities.User
-import com.mindhub.services.UserInfo
+import com.mindhub.common.services.UserInfo
 import com.mindhub.ui.theme.MindHubTheme
 import com.mindhub.view.destinations.AskResultsDestination
 import com.mindhub.view.layouts.AppScaffold
