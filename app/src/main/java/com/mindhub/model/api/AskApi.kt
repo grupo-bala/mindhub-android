@@ -14,13 +14,19 @@ interface AskProvider {
 }
 
 object AskFakeApi : AskProvider {
+    private var count = 0
+
     val asks = mutableListOf<Ask>().also {
         val user = User("João", "joaum123@gmail.com", "jjaum", 0, Badge(""), listOf(), "")
         it.add(Ask(0, "Matemática 1", "teste", 76, user, Expertise("teste")))
     }
 
     override suspend fun create(ask: Ask): Ask {
+        count += 1
+        ask.id = count
+
         asks.add(ask)
+
         return ask
     }
 
