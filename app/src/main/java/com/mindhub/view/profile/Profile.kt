@@ -20,8 +20,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.InputChip
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -36,12 +34,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.mindhub.common.services.UserInfo
 import com.mindhub.model.entities.Badge
 import com.mindhub.model.entities.Expertise
 import com.mindhub.model.entities.User
-import com.mindhub.common.services.UserInfo
 import com.mindhub.ui.theme.MindHubTheme
 import com.mindhub.view.composables.MeasureViewWidth
+import com.mindhub.view.composables.Tabs
 import com.mindhub.view.destinations.EditProfileDestination
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -159,16 +158,7 @@ fun Profile(
                     .height(1.dp)
             )
 
-            TabRow(
-                selectedTabIndex = currentTabIndex,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                tabs.forEachIndexed { index, title -> Tab(
-                    selected = currentTabIndex == index,
-                    onClick = { currentTabIndex = index },
-                    text = { Text(text = title) }
-                )}
-            }
+            Tabs(tabs = tabs, tabsContent = listOf({}, {}))
         }
     }
 }

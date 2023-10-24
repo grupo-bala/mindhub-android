@@ -7,8 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Search
@@ -34,7 +32,7 @@ import com.mindhub.model.entities.User
 import com.mindhub.ui.theme.MindHubTheme
 import com.mindhub.view.composables.NavBar
 import com.mindhub.view.composables.Suspended
-import com.mindhub.view.composables.post.PostItem
+import com.mindhub.view.composables.post.PostList
 import com.mindhub.view.destinations.AskCreateDestination
 import com.mindhub.view.destinations.AskViewDestination
 import com.mindhub.view.layouts.AppScaffold
@@ -127,20 +125,10 @@ fun AskResults(
                 } else if (searchViewModel.asks.isEmpty()) {
                     Text(text = "Nenhum resultado foi encontrado")
                 } else {
-                    LazyColumn() {
-                        items(searchViewModel.asks) {
-                            PostItem(
-                                title = it.title,
-                                description = it.content,
-                                score = it.score,
-                                onClick = {
-                                    navigator.navigate(
-                                        AskViewDestination(it.id)
-                                    )
-                                }
-                            )
-                        }
-                    }
+                    PostList(
+                        posts = searchViewModel.asks,
+                        onClick = { navigator.navigate(AskViewDestination(it.id)) }
+                    )
                 }
             }
         }
