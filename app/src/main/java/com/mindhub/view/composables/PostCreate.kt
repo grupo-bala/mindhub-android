@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.mindhub.model.entities.Post
 import com.mindhub.viewmodel.post.PostViewModelInterface
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -29,7 +30,7 @@ fun PostCreate(
     navigator: DestinationsNavigator,
     viewModel: PostViewModelInterface,
     extraFields: @Composable () -> Unit = {},
-    onSuccess: () -> Unit,
+    onSuccess: (Post) -> Unit,
 ) {
     var feedbackError: String? = null
 
@@ -52,7 +53,7 @@ fun PostCreate(
                 actions = {
                     Button(onClick = {
                         viewModel.create(
-                            onSuccess = onSuccess,
+                            onSuccess = { onSuccess(it) },
                             onFailure = {
                                 feedbackError = it
                             }
