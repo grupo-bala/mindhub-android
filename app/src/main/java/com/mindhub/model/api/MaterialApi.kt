@@ -14,8 +14,8 @@ data class MaterialRequest(
 )
 
 interface MaterialProvider {
-    suspend fun create(material: MaterialRequest)
-    suspend fun update(materialId: Int, materialUpdated: MaterialRequest)
+    suspend fun create(material: MaterialRequest): Material
+    suspend fun update(materialUpdated: Material)
     suspend fun remove(materialId: Int)
     suspend fun getOne(id: Int): Material
     suspend fun get(title: String): List<Material>
@@ -25,20 +25,24 @@ object MaterialFakeApi: MaterialProvider {
     private val materials = mutableListOf<Material>()
     private var count: Int = 0
 
-    override suspend fun create(material: MaterialRequest) {
+    override suspend fun create(material: MaterialRequest): Material {
         count += 1
-        materials.add(Material(
+        val material = Material(
             id = count,
             title = material.title,
             content = material.content,
             expertise = material.expertise,
             user = material.user,
             score = 10
-        ))
+        )
+
+        materials.add(material)
+
+        return material
     }
 
-    override suspend fun update(materialId: Int, materialUpdated: MaterialRequest) {
-        val material = materials.find { it.id == materialId } ?: throw Exception()
+    override suspend fun update(materialUpdated: Material) {
+        val material = materials.find { it.id == materialUpdated.id } ?: throw Exception()
 
         material.content = materialUpdated.content
         material.title = materialUpdated.title
