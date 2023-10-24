@@ -1,4 +1,4 @@
-package com.mindhub.view.post
+package com.mindhub.view.composables.post
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,7 +23,6 @@ import com.mindhub.model.entities.Badge
 import com.mindhub.model.entities.Expertise
 import com.mindhub.model.entities.User
 import com.mindhub.ui.theme.MindHubTheme
-import com.mindhub.view.composables.post.PostInfo
 import com.mindhub.view.composables.Suspended
 import com.mindhub.view.composables.comment.CommentsView
 import com.mindhub.view.layouts.AppScaffold
