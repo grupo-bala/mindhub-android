@@ -8,6 +8,8 @@ import androidx.lifecycle.viewModelScope
 import com.mindhub.model.api.MaterialFakeApi
 import com.mindhub.model.api.MaterialRequest
 import com.mindhub.model.entities.Expertise
+import com.mindhub.model.entities.Material
+import com.mindhub.model.entities.Post
 import com.mindhub.services.UserInfo
 import com.mindhub.viewmodel.post.PostViewModelInterface
 import kotlinx.coroutines.launch
@@ -18,12 +20,12 @@ class MaterialViewModel: ViewModel(), PostViewModelInterface {
     override var expertise by mutableStateOf(Expertise(""))
 
     override fun create(
-        onSuccess: () -> Unit,
+        onSuccess: (Post) -> Unit,
         onFailure: (String?) -> Unit,
     ) {
         viewModelScope.launch {
             try {
-                MaterialFakeApi.create(
+                val post = MaterialFakeApi.create(
                     MaterialRequest(
                         title = title,
                         content = content,
@@ -32,7 +34,7 @@ class MaterialViewModel: ViewModel(), PostViewModelInterface {
                     )
                 )
 
-                onSuccess()
+                onSuccess(post)
             } catch (e: Exception) {
                 onFailure(e.message)
             }
@@ -47,13 +49,17 @@ class MaterialViewModel: ViewModel(), PostViewModelInterface {
         viewModelScope.launch {
             try {
                 MaterialFakeApi.update(
-                    postId, MaterialRequest(
+                    Material(
+                        id = -1,
                         title = title,
                         content = content,
                         expertise = expertise,
-                        user = UserInfo!!
+                        user = UserInfo!!,
+                        score = 0
                     )
                 )
+
+                onSuccess()
             } catch (e: Exception) {
                 onFailure(e.message)
             }
