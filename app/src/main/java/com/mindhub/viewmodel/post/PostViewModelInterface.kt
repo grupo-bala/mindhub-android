@@ -1,6 +1,7 @@
 package com.mindhub.viewmodel.post
 
 import com.mindhub.model.entities.Expertise
+import com.mindhub.model.entities.Post
 
 interface PostViewModelInterface {
     var title: String
@@ -8,7 +9,7 @@ interface PostViewModelInterface {
     var expertise: Expertise
 
     fun create(
-        onSuccess: () -> Unit,
+        onSuccess: (Post) -> Unit,
         onFailure: (String?) -> Unit,
     )
     fun update(
