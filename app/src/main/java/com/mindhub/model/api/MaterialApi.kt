@@ -4,6 +4,7 @@ import com.mindhub.model.entities.Expertise
 import com.mindhub.model.entities.Material
 import com.mindhub.model.entities.User
 import kotlinx.serialization.Serializable
+import java.time.LocalDateTime
 
 @Serializable
 data class MaterialRequest(
@@ -33,6 +34,7 @@ object MaterialFakeApi: MaterialProvider {
             content = material.content,
             expertise = material.expertise,
             user = material.user,
+            date = LocalDateTime.now(),
             score = 10
         )
 

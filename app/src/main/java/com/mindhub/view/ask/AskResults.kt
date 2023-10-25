@@ -138,19 +138,6 @@ fun AskResults(
 @Preview(showBackground = true)
 @Composable
 fun AskResultsPreview() {
-    val coroutine = rememberCoroutineScope()
-
-    LaunchedEffect(key1 = true) {
-        coroutine.launch {
-            val user = User("", "", "", 0, Badge(""), listOf(), "")
-            AskFakeApi.create(Ask(0, "Matemática 1", "teste", 76, user, Expertise("teste")));
-            AskFakeApi.create(Ask(0, "Matemática 2", "teste", 76, user, Expertise("teste")));
-            AskFakeApi.create(Ask(0, "Matemática 3", "teste", 76, user, Expertise("teste")));
-            AskFakeApi.create(Ask(0, "Matemática 4", "teste", 76, user, Expertise("teste")));
-            AskFakeApi.create(Ask(0, "Matemática 5", "teste", 76, user, Expertise("teste")));
-        }
-    }
-
     MindHubTheme {
         AskResults(
             navigator = EmptyDestinationsNavigator

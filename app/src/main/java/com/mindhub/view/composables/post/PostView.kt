@@ -17,11 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.mindhub.model.api.AskFakeApi
-import com.mindhub.model.entities.Ask
-import com.mindhub.model.entities.Badge
-import com.mindhub.model.entities.Expertise
-import com.mindhub.model.entities.User
 import com.mindhub.ui.theme.MindHubTheme
 import com.mindhub.view.composables.Suspended
 import com.mindhub.view.composables.comment.CommentsView
@@ -89,8 +84,6 @@ fun PostView(
 @Composable
 fun PostViewPreview() {
     val viewModel: GetAskViewModel = viewModel()
-    val user = User("Teste", "teste", "teste87", 0, Badge(""), listOf(), "")
-    AskFakeApi.asks.add(Ask(0, "Como aplicar o teorema de pitágoras em um círculo?", "teste", 76, user, Expertise("Matemática")));
 
     MindHubTheme {
         PostView(

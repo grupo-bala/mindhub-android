@@ -5,13 +5,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mindhub.common.services.UserInfo
 import com.mindhub.model.api.AskFakeApi
 import com.mindhub.model.entities.Ask
 import com.mindhub.model.entities.Expertise
 import com.mindhub.model.entities.Post
-import com.mindhub.common.services.UserInfo
 import com.mindhub.viewmodel.post.PostViewModelInterface
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 
 class AskViewModel: ViewModel(), PostViewModelInterface {
     override var title by mutableStateOf("")
@@ -30,6 +31,7 @@ class AskViewModel: ViewModel(), PostViewModelInterface {
                     content = content,
                     expertise = expertise,
                     score = 0,
+                    date = LocalDateTime.now(),
                     user = UserInfo!!
                 ))
 
@@ -53,6 +55,7 @@ class AskViewModel: ViewModel(), PostViewModelInterface {
                     content = content,
                     expertise = expertise,
                     user = UserInfo!!,
+                    date = LocalDateTime.now(),
                     score = 0
                 ))
 

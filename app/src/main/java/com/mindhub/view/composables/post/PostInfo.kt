@@ -28,6 +28,7 @@ import com.mindhub.view.composables.chips.ScoreChip
 import com.mindhub.view.composables.chips.ShareChip
 import com.mindhub.view.layouts.SpacedColumn
 import io.ktor.util.reflect.instanceOf
+import java.time.LocalDateTime
 
 @Composable
 fun PostInfo(
@@ -91,6 +92,7 @@ fun PostInfoPreview() {
                 "d)2x² - 7x + 1 = 0",
         expertise = Expertise("Matemática"),
         score = 76,
+        date = LocalDateTime.now(),
         user = user
     )
 

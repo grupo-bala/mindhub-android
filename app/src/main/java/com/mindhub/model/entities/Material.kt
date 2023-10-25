@@ -1,6 +1,8 @@
 package com.mindhub.model.entities
 
+import com.mindhub.common.serialize.DateSerializer
 import kotlinx.serialization.Serializable
+import java.time.LocalDateTime
 
 @Serializable
 data class Material(
@@ -9,5 +11,7 @@ data class Material(
     override var title: String,
     override var content: String,
     override var score: Int,
+    @Serializable(DateSerializer::class)
+    override var date: LocalDateTime,
     var expertise: Expertise
 ) : Post

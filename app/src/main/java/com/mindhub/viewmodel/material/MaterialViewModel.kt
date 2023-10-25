@@ -1,18 +1,19 @@
 package com.mindhub.viewmodel.material
 
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mindhub.common.services.UserInfo
 import com.mindhub.model.api.MaterialFakeApi
 import com.mindhub.model.api.MaterialRequest
 import com.mindhub.model.entities.Expertise
 import com.mindhub.model.entities.Material
 import com.mindhub.model.entities.Post
-import com.mindhub.common.services.UserInfo
 import com.mindhub.viewmodel.post.PostViewModelInterface
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 
 class MaterialViewModel: ViewModel(), PostViewModelInterface {
     override var title by mutableStateOf("")
@@ -55,6 +56,7 @@ class MaterialViewModel: ViewModel(), PostViewModelInterface {
                         content = content,
                         expertise = expertise,
                         user = UserInfo!!,
+                        date = LocalDateTime.now(),
                         score = 0
                     )
                 )

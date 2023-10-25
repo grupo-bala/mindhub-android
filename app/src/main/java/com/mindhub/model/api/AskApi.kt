@@ -5,6 +5,7 @@ import com.mindhub.model.entities.Ask
 import com.mindhub.model.entities.Badge
 import com.mindhub.model.entities.Expertise
 import com.mindhub.model.entities.User
+import java.time.LocalDateTime
 
 interface AskProvider {
     suspend fun create(ask: Ask): Ask
@@ -21,9 +22,9 @@ object AskFakeApi : AskProvider {
 
     val asks = mutableListOf<Ask>().also {
         val user = User("João", "joaum123@gmail.com", "jjaum", 0, Badge(""), listOf(), "")
-        it.add(Ask(0, "Matemática 1", "teste", 76, user, Expertise("Matemática")))
-        it.add(Ask(0, "Química 1", "teste", 76, user, Expertise("Química")))
-        it.add(Ask(0, "Literatura 1", "teste", 76, user, Expertise("Literatura")))
+        it.add(Ask(0, "Matemática 1", "teste", 76, user, LocalDateTime.now(), Expertise("Matemática")))
+        it.add(Ask(0, "Química 1", "teste", 76, user, LocalDateTime.now(), Expertise("Química")))
+        it.add(Ask(0, "Literatura 1", "teste", 76, user, LocalDateTime.now(), Expertise("Literatura")))
     }
 
     override suspend fun create(ask: Ask): Ask {
