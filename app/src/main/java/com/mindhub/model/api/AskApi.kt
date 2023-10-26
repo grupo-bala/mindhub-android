@@ -22,9 +22,9 @@ object AskFakeApi : AskProvider {
 
     val asks = mutableListOf<Ask>().also {
         val user = User("João", "joaum123@gmail.com", "jjaum", 0, Badge(""), listOf(), "")
-        it.add(Ask(0, "Matemática 1", "teste", 76, user, LocalDateTime.now(), Expertise("Matemática")))
-        it.add(Ask(0, "Química 1", "teste", 76, user, LocalDateTime.now(), Expertise("Química")))
-        it.add(Ask(0, "Literatura 1", "teste", 76, user, LocalDateTime.now(), Expertise("Literatura")))
+        it.add(Ask(count++, "Matemática 1", "teste", 76, user, LocalDateTime.now(), Expertise("Matemática")))
+        it.add(Ask(count++, "Química 1", "teste", 76, user, LocalDateTime.now(), Expertise("Química")))
+        it.add(Ask(count++, "Literatura 1", "teste", 76, user, LocalDateTime.now(), Expertise("Literatura")))
     }
 
     override suspend fun create(ask: Ask): Ask {
@@ -58,7 +58,7 @@ object AskFakeApi : AskProvider {
     }
 
     override suspend fun getRecents(page: Int): List<Ask> {
-        TODO("Not yet implemented")
+        return asks.sortedBy { it.date }
     }
 
     override suspend fun remove(id: Int) {
