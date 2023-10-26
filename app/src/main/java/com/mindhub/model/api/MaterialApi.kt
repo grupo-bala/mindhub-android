@@ -1,5 +1,7 @@
 package com.mindhub.model.api
 
+import com.mindhub.common.services.UserInfo
+import com.mindhub.model.entities.Badge
 import com.mindhub.model.entities.Expertise
 import com.mindhub.model.entities.Material
 import com.mindhub.model.entities.User
@@ -20,11 +22,18 @@ interface MaterialProvider {
     suspend fun remove(materialId: Int)
     suspend fun getOne(id: Int): Material
     suspend fun get(title: String): List<Material>
+    suspend fun getForYou(page: Int): List<Material>
+    suspend fun getRecents(page: Int): List<Material>
 }
 
 object MaterialFakeApi: MaterialProvider {
-    private val materials = mutableListOf<Material>()
     private var count: Int = 0
+    private val materials = mutableListOf<Material>().also {
+        val user = User("João", "joaum123@gmail.com", "jjaum", 0, Badge(""), listOf(), "")
+        it.add(Material(count++, user, "Material 1", "teste", 87, LocalDateTime.now(), Expertise("Matemática")))
+        it.add(Material(count++, user, "Material 2", "teste", 87, LocalDateTime.now(), Expertise("Matemática")))
+        it.add(Material(count++, user, "Material 2", "teste", 87, LocalDateTime.now(), Expertise("Matemática")))
+    }
 
     override suspend fun create(material: MaterialRequest): Material {
         count += 1
@@ -63,5 +72,14 @@ object MaterialFakeApi: MaterialProvider {
 
     override suspend fun get(title: String): List<Material> {
         return materials.filter { it.title.contains(title) }
+    }
+
+    override suspend fun getForYou(page: Int): List<Material> {
+        val filtered = materials.filter { it.expertise in UserInfo!!.expertises }
+        return filtered.sortedBy { it.score }
+    }
+
+    override suspend fun getRecents(page: Int): List<Material> {
+        return materials.sortedBy { it.date }
     }
 }
