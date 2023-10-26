@@ -20,10 +20,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.mindhub.common.services.UserInfo
 import com.mindhub.model.entities.Badge
 import com.mindhub.model.entities.User
-import com.mindhub.common.services.UserInfo
 import com.mindhub.ui.theme.MindHubTheme
+import com.mindhub.view.destinations.AskFeedDestination
 import com.mindhub.view.destinations.AskResultsDestination
 import com.mindhub.view.layouts.AppScaffold
 import com.mindhub.view.layouts.SpacedColumn
@@ -74,7 +75,7 @@ fun AskHome(
                 onValueChange = {}
             )
 
-            TextButton(onClick = { /*TODO*/ }) {
+            TextButton(onClick = { navigator.navigate(AskFeedDestination) }) {
                 Text(text = "ou quer responder umas perguntas?")
             }
         }
