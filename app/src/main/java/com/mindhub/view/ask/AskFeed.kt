@@ -31,7 +31,7 @@ fun AskFeed(
 
     LaunchedEffect(key1 = true) {
         feed.getForYou()
-        // feed.getRecents()
+        feed.getRecents()
     }
 
     AppScaffold(
@@ -53,7 +53,7 @@ fun AskFeed(
                     PostList(
                         posts = feed.asksRecent,
                         modifier = Modifier.padding(horizontal = 16.dp),
-                        onClick = {}
+                        onClick = { }
                     )
                 }
             })
