@@ -52,7 +52,9 @@ import com.mindhub.model.entities.User
 import com.mindhub.common.services.UserInfo
 import com.mindhub.ui.theme.MindHubTheme
 import com.mindhub.view.composables.Suspended
+import com.mindhub.view.layouts.AppScaffold
 import com.mindhub.view.layouts.SpacedColumn
+import com.mindhub.view.layouts.Views
 import com.mindhub.viewmodel.badge.BadgeViewModel
 import com.mindhub.viewmodel.expertise.ExpertiseViewModel
 import com.mindhub.viewmodel.profile.EditProfileViewModel
@@ -91,10 +93,10 @@ fun EditProfile(
     expertiseViewModel.loadExpertises()
     badgeViewModel.loadBadges()
 
-    Surface(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
+    AppScaffold(
+        currentView = Views.USER,
+        navigator = navigator,
+        bottomAppBar = {}
     ) {
         SpacedColumn(
             spacing = 8,
