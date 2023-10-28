@@ -12,6 +12,6 @@ data class Material(
     override var content: String,
     override var score: Int,
     @Serializable(DateSerializer::class)
-    override var date: LocalDateTime,
+    override var postDate: LocalDateTime,
     var expertise: Expertise
 ) : Post

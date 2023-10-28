@@ -8,5 +8,5 @@ interface Post {
     var title: String
     var content: String
     var score: Int
-    var date: LocalDateTime
+    var postDate: LocalDateTime
 }

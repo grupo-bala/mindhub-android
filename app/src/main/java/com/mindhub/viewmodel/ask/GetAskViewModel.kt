@@ -5,9 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mindhub.common.services.ErrorParser
 import com.mindhub.model.api.AskFakeApi
 import com.mindhub.model.entities.Post
-import com.mindhub.common.services.ErrorParser
 import com.mindhub.viewmodel.post.GetPostViewModel
 import kotlinx.coroutines.launch
 
@@ -24,7 +24,6 @@ class GetAskViewModel : ViewModel(), GetPostViewModel {
             try {
                 post = AskFakeApi.getOne(id)
             } catch (e: Exception) {
-                println(e)
                 feedback = ErrorParser.from(e.message)
             }
 

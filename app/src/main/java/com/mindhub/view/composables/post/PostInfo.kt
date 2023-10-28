@@ -92,7 +92,7 @@ fun PostInfoPreview() {
                 "d)2x² - 7x + 1 = 0",
         expertise = Expertise("Matemática"),
         score = 76,
-        date = LocalDateTime.now(),
+        postDate = LocalDateTime.now(),
         user = user
     )
 

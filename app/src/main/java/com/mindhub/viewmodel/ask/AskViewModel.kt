@@ -31,7 +31,7 @@ class AskViewModel: ViewModel(), PostViewModelInterface {
                     content = content,
                     expertise = expertise,
                     score = 0,
-                    date = LocalDateTime.now(),
+                    postDate = LocalDateTime.now(),
                     user = UserInfo!!
                 ))
 
@@ -55,7 +55,7 @@ class AskViewModel: ViewModel(), PostViewModelInterface {
                     content = content,
                     expertise = expertise,
                     user = UserInfo!!,
-                    date = LocalDateTime.now(),
+                    postDate = LocalDateTime.now(),
                     score = 0
                 ))
 

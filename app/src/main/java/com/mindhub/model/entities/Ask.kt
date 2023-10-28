@@ -12,6 +12,6 @@ data class Ask(
     override var score: Int,
     override var user: User,
     @Serializable(DateSerializer::class)
-    override var date: LocalDateTime,
+    override var postDate: LocalDateTime,
     var expertise: Expertise,
 ) : Post

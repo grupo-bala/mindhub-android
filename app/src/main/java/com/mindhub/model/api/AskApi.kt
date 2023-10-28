@@ -58,7 +58,7 @@ object AskFakeApi : AskProvider {
     }
 
     override suspend fun getRecents(page: Int): List<Ask> {
-        return asks.sortedBy { it.date }
+        return asks.sortedBy { it.postDate }
     }
 
     override suspend fun remove(id: Int) {

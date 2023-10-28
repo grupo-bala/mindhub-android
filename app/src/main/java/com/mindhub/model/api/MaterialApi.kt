@@ -43,7 +43,7 @@ object MaterialFakeApi: MaterialProvider {
             content = material.content,
             expertise = material.expertise,
             user = material.user,
-            date = LocalDateTime.now(),
+            postDate = LocalDateTime.now(),
             score = 10
         )
 
@@ -80,6 +80,6 @@ object MaterialFakeApi: MaterialProvider {
     }
 
     override suspend fun getRecents(page: Int): List<Material> {
-        return materials.sortedBy { it.date }
+        return materials.sortedBy { it.postDate }
     }
 }
