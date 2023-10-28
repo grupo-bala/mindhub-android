@@ -1,7 +1,6 @@
 package com.mindhub.view.events
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
-
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -48,6 +47,10 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mindhub.common.ext.toBrazilianDateFormat
 import com.mindhub.common.ext.toTimeFormat
+import com.mindhub.common.services.UserInfo
+import com.mindhub.model.entities.Badge
+import com.mindhub.model.entities.Expertise
+import com.mindhub.model.entities.User
 import com.mindhub.ui.theme.MindHubTheme
 import com.mindhub.view.layouts.SpacedColumn
 import com.mindhub.viewmodel.event.EventViewModel
@@ -59,7 +62,7 @@ import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 @OptIn(ExperimentalMaterial3Api::class)
 @Destination
 @Composable
-fun CreateEventInfo(
+fun CreateEvent(
     navigator: DestinationsNavigator
 ) {
     val viewModel: EventViewModel = viewModel()
@@ -81,7 +84,9 @@ fun CreateEventInfo(
                     }
                 },
                 actions = {
-                    Button(onClick = {}) {
+                    Button(onClick = {
+                        viewModel.create() {}
+                    }) {
                         Text(text = "Adicionar")
                     }
                 }
@@ -243,7 +248,7 @@ fun CreateEventInfo(
                         ),
                         onDismissRequest = { isMapExpanded = false },
                     ) {
-                        CreateEventLocation(
+                        EventLocationInput(
                             currentPosition = viewModel.position,
                             onChange = { viewModel.position = it }
                         )
@@ -257,7 +262,17 @@ fun CreateEventInfo(
 @Preview(showBackground = true)
 @Composable
 fun CreateEventInfoPreview() {
+    UserInfo = User(
+        name = "User",
+        username = "username",
+        email = "user@gmail.com",
+        xp = 727,
+        currentBadge = Badge("Aprendiz"),
+        expertises = listOf(Expertise("Matemática"), Expertise("Geografia"), Expertise("Química")),
+        token = ""
+    )
+
     MindHubTheme {
-        CreateEventInfo(navigator = EmptyDestinationsNavigator)
+        CreateEvent(navigator = EmptyDestinationsNavigator)
     }
 }
