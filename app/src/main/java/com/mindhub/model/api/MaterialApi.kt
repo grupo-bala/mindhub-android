@@ -30,9 +30,9 @@ object MaterialFakeApi: MaterialProvider {
     private var count: Int = 0
     private val materials = mutableListOf<Material>().also {
         val user = User("João", "joaum123@gmail.com", "jjaum", 0, Badge(""), listOf(), "")
-        it.add(Material(count++, user, "Material 1", "teste", 87, LocalDateTime.now(), Expertise("Matemática")))
-        it.add(Material(count++, user, "Material 2", "teste", 87, LocalDateTime.now(), Expertise("Matemática")))
-        it.add(Material(count++, user, "Material 2", "teste", 87, LocalDateTime.now(), Expertise("Matemática")))
+        it.add(Material(count++, user, "Relações trigonométricas em 1 minuto!", "teste", 87, LocalDateTime.now(), Expertise("Matemática")))
+        it.add(Material(count++, user, "As três leis de Newton com exemplos", "teste", 87, LocalDateTime.now(), Expertise("Física")))
+        it.add(Material(count++, user, "Os biomas brasileiros explicados", "teste", 87, LocalDateTime.now(), Expertise("Geografia")))
     }
 
     override suspend fun create(material: MaterialRequest): Material {
