@@ -28,7 +28,7 @@ import com.mindhub.view.layouts.SpacedColumn
 @SuppressLint("MissingPermission")
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun CreateEventLocation(
+fun EventLocationInput(
     currentPosition: LatLng,
     onChange: (LatLng) -> Unit
 ) {
@@ -92,7 +92,7 @@ fun CreateEventLocation(
 @Composable
 fun CreateEventLocationPreview() {
     MindHubTheme {
-        CreateEventLocation(
+        EventLocationInput(
             currentPosition = LatLng(0.0, 0.0),
             onChange = {}
         )
