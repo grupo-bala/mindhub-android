@@ -1,6 +1,7 @@
 package com.mindhub.view.events
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
+
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -43,10 +44,13 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.mindhub.common.services.toBrazilianDateFormat
-import com.mindhub.common.services.toTimeFormat
+import androidx.compose.ui.window.DialogProperties
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.mindhub.common.ext.toBrazilianDateFormat
+import com.mindhub.common.ext.toTimeFormat
 import com.mindhub.ui.theme.MindHubTheme
 import com.mindhub.view.layouts.SpacedColumn
+import com.mindhub.viewmodel.event.EventViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
@@ -58,6 +62,7 @@ import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 fun CreateEventInfo(
     navigator: DestinationsNavigator
 ) {
+    val viewModel: EventViewModel = viewModel()
     val focusManager = LocalFocusManager.current
 
     Surface(
@@ -71,13 +76,13 @@ fun CreateEventInfo(
             TopAppBar(
                 title = { Text(text = "Adicionar um evento", style = MaterialTheme.typography.titleMedium) },
                 navigationIcon = {
-                    IconButton(onClick = { /*TODO*/ }) {
+                    IconButton(onClick = { navigator.popBackStack() }) {
                         Icon(imageVector = Icons.Filled.Close, contentDescription = null)
                     }
                 },
                 actions = {
-                    Button(onClick = { /*TODO*/ }) {
-                        Text(text = "Continuar")
+                    Button(onClick = {}) {
+                        Text(text = "Adicionar")
                     }
                 }
             )
@@ -95,25 +100,24 @@ fun CreateEventInfo(
                     .verticalScroll(rememberScrollState())
             ) {
                 OutlinedTextField(
-                    value = "",
+                    value = viewModel.title,
                     label = { Text(text = "Título") },
                     placeholder = { Text(text = "Digite o título") },
-                    onValueChange = {},
+                    onValueChange = { viewModel.title = it },
                     modifier = Modifier.fillMaxWidth()
                 )
 
                 OutlinedTextField(
-                    value = "",
+                    value = viewModel.content,
                     label = { Text(text = "Descrição") },
                     placeholder = { Text(text = "Digite a descrição") },
-                    onValueChange = {},
+                    onValueChange = { viewModel.content = it },
                     modifier = Modifier
                         .height(300.dp)
                         .fillMaxWidth()
                 )
 
                 var isDatePickerOpened by remember { mutableStateOf(false) }
-                var selectedDate by remember { mutableStateOf("") }
                 val datePickerState = rememberDatePickerState()
 
                 if (isDatePickerOpened) {
@@ -122,7 +126,7 @@ fun CreateEventInfo(
                         confirmButton = {
                             Button(onClick = {
                                 datePickerState.selectedDateMillis?.let {
-                                    selectedDate = it.toBrazilianDateFormat()
+                                    viewModel.date = it.toBrazilianDateFormat()
                                 }
 
                                 isDatePickerOpened = false
@@ -143,7 +147,7 @@ fun CreateEventInfo(
                 }
 
                 OutlinedTextField(
-                    value = selectedDate,
+                    value = viewModel.date,
                     onValueChange = { },
                     label = { Text(text = "Data") },
                     placeholder = { Text(text = "Selecione a data") },
@@ -154,7 +158,6 @@ fun CreateEventInfo(
                 )
 
                 var isTimePickerOpened by remember { mutableStateOf(false) }
-                var selectedTime by remember { mutableStateOf("") }
                 val timePickerState = rememberTimePickerState()
 
                 if (isTimePickerOpened) {
@@ -181,7 +184,7 @@ fun CreateEventInfo(
                                         .padding(8.dp)
                                 ) {
                                     Button(onClick = {
-                                        selectedTime = timePickerState.toTimeFormat()
+                                        viewModel.time = timePickerState.toTimeFormat()
                                         isTimePickerOpened = false
                                     }) {
                                         Text(text = "Escolher horário")
@@ -200,7 +203,7 @@ fun CreateEventInfo(
                 }
 
                 OutlinedTextField(
-                    value = selectedTime,
+                    value = viewModel.time,
                     onValueChange = { },
                     label = { Text(text = "Horário") },
                     placeholder = { Text(text = "Selecione o horário") },
@@ -209,6 +212,43 @@ fun CreateEventInfo(
                     readOnly = true,
                     interactionSource = timeInteraction
                 )
+
+                var isMapExpanded by remember {
+                    mutableStateOf(false)
+                }
+
+                val mapInteraction = remember { MutableInteractionSource() }.also {
+                    if (it.collectIsFocusedAsState().value) {
+                        isMapExpanded = true
+                        focusManager.clearFocus(force = true)
+                    }
+                }
+
+                OutlinedTextField(
+                    value = viewModel.position.toString(),
+                    onValueChange = { },
+                    label = { Text(text = "Local") },
+                    placeholder = { Text(text = "Selecione o local") },
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    readOnly = true,
+                    interactionSource = mapInteraction
+                )
+
+                if (isMapExpanded) {
+                    Dialog(
+                        properties = DialogProperties(
+                            dismissOnBackPress = true,
+                            dismissOnClickOutside = true
+                        ),
+                        onDismissRequest = { isMapExpanded = false },
+                    ) {
+                        CreateEventLocation(
+                            currentPosition = viewModel.position,
+                            onChange = { viewModel.position = it }
+                        )
+                    }
+                }
             }
         }
     }
