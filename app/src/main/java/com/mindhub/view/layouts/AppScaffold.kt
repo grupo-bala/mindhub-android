@@ -31,7 +31,7 @@ enum class Views(val icon: ImageVector, val destination: Direction) {
     ASK(Icons.Filled.Email, AskHomeDestination),
     MATERIAL(Icons.Filled.Info, MaterialFeedDestination),
     EVENT(Icons.Filled.Place, AskHomeDestination),
-    USER(Icons.Filled.AccountCircle, ProfileDestination)
+    USER(Icons.Filled.AccountCircle, ProfileDestination())
 }
 
 @Composable
