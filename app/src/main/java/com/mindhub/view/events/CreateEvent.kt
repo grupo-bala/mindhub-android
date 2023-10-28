@@ -52,6 +52,7 @@ import com.mindhub.model.entities.Badge
 import com.mindhub.model.entities.Expertise
 import com.mindhub.model.entities.User
 import com.mindhub.ui.theme.MindHubTheme
+import com.mindhub.view.destinations.EventViewDestination
 import com.mindhub.view.layouts.SpacedColumn
 import com.mindhub.viewmodel.event.EventViewModel
 import com.ramcosta.composedestinations.annotation.Destination
@@ -85,7 +86,9 @@ fun CreateEvent(
                 },
                 actions = {
                     Button(onClick = {
-                        viewModel.create() {}
+                        viewModel.create() {
+                            navigator.navigate(EventViewDestination(it.id))
+                        }
                     }) {
                         Text(text = "Adicionar")
                     }
