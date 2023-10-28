@@ -21,7 +21,9 @@ class EventViewModel : ViewModel() {
     var position by mutableStateOf(LatLng(0.0, 0.0))
     var isLoading by mutableStateOf(false)
 
-    fun create() {
+    fun create(
+        onSuccess: () -> Unit
+    ) {
         viewModelScope.launch {
             try {
                 isLoading = true
@@ -39,6 +41,8 @@ class EventViewModel : ViewModel() {
                         longitude = position.longitude
                     )
                 )
+
+                onSuccess()
             } catch (e: Error) {
 
             }
