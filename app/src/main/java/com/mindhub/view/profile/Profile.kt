@@ -14,8 +14,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Create
+import androidx.compose.material.icons.outlined.Email
+import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.InputChip
@@ -32,6 +35,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.mindhub.common.services.UserInfo
@@ -40,125 +44,161 @@ import com.mindhub.model.entities.Expertise
 import com.mindhub.model.entities.User
 import com.mindhub.ui.theme.MindHubTheme
 import com.mindhub.view.composables.MeasureViewWidth
+import com.mindhub.view.composables.Suspended
 import com.mindhub.view.composables.Tabs
 import com.mindhub.view.destinations.EditProfileDestination
+import com.mindhub.view.destinations.RankingDestination
+import com.mindhub.view.layouts.AppScaffold
+import com.mindhub.view.layouts.Views
+import com.mindhub.viewmodel.profile.ProfileViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Destination
 @Composable
 fun Profile(
-    navigator: DestinationsNavigator
+    navigator: DestinationsNavigator,
+    username: String? = null
 ) {
+    val profileViewModel: ProfileViewModel = viewModel()
+
     var currentTabIndex by remember {
         mutableIntStateOf(0)
     }
+
     val tabs = listOf("Perguntas", "Materiais")
 
-    Surface(
-        modifier = Modifier
-            .fillMaxSize()
+    profileViewModel.loadProfile(username)
+
+    AppScaffold(
+        currentView = Views.USER,
+        navigator = navigator,
     ) {
-        Column(
-            modifier = Modifier.fillMaxHeight()
+        Box(
+            modifier = Modifier.fillMaxSize()
         ) {
             Column(
-                modifier = Modifier.padding(32.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                modifier = Modifier.fillMaxHeight()
             ) {
-                AsyncImage(
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data("https://picsum.photos/200") // TODO: change with the user profile picture
-                        .crossfade(true)
-                        .build(),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .width(128.dp)
-                        .height(128.dp)
-                )
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
+                Column(
+                    modifier = Modifier.padding(32.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Column(
-                        modifier = Modifier.fillMaxWidth()
+                    AsyncImage(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data("https://picsum.photos/200") // TODO: change with the user profile picture
+                            .crossfade(true)
+                            .build(),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .clip(CircleShape)
+                            .width(128.dp)
+                            .height(128.dp)
+                    )
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween,
                     ) {
-                        MeasureViewWidth(viewToMeasure = {
-                            Text(text = UserInfo!!.name)
-                        }) { width ->
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxWidth(),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Text(text = UserInfo!!.name)
-                                IconButton(
-                                    onClick = { navigator.navigate(EditProfileDestination) },
-                                    modifier = Modifier.padding(start = width + 32.dp)
+                        Column(
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            MeasureViewWidth(viewToMeasure = {
+                                Text(text = profileViewModel.username)
+                            }) { width ->
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth(),
+                                    contentAlignment = Alignment.Center
                                 ) {
-                                    Icon(imageVector = Icons.Default.Create, contentDescription = null)
+                                    Text(text = profileViewModel.username)
+
+                                    if (username == null) {
+                                        IconButton(
+                                            onClick = { navigator.navigate(EditProfileDestination) },
+                                            modifier = Modifier.padding(start = width + 32.dp).height(20.dp)
+                                        ) {
+                                            Icon(imageVector = Icons.Default.Create, contentDescription = null)
+                                        }
+                                    }
                                 }
                             }
-                        }
 
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(8.dp, alignment = Alignment.CenterHorizontally)
+                            ) {
+                                Text(text = "@${profileViewModel.username}")
+
+                                Divider(
+                                    modifier = Modifier
+                                        .height(15.dp)
+                                        .width(2.dp)
+                                )
+
+                                Text(text = "${profileViewModel.xp} XP")
+
+                                Divider(
+                                    modifier = Modifier
+                                        .height(15.dp)
+                                        .width(2.dp)
+                                )
+
+                                Text(text = profileViewModel.badge.title)
+                            }
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Suspended(
+                        isLoading = profileViewModel.isLoading
+                    ) {
                         Row(
-                            modifier = Modifier
-                                .fillMaxWidth(),
+                            modifier = Modifier.fillMaxWidth(),
                             verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(8.dp, alignment = Alignment.CenterHorizontally)
+                            horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally)
                         ) {
-                            Text(text = "@${UserInfo!!.username}")
-
-                            Divider(
-                                modifier = Modifier
-                                    .height(15.dp)
-                                    .width(2.dp)
-                            )
-
-                            Text(text = "${UserInfo!!.xp} XP")
-
-                            Divider(
-                                modifier = Modifier
-                                    .height(15.dp)
-                                    .width(2.dp)
-                            )
-
-                            Text(text = UserInfo!!.currentBadge.title)
+                            for (expertise in profileViewModel.expertises) {
+                                InputChip(
+                                    selected = false,
+                                    onClick = {},
+                                    label = { Text(text = expertise.title) },
+                                )
+                            }
                         }
                     }
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Divider(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(1.dp)
+                )
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally)
-                ) {
-                    for (expertise in UserInfo!!.expertises) {
-                        InputChip(
-                            selected = false,
-                            onClick = {},
-                            label = { Text(text = expertise.title) },
-                        )
-                    }
-                }
+                Tabs(tabs = tabs, tabsContent = listOf({}, {}))
             }
 
-            Divider(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(1.dp)
-            )
-
-            Tabs(tabs = tabs, tabsContent = listOf({}, {}))
+            if (username == null) {
+                FloatingActionButton(
+                    onClick = {
+                        navigator.navigate(RankingDestination)
+                    },
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .align(Alignment.BottomEnd)
+                ) {
+                    Icon(imageVector = Icons.Outlined.Star, contentDescription = null)
+                }
+            }
         }
     }
 }
