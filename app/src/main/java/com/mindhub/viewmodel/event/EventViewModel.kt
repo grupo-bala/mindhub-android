@@ -22,13 +22,13 @@ class EventViewModel : ViewModel() {
     var isLoading by mutableStateOf(false)
 
     fun create(
-        onSuccess: () -> Unit
+        onSuccess: (Event) -> Unit
     ) {
         viewModelScope.launch {
             try {
                 isLoading = true
 
-                EventFakeApi.create(
+                val event = EventFakeApi.create(
                     Event(
                         id = 0,
                         user = UserInfo!!,
@@ -42,7 +42,7 @@ class EventViewModel : ViewModel() {
                     )
                 )
 
-                onSuccess()
+                onSuccess(event)
             } catch (e: Error) {
 
             }

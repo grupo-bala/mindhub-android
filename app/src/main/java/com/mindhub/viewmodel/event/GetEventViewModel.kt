@@ -7,21 +7,22 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mindhub.common.services.ErrorParser
 import com.mindhub.model.api.EventFakeApi
-import com.mindhub.model.entities.Event
+import com.mindhub.model.entities.Post
+import com.mindhub.viewmodel.post.GetPostViewModel
 import kotlinx.coroutines.launch
 
-class GetEventViewModel : ViewModel() {
-    var event: Event? by mutableStateOf(null)
-    var feedback by mutableStateOf("")
-    var isLoading by mutableStateOf(false)
+class GetEventViewModel : ViewModel(), GetPostViewModel {
+    override var post: Post? by mutableStateOf(null)
+    override var feedback by mutableStateOf("")
+    override var isLoading by mutableStateOf(false)
 
-    fun get(id: Int) {
+    override fun get(id: Int) {
         viewModelScope.launch {
             feedback = ""
             isLoading = true
 
             try {
-                event = EventFakeApi.get(id)
+                post = EventFakeApi.get(id)
             } catch (e: Exception) {
                 feedback = ErrorParser.from(e.message)
             }
