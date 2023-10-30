@@ -63,7 +63,7 @@ import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 @OptIn(ExperimentalMaterial3Api::class)
 @Destination
 @Composable
-fun CreateEvent(
+fun EventCreate(
     navigator: DestinationsNavigator
 ) {
     val viewModel: EventViewModel = viewModel()
@@ -276,6 +276,6 @@ fun CreateEventInfoPreview() {
     )
 
     MindHubTheme {
-        CreateEvent(navigator = EmptyDestinationsNavigator)
+        EventCreate(navigator = EmptyDestinationsNavigator)
     }
 }
