@@ -18,12 +18,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mindhub.model.entities.Ask
 import com.mindhub.model.entities.Badge
+import com.mindhub.model.entities.Event
 import com.mindhub.model.entities.Expertise
 import com.mindhub.model.entities.Material
 import com.mindhub.model.entities.Post
 import com.mindhub.model.entities.User
 import com.mindhub.ui.theme.MindHubTheme
 import com.mindhub.view.composables.chips.CommentsChip
+import com.mindhub.view.composables.chips.LocationChip
 import com.mindhub.view.composables.chips.ScoreChip
 import com.mindhub.view.composables.chips.ShareChip
 import com.mindhub.view.layouts.SpacedColumn
@@ -60,6 +62,10 @@ fun PostInfo(
             ScoreChip(score = post.score)
             CommentsChip(commentsQuantity = 10)
             ShareChip()
+
+            if (post.instanceOf(Event::class)) {
+                LocationChip()
+            }
         }
 
         Row(
