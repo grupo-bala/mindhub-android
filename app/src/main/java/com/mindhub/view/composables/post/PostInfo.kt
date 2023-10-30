@@ -47,8 +47,14 @@ fun PostInfo(
         Text(text = post.title, style = MaterialTheme.typography.titleLarge)
         Text(text = "por ${post.user.username}", style = MaterialTheme.typography.labelLarge)
 
-        if (post.instanceOf(Ask::class) || post.instanceOf(Material::class)) {
+        if (post.instanceOf(Ask::class)) {
             val postWithExpertise = post as Ask
+            SuggestionChip(
+                onClick = { /*TODO*/ },
+                label = { Text(text = postWithExpertise.expertise.title) }
+            )
+        } else if (post.instanceOf(Material::class)) {
+            val postWithExpertise = post as Material
             SuggestionChip(
                 onClick = { /*TODO*/ },
                 label = { Text(text = postWithExpertise.expertise.title) }
