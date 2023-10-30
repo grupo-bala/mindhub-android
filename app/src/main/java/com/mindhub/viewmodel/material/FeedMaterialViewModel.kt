@@ -8,22 +8,23 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mindhub.model.api.MaterialFakeApi
-import com.mindhub.model.entities.Material
+import com.mindhub.model.entities.Post
+import com.mindhub.viewmodel.post.FeedPostViewModel
 import kotlinx.coroutines.launch
 
-class FeedMaterialViewModel : ViewModel() {
-    var materialsForYou = mutableStateListOf<Material>()
-    var materialsRecents = mutableStateListOf<Material>()
-    var currentPageForYou by mutableIntStateOf(1)
-    var currentPageRecents by mutableIntStateOf(1)
-    var isLoadingForYou by mutableStateOf(false)
-    var isLoadingRecents by mutableStateOf(false)
+class FeedMaterialViewModel : ViewModel(), FeedPostViewModel {
+    override var forYou: MutableList<Post> = mutableStateListOf<Post>()
+    override var recents: MutableList<Post> = mutableStateListOf<Post>()
+    override var currentPageForYou by mutableIntStateOf(1)
+    override var currentPageRecents by mutableIntStateOf(1)
+    override var isLoadingForYou by mutableStateOf(false)
+    override var isLoadingRecents by mutableStateOf(false)
 
-    fun getForYou() {
+    override fun getForYou() {
         viewModelScope.launch {
             try {
                 isLoadingForYou = true
-                materialsForYou.addAll(MaterialFakeApi.getForYou(currentPageForYou))
+                forYou.addAll(MaterialFakeApi.getForYou(currentPageForYou))
                 currentPageForYou++
             } catch (_: Exception) { }
 
@@ -31,11 +32,11 @@ class FeedMaterialViewModel : ViewModel() {
         }
     }
 
-    fun getRecents() {
+    override fun getRecents() {
         viewModelScope.launch {
             try {
                 isLoadingRecents = true
-                materialsRecents.addAll(MaterialFakeApi.getRecents(currentPageRecents))
+                recents.addAll(MaterialFakeApi.getRecents(currentPageRecents))
                 currentPageRecents++
             } catch (_: Exception) { }
 
