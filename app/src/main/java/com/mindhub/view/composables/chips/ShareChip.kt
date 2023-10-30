@@ -10,6 +10,6 @@ import androidx.compose.runtime.Composable
 fun ShareChip() {
     BaseChip {
         Icon(imageVector = Icons.Outlined.Share, contentDescription = null)
-        Text(text = "share")
+        Text(text = "Compartilhar")
     }
 }
