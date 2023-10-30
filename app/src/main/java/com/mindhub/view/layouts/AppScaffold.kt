@@ -21,6 +21,7 @@ import com.mindhub.ui.theme.MindHubTheme
 import com.mindhub.view.composables.NavBar
 import com.mindhub.view.composables.TopBar
 import com.mindhub.view.destinations.AskHomeDestination
+import com.mindhub.view.destinations.EventFeedDestination
 import com.mindhub.view.destinations.MaterialFeedDestination
 import com.mindhub.view.destinations.ProfileDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -30,7 +31,7 @@ import com.ramcosta.composedestinations.spec.Direction
 enum class Views(val icon: ImageVector, val destination: Direction) {
     ASK(Icons.Filled.Email, AskHomeDestination),
     MATERIAL(Icons.Filled.Info, MaterialFeedDestination),
-    EVENT(Icons.Filled.Place, AskHomeDestination),
+    EVENT(Icons.Filled.Place, EventFeedDestination),
     USER(Icons.Filled.AccountCircle, ProfileDestination())
 }
 
