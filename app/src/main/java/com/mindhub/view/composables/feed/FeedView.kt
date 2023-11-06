@@ -1,8 +1,14 @@
 package com.mindhub.view.composables.feed
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.mindhub.model.entities.Post
@@ -19,36 +25,43 @@ fun FeedView(
     navigator: DestinationsNavigator,
     viewModel: FeedPostViewModel,
     currentView: Views,
-    onClick: (Post) -> Unit
+    onClickItem: (Post) -> Unit,
+    onClickAdd: () -> Unit
 ) {
-    LaunchedEffect(key1 = true) {
-        viewModel.getForYou()
-        viewModel.getRecents()
-    }
-
     AppScaffold(
         currentView = currentView,
         navigator = navigator
     ) {
-        Tabs(
-            tabs = listOf("Para você", "Mais recentes"),
-            tabsContent = listOf({
-                Suspended(isLoading = viewModel.isLoadingForYou) {
-                    PostList(
-                        posts = viewModel.forYou,
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                        onClick = onClick
-                    )
-                }
-            }, {
-                Suspended(isLoading = viewModel.isLoadingRecents) {
-                    PostList(
-                        posts = viewModel.recents,
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                        onClick = onClick
-                    )
-                }
-            })
-        )
+        Box(modifier = Modifier.fillMaxSize()) {
+            Tabs(
+                tabs = listOf("Para você", "Mais recentes"),
+                tabsContent = listOf({
+                    Suspended(isLoading = viewModel.isLoadingForYou) {
+                        PostList(
+                            posts = viewModel.forYou,
+                            modifier = Modifier.padding(horizontal = 16.dp),
+                            onClick = onClickItem
+                        )
+                    }
+                }, {
+                    Suspended(isLoading = viewModel.isLoadingRecents) {
+                        PostList(
+                            posts = viewModel.recents,
+                            modifier = Modifier.padding(horizontal = 16.dp),
+                            onClick = onClickItem
+                        )
+                    }
+                })
+            )
+
+            FloatingActionButton(
+                onClick = onClickAdd,
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(16.dp)
+            ) {
+                Icon(imageVector = Icons.Outlined.Add, contentDescription = null)
+            }
+        }
     }
 }
