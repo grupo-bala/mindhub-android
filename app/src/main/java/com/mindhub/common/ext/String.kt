@@ -5,11 +5,13 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 fun String.ellipsis(maxSize: Int): String {
-    if (maxSize >= this.length) {
-        return this
+    val beforeEnter = this.split("\n")[0]
+
+    if (maxSize >= beforeEnter.length) {
+        return beforeEnter
     }
 
-    return "${this.substring(0, maxSize - 1)}..."
+    return "${beforeEnter.substring(0, maxSize - 1)}..."
 }
 
 fun String.dateToUnix(time: String): LocalDateTime {
