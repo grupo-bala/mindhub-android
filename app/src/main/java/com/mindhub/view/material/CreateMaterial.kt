@@ -4,6 +4,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mindhub.ui.theme.MindHubTheme
 import com.mindhub.view.composables.post.PostCreate
+import com.mindhub.view.destinations.MaterialViewDestination
 import com.mindhub.viewmodel.material.MaterialViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -22,7 +23,7 @@ fun CreateMaterial(
         navigator = navigator,
         viewModel = viewModel,
         onSuccess = {
-            TODO("Navigate to post view")
+            navigator.navigate(MaterialViewDestination(it.id))
         }
     )
 }
