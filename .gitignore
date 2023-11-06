@@ -13,4 +13,4 @@
 .externalNativeBuild
 .cxx
 local.properties
-/app/src/main/java/com/mindhub/services/Config.kt
+app/secrets.properties
