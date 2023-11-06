@@ -51,7 +51,7 @@ class MaterialViewModel: ViewModel(), PostViewModelInterface {
             try {
                 MaterialFakeApi.update(
                     Material(
-                        id = -1,
+                        id = postId,
                         title = title,
                         content = content,
                         expertise = expertise,
