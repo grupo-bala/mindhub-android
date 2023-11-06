@@ -28,7 +28,7 @@
             </intent-filter>
             <intent-filter android:autoVerify="true">
                 <data
-                    android:host="grupo-bala.github.io/mindhub-android"
+                    android:host="mindhub.netlify.app"
                     android:scheme="https" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />

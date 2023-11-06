@@ -13,7 +13,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
     route = "ask",
     deepLinks = [
         DeepLink(
-            uriPattern = "https://grupo-bala.github.io/mindhub-android/ask/{askId}",
+            uriPattern = "https://mindhub.netlify.app/ask/{askId}",
             action = Intent.ACTION_VIEW
         )
     ]
