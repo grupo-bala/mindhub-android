@@ -9,6 +9,7 @@ import com.mindhub.model.entities.Expertise
 import com.mindhub.model.entities.User
 import com.mindhub.ui.theme.MindHubTheme
 import com.mindhub.view.composables.feed.FeedView
+import com.mindhub.view.destinations.AskResultsDestination
 import com.mindhub.view.destinations.AskViewDestination
 import com.mindhub.view.layouts.Views
 import com.mindhub.viewmodel.ask.FeedAskViewModel
@@ -27,7 +28,8 @@ fun AskFeed(
         navigator = navigator,
         viewModel = feed,
         currentView = Views.ASK,
-        onClick = { navigator.navigate((AskViewDestination(it.id))) }
+        onClickItem = { navigator.navigate(AskViewDestination(it.id)) },
+        onClickAdd = { navigator.navigate(AskResultsDestination) }
     )
 }
 
