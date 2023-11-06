@@ -91,7 +91,11 @@ fun PostInfo(
             CommentsChip(commentsQuantity = 10)
 
             if (post.instanceOf(Event::class)) {
-                LocationChip()
+                val event = post as Event
+                LocationChip(
+                    latitude = event.latitude,
+                    longitude = event.longitude
+                )
             }
 
             ShareChip(text = "${post.title}\n\n${post.getRoute()}")
