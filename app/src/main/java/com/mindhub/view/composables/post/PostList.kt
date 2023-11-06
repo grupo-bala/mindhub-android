@@ -15,9 +15,7 @@ fun PostList(
     LazyColumn(modifier = modifier) {
         items(posts) {
             PostItem(
-                title = it.title,
-                description = it.content,
-                score = it.score,
+                post = it,
                 onClick = { onClick(it) }
             )
         }

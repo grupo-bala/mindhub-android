@@ -1,13 +1,20 @@
 package com.mindhub.view.composables.post
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.DateRange
+import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,13 +23,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mindhub.common.ext.ellipsis
+import com.mindhub.common.ext.toBrazilianDateFormat
+import com.mindhub.model.entities.Badge
+import com.mindhub.model.entities.Event
+import com.mindhub.model.entities.Post
+import com.mindhub.model.entities.User
 import com.mindhub.ui.theme.MindHubTheme
+import com.mindhub.view.composables.chips.BaseChip
+import io.ktor.util.reflect.instanceOf
+import java.time.LocalDateTime
 
 @Composable
 fun PostItem(
-    title: String,
-    description: String,
-    score: Int,
+    post: Post,
     onClick: () -> Unit,
 ) {
     Column(
@@ -40,20 +53,56 @@ fun PostItem(
                 modifier = Modifier.weight(1.0f)
             ) {
                 Text(
-                    text = title,
+                    text = post.title,
                     style = MaterialTheme.typography.titleMedium
                 )
 
                 Text(
-                    text = description.ellipsis(100),
+                    text = post.content.ellipsis(100),
                     style = MaterialTheme.typography.bodyMedium
                 )
+
+                if (post.instanceOf(Event::class)) {
+                    val event = post as Event
+                    
+                    Spacer(modifier = Modifier.height(8.dp))
+                    
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        BaseChip {
+                            Icon(
+                                imageVector = Icons.Outlined.DateRange,
+                                contentDescription = null,
+                                modifier = Modifier.size(16.dp)
+                            )
+
+                            Text(
+                                text = event.date.toBrazilianDateFormat(),
+                                style = MaterialTheme.typography.labelSmall
+                            )
+                        }
+
+                        BaseChip {
+                            Icon(
+                                imageVector = Icons.Outlined.LocationOn,
+                                contentDescription = null,
+                                modifier = Modifier.size(16.dp)
+                            )
+
+                            Text(
+                                text = event.localName,
+                                style = MaterialTheme.typography.labelSmall
+                            )
+                        }
+                    }
+                }
             }
 
             Spacer(modifier = Modifier.width(16.dp))
 
             Text(
-                text = "$score",
+                text = "${post.score}",
                 style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.primary
             )
@@ -66,11 +115,27 @@ fun PostItem(
 @Preview(showBackground = true)
 @Composable
 fun PostItemPreview() {
+    val user = User("", "", "teste76", 0, Badge(""), listOf(), "")
+    val event = Event(
+        id = 0,
+        title = "Produto das raízes com equação de 2 grau",
+        content = "Gostaria de saber o produto das raízes das seguintes funções de segundo grau:\n\n" +
+                "a)3x² - 6x + 1 = 0\n" +
+                "b)x² - 16x + 28 = 0\n" +
+                "c)2x² - 4x - 3 = 0 \n" +
+                "d)2x² - 7x + 1 = 0",
+        score = 76,
+        postDate = LocalDateTime.now(),
+        date = LocalDateTime.now(),
+        latitude = 0.0,
+        longitude = 0.0,
+        user = user,
+        localName = "Quixadá"
+    )
+
     MindHubTheme {
         PostItem(
-            title = "As principais funções matemáticas",
-            description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit Lorem ipsum dolor sit amet, consectetur adipiscing elit... Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
-            score = 87,
+            post = event,
             onClick = {}
         )
     }
