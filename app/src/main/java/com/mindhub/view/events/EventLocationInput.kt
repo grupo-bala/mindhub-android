@@ -55,10 +55,12 @@ fun EventLocationInput(
 
             LaunchedEffect(key1 = true) {
                 locationService.lastLocation.addOnSuccessListener {
-                    cameraPositionState.position = CameraPosition.fromLatLngZoom(
-                        LatLng(it.latitude, it.longitude),
-                        15.0f
-                    )
+                    if (it != null) {
+                        cameraPositionState.position = CameraPosition.fromLatLngZoom(
+                            LatLng(it.latitude, it.longitude),
+                            15.0f
+                        )
+                    }
                 }
             }
 
