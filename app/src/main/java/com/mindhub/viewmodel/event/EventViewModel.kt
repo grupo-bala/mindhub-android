@@ -38,7 +38,8 @@ class EventViewModel : ViewModel() {
                         postDate = LocalDateTime.now(),
                         date = date.dateToUnix(time),
                         latitude = position.latitude,
-                        longitude = position.longitude
+                        longitude = position.longitude,
+                        localName = ""
                     )
                 )
 

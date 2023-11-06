@@ -11,5 +11,6 @@ data class Event(
     override var postDate: LocalDateTime,
     var date: LocalDateTime,
     var latitude: Double,
-    var longitude: Double
+    var longitude: Double,
+    var localName: String,
 ) : Post
