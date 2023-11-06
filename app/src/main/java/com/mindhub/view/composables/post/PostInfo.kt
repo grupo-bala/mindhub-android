@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.mindhub.common.services.UserInfo
 import com.mindhub.model.entities.Ask
 import com.mindhub.model.entities.Badge
 import com.mindhub.model.entities.Event
@@ -27,16 +28,24 @@ import com.mindhub.model.entities.Post
 import com.mindhub.model.entities.User
 import com.mindhub.ui.theme.MindHubTheme
 import com.mindhub.view.composables.chips.CommentsChip
+import com.mindhub.view.composables.chips.EditChip
 import com.mindhub.view.composables.chips.LocationChip
 import com.mindhub.view.composables.chips.ScoreChip
 import com.mindhub.view.composables.chips.ShareChip
+import com.mindhub.view.destinations.AskUpdateDestination
+import com.mindhub.view.destinations.EventCreateDestination
+import com.mindhub.view.destinations.UpdateMaterialDestination
 import com.mindhub.view.layouts.SpacedColumn
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
+import com.ramcosta.composedestinations.spec.Direction
 import io.ktor.util.reflect.instanceOf
 import java.time.LocalDateTime
 
 @Composable
 fun PostInfo(
-    post: Post
+    post: Post,
+    navigator: DestinationsNavigator
 ) {
     SpacedColumn(
         spacing = 8,
@@ -47,18 +56,27 @@ fun PostInfo(
         Text(text = post.title, style = MaterialTheme.typography.titleLarge)
         Text(text = "por ${post.user.username}", style = MaterialTheme.typography.labelLarge)
 
-        if (post.instanceOf(Ask::class)) {
-            val postWithExpertise = post as Ask
-            SuggestionChip(
-                onClick = { /*TODO*/ },
-                label = { Text(text = postWithExpertise.expertise.title) }
-            )
-        } else if (post.instanceOf(Material::class)) {
-            val postWithExpertise = post as Material
-            SuggestionChip(
-                onClick = { /*TODO*/ },
-                label = { Text(text = postWithExpertise.expertise.title) }
-            )
+        var destination: Direction = EventCreateDestination
+
+        Row {
+
+            if (post.instanceOf(Ask::class)) {
+                val postWithExpertise = post as Ask
+                SuggestionChip(
+                    onClick = { /*TODO*/ },
+                    label = { Text(text = postWithExpertise.expertise.title) }
+                )
+
+                destination = AskUpdateDestination(postWithExpertise)
+            } else if (post.instanceOf(Material::class)) {
+                val postWithExpertise = post as Material
+                SuggestionChip(
+                    onClick = { /*TODO*/ },
+                    label = { Text(text = postWithExpertise.expertise.title) }
+                )
+
+                destination = UpdateMaterialDestination(postWithExpertise)
+            }
         }
 
         Text(text = post.content)
@@ -76,6 +94,12 @@ fun PostInfo(
             }
 
             ShareChip()
+
+            if (post.user == UserInfo) {
+                EditChip {
+                    navigator.navigate(destination)
+                }
+            }
         }
 
         Row(
@@ -113,6 +137,6 @@ fun PostInfoPreview() {
     )
 
     MindHubTheme {
-        PostInfo(post = ask)
+        PostInfo(post = ask, navigator = EmptyDestinationsNavigator)
     }
 }
