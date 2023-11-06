@@ -53,7 +53,10 @@ fun PostCreate(
                 actions = {
                     Button(onClick = {
                         viewModel.create(
-                            onSuccess = { onSuccess(it) },
+                            onSuccess = {
+                                navigator.popBackStack()
+                                onSuccess(it)
+                            },
                             onFailure = {
                                 feedbackError = it
                             }
