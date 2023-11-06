@@ -20,6 +20,11 @@ class FeedAskViewModel : ViewModel(), FeedPostViewModel {
     override var isLoadingForYou by mutableStateOf(false)
     override var isLoadingRecents by mutableStateOf(false)
 
+    init {
+        this.getForYou()
+        this.getRecents()
+    }
+
     override fun getForYou() {
         viewModelScope.launch {
             try {
