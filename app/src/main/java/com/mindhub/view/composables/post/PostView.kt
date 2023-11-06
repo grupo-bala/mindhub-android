@@ -60,7 +60,7 @@ fun PostView(
                     if (viewModel.post == null) {
                         Text(text = viewModel.feedback)
                     } else {
-                        PostInfo(post = viewModel.post!!)
+                        PostInfo(post = viewModel.post!!, navigator = navigator)
                         CommentsView(postId = postId)
                     }
                 }
