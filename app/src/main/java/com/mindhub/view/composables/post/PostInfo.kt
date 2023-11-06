@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.mindhub.common.ext.getRoute
 import com.mindhub.common.services.UserInfo
 import com.mindhub.model.entities.Ask
 import com.mindhub.model.entities.Badge
@@ -93,7 +94,7 @@ fun PostInfo(
                 LocationChip()
             }
 
-            ShareChip()
+            ShareChip(text = "${post.title}\n\n${post.getRoute()}")
 
             if (post.user == UserInfo) {
                 EditChip {
