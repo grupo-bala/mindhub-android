@@ -29,8 +29,8 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 fun PostCreate(
     navigator: DestinationsNavigator,
     viewModel: PostViewModelInterface,
-    extraFields: @Composable () -> Unit = {},
     onSuccess: (Post) -> Unit,
+    extraFields: @Composable () -> Unit = {}
 ) {
     var feedbackError: String? = null
 
