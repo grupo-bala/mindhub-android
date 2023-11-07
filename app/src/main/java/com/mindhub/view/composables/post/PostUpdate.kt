@@ -89,7 +89,7 @@ fun PostUpdate(
                 modifier = Modifier.padding(horizontal = 16.dp)
             ) {
                 Text(
-                    text = "Remover material",
+                    text = "Remover ${viewModel.getType()}",
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.fillMaxWidth(),
                     textAlign = TextAlign.Center
