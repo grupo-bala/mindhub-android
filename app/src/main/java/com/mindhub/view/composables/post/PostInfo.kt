@@ -1,5 +1,6 @@
 package com.mindhub.view.composables.post
 
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -10,14 +11,17 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.mindhub.common.ext.getRoute
 import com.mindhub.common.services.UserInfo
 import com.mindhub.model.entities.Ask
@@ -58,19 +62,22 @@ fun PostInfo(
         Text(text = "por ${post.user.username}", style = MaterialTheme.typography.labelLarge)
 
         var destination: Direction = EventCreateDestination
+        var askFile: Uri? = null
 
         Row {
-
             if (post.instanceOf(Ask::class)) {
                 val postWithExpertise = post as Ask
+
                 SuggestionChip(
                     onClick = { /*TODO*/ },
                     label = { Text(text = postWithExpertise.expertise.title) }
                 )
 
-                destination = AskUpdateDestination(postWithExpertise)
+                askFile = post.file
+                destination = AskUpdateDestination(post)
             } else if (post.instanceOf(Material::class)) {
                 val postWithExpertise = post as Material
+
                 SuggestionChip(
                     onClick = { /*TODO*/ },
                     label = { Text(text = postWithExpertise.expertise.title) }
@@ -82,6 +89,18 @@ fun PostInfo(
 
         Text(text = post.content)
         Spacer(modifier = Modifier.size(8.dp))
+
+        if (askFile != null) {
+            AsyncImage(
+                model = askFile,
+                contentDescription = null,
+                modifier = Modifier
+                    .height(200.dp)
+                    .clip(RoundedCornerShape(5))
+                    .align(Alignment.CenterHorizontally)
+            )
+            Spacer(modifier = Modifier.size(8.dp))
+        }
 
         Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
