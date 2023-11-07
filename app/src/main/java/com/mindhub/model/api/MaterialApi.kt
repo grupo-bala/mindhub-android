@@ -75,11 +75,16 @@ object MaterialFakeApi: MaterialProvider {
     }
 
     override suspend fun getForYou(page: Int): List<Material> {
-        val filtered = materials.filter { it.expertise in UserInfo!!.expertises }
+        val filtered = materials.filter {
+            it.expertise in UserInfo!!.expertises && it.user.username != UserInfo!!.username
+        }
+
         return filtered.sortedBy { it.score }
     }
 
     override suspend fun getRecents(page: Int): List<Material> {
-        return materials.sortedBy { it.postDate }
+        return materials.filter {
+            it.user.username != UserInfo!!.username
+        }.sortedBy { it.postDate }
     }
 }

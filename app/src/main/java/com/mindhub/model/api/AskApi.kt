@@ -53,12 +53,17 @@ object AskFakeApi : AskProvider {
     }
 
     override suspend fun getForYou(page: Int): List<Ask> {
-        val filtered = asks.filter { it.expertise in UserInfo!!.expertises }
+        val filtered = asks.filter {
+            it.expertise in UserInfo!!.expertises && it.user.username != UserInfo!!.username
+        }
+
         return filtered.sortedBy { it.score }
     }
 
     override suspend fun getRecents(page: Int): List<Ask> {
-        return asks.sortedBy { it.postDate }
+        return asks.filter {
+            it.user.username != UserInfo!!.username
+        }.sortedBy { it.postDate }
     }
 
     override suspend fun remove(id: Int) {

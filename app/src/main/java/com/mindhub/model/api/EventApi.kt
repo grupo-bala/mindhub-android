@@ -4,6 +4,7 @@ import com.google.maps.GeoApiContext
 import com.google.maps.GeocodingApi
 import com.google.maps.model.LatLng
 import com.mindhub.BuildConfig
+import com.mindhub.common.services.UserInfo
 import com.mindhub.model.entities.Badge
 import com.mindhub.model.entities.Event
 import com.mindhub.model.entities.User
@@ -57,10 +58,14 @@ object EventFakeApi : EventProvider {
     }
 
     override suspend fun getForYou(page: Int): List<Event> {
-        return events.sortedBy { it.score }
+        return events.filter {
+            it.user.username != UserInfo!!.username
+        }.sortedBy { it.score }
     }
 
     override suspend fun getRecents(page: Int): List<Event> {
-        return events.sortedBy { it.postDate }
+        return events.filter {
+            it.user.username != UserInfo!!.username
+        }.sortedBy { it.postDate }
     }
 }
