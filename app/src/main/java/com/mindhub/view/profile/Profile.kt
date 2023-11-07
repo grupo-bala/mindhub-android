@@ -75,6 +75,8 @@ fun Profile(
     AppScaffold(
         currentView = Views.USER,
         navigator = navigator,
+        hasLogout = username == null,
+        hasBackArrow = username != null,
     ) {
         Box(
             modifier = Modifier.fillMaxSize()

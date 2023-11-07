@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -22,6 +23,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mindhub.ui.theme.MindHubTheme
+import com.mindhub.view.NavGraphs
+import com.mindhub.view.destinations.LoginDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 
@@ -29,7 +32,8 @@ import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 @Composable
 fun TopBar(
     navigator: DestinationsNavigator,
-    hasBackArrow: Boolean = false
+    hasBackArrow: Boolean = false,
+    hasLogout: Boolean = false,
 ) {
     Column {
         CenterAlignedTopAppBar(
@@ -44,6 +48,18 @@ fun TopBar(
                 { IconButton(onClick = { navigator.popBackStack() }) {
                     Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = null)
                 } }
+            } else {
+                {}
+            },
+            actions = if (hasLogout) {
+                {
+                    IconButton(onClick = {
+                        navigator.popBackStack(NavGraphs.root, false, false)
+                        navigator.navigate(LoginDestination)
+                    }) {
+                        Icon(imageVector = Icons.Filled.ExitToApp, contentDescription = null)
+                    }
+                }
             } else {
                 {}
             }

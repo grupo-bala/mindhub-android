@@ -40,7 +40,8 @@ fun AppScaffold(
     currentView: Views,
     navigator: DestinationsNavigator,
     hasBackArrow: Boolean = false,
-    topAppBar: @Composable () -> Unit = { TopBar(navigator, hasBackArrow) },
+    hasLogout: Boolean = false,
+    topAppBar: @Composable () -> Unit = { TopBar(navigator, hasBackArrow, hasLogout) },
     bottomAppBar: @Composable (Views) -> Unit = {
         NavBar(currentView = currentView, navigator = navigator)
     },
