@@ -1,5 +1,6 @@
 package com.mindhub.viewmodel.ask
 
+import android.net.Uri
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -18,6 +19,7 @@ class AskViewModel: ViewModel(), PostViewModelInterface {
     override var title by mutableStateOf("")
     override var content by mutableStateOf("")
     override var expertise by mutableStateOf(Expertise(""))
+    var file by mutableStateOf<Uri?>(null)
 
     override fun create(
         onSuccess: (Post) -> Unit,
@@ -30,6 +32,7 @@ class AskViewModel: ViewModel(), PostViewModelInterface {
                     title = title,
                     content = content,
                     expertise = expertise,
+                    file = file,
                     score = 0,
                     postDate = LocalDateTime.now(),
                     user = UserInfo!!
@@ -55,6 +58,7 @@ class AskViewModel: ViewModel(), PostViewModelInterface {
                     content = content,
                     expertise = expertise,
                     user = UserInfo!!,
+                    file = file,
                     postDate = LocalDateTime.now(),
                     score = 0
                 ))
