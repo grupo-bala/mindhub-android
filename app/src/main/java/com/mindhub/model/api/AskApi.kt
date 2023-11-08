@@ -42,6 +42,7 @@ object AskFakeApi : AskProvider {
         ask.title = askUpdated.title
         ask.content = askUpdated.content
         ask.expertise = askUpdated.expertise
+        ask.file = askUpdated.file
     }
 
     override suspend fun getOne(id: Int): Ask {
