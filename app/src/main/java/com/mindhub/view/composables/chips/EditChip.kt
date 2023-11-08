@@ -15,7 +15,9 @@ import androidx.compose.ui.unit.dp
 fun EditChip(
     navigate: () -> Unit
 ) {
-    BaseChip(modifier = Modifier.clickable { navigate() }) {
+    BaseChip(
+        modifier = Modifier.clickable { navigate() }
+    ) {
         Icon(imageVector = Icons.Filled.Edit, contentDescription = null, modifier = Modifier.size(16.dp))
         Text(text = "Editar", style = MaterialTheme.typography.labelSmall)
     }
