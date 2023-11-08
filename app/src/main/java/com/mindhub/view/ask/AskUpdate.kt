@@ -26,6 +26,7 @@ fun AskUpdate(
     viewModel.title = ask.title
     viewModel.content = ask.content
     viewModel.expertise = ask.expertise
+    viewModel.file = ask.file
 
     PostUpdate(
         navigator = navigator,
