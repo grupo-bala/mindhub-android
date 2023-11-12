@@ -1,4 +1,4 @@
-package com.mindhub.view.events
+package com.mindhub.view.composables.events
 
 import android.Manifest
 import android.annotation.SuppressLint
