@@ -7,10 +7,18 @@ data class CreateCommentRequest(
     val content: String,
     val postId: Int
 )
+
+data class CreateReplyRequest(
+    val content: String,
+    val postId: Int,
+    val commentId: Int,
+)
+
 interface CommentProvider {
-    suspend fun create(data: CreateCommentRequest)
+    suspend fun create(data: CreateCommentRequest): Comment
     suspend fun get(postId: Int, page: Int): List<Comment>
     suspend fun vote(commentId: Int, score: Int)
+    suspend fun createReply(data: CreateReplyRequest): Comment
 }
 
 object CommentFakeApi : CommentProvider {
@@ -25,7 +33,7 @@ object CommentFakeApi : CommentProvider {
                 isBestAnswer = true,
                 score = 4,
                 userScore = 0,
-                replies = listOf(
+                replies = mutableListOf(
                     Comment(
                         id = id++,
                         postId = 0,
@@ -34,7 +42,7 @@ object CommentFakeApi : CommentProvider {
                         isBestAnswer = false,
                         score = 1,
                         userScore = 0,
-                        replies = listOf()
+                        replies = mutableListOf()
                     )
                 )
             )
@@ -49,25 +57,25 @@ object CommentFakeApi : CommentProvider {
                 isBestAnswer = false,
                 score = -2,
                 userScore = 0,
-                replies = listOf()
+                replies = mutableListOf()
             )
         )
     }
-    override suspend fun create(data: CreateCommentRequest) {
+    override suspend fun create(data: CreateCommentRequest): Comment {
         val comment = Comment(
-            id = id,
+            id = id++,
             postId = data.postId,
             username = UserInfo!!.username,
             content = data.content,
             isBestAnswer = false,
             score = 0,
             userScore = 0,
-            replies = listOf(),
+            replies = mutableListOf(),
         )
 
         comments.add(comment)
 
-        id += 1
+        return comment
     }
 
     override suspend fun get(postId: Int, page: Int): List<Comment> {
@@ -78,6 +86,19 @@ object CommentFakeApi : CommentProvider {
         val comment = comments.find { it.id == commentId } ?: throw Exception()
         comment.userScore = score
         comment.score += score
+    }
+
+    override suspend fun createReply(data: CreateReplyRequest): Comment {
+        return Comment(
+            id = id++,
+            postId = data.postId,
+            username = UserInfo!!.username,
+            content = data.content,
+            isBestAnswer = false,
+            score = 0,
+            userScore = 0,
+            replies = mutableListOf(),
+        )
     }
 }
 
