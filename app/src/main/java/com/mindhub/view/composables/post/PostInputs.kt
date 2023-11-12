@@ -6,8 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.DropdownMenu
@@ -33,10 +31,12 @@ import com.mindhub.model.entities.User
 import com.mindhub.common.services.UserInfo
 import com.mindhub.ui.theme.MindHubTheme
 import com.mindhub.view.layouts.SpacedColumn
+import com.mindhub.viewmodel.event.EventViewModel
 import com.mindhub.viewmodel.expertise.ExpertiseViewModel
 import com.mindhub.viewmodel.material.MaterialViewModel
 import com.mindhub.viewmodel.post.PostViewModelInterface
 import com.ramcosta.composedestinations.annotation.Destination
+import io.ktor.util.reflect.instanceOf
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Destination
@@ -76,45 +76,47 @@ fun PostInputs(
                 modifier = Modifier.fillMaxWidth()
             )
 
-            Column(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                ExposedDropdownMenuBox(
-                    expanded = isMenuExpanded,
-                    onExpandedChange = { }
+            if (!viewModel.instanceOf(EventViewModel::class)) {
+                Column(
+                    modifier = Modifier.fillMaxWidth()
                 ) {
-                    OutlinedTextField(
-                        value = viewModel.expertise.title ?: "",
-                        readOnly = true,
-                        label = { Text(text = "Categoria") },
-                        onValueChange = {},
-                        trailingIcon = {
-                            Icon(
-                                imageVector = Icons.Default.ArrowDropDown,
-                                contentDescription = null
-                            )
-                        },
-                        interactionSource = expertiseInteraction,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .menuAnchor()
-                    )
-
-                    DropdownMenu(
+                    ExposedDropdownMenuBox(
                         expanded = isMenuExpanded,
-                        onDismissRequest = { isMenuExpanded = false },
-                        modifier = Modifier
-                            .exposedDropdownSize(matchTextFieldWidth = true)
-                            .height(280.dp)
+                        onExpandedChange = { }
                     ) {
-                        for (expertise in expertiseViewModel.expertises) {
-                            DropdownMenuItem(
-                                text = { Text(expertise.title) },
-                                onClick = {
-                                    viewModel.expertise = expertise
-                                    isMenuExpanded = false
-                                }
-                            )
+                        OutlinedTextField(
+                            value = viewModel.expertise!!.title ?: "",
+                            readOnly = true,
+                            label = { Text(text = "Categoria") },
+                            onValueChange = {},
+                            trailingIcon = {
+                                Icon(
+                                    imageVector = Icons.Default.ArrowDropDown,
+                                    contentDescription = null
+                                )
+                            },
+                            interactionSource = expertiseInteraction,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .menuAnchor()
+                        )
+
+                        DropdownMenu(
+                            expanded = isMenuExpanded,
+                            onDismissRequest = { isMenuExpanded = false },
+                            modifier = Modifier
+                                .exposedDropdownSize(matchTextFieldWidth = true)
+                                .height(280.dp)
+                        ) {
+                            for (expertise in expertiseViewModel.expertises) {
+                                DropdownMenuItem(
+                                    text = { Text(expertise.title) },
+                                    onClick = {
+                                        viewModel.expertise = expertise
+                                        isMenuExpanded = false
+                                    }
+                                )
+                            }
                         }
                     }
                 }
