@@ -10,19 +10,24 @@ import com.mindhub.common.ext.dateToUnix
 import com.mindhub.common.services.UserInfo
 import com.mindhub.model.api.EventFakeApi
 import com.mindhub.model.entities.Event
+import com.mindhub.model.entities.Expertise
+import com.mindhub.model.entities.Post
+import com.mindhub.viewmodel.post.PostViewModelInterface
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 
-class EventViewModel : ViewModel() {
-    var title by mutableStateOf("")
-    var content by mutableStateOf("")
+class EventViewModel : ViewModel(), PostViewModelInterface {
+    override var title by mutableStateOf("")
+    override var content by mutableStateOf("")
+    override var expertise: Expertise? = null
     var date by mutableStateOf("")
     var time by mutableStateOf("")
     var position by mutableStateOf(LatLng(0.0, 0.0))
     var isLoading by mutableStateOf(false)
 
-    fun create(
-        onSuccess: (Event) -> Unit
+    override fun create(
+        onSuccess: (Post) -> Unit,
+        onFailure: (String?) -> Unit
     ) {
         viewModelScope.launch {
             try {
@@ -45,10 +50,67 @@ class EventViewModel : ViewModel() {
 
                 onSuccess(event)
             } catch (e: Error) {
-
+                onFailure(e.message)
             }
 
             isLoading = false
         }
+    }
+
+    override fun update(
+        postId: Int,
+        onSuccess: () -> Unit,
+        onFailure: (String?) -> Unit,
+    ) {
+        viewModelScope.launch {
+            try {
+                isLoading = true
+
+                EventFakeApi.update(
+                    Event(
+                        id = postId,
+                        user = UserInfo!!,
+                        title = title,
+                        content = content,
+                        postDate = LocalDateTime.now(),
+                        score = 0,
+                        date = date.dateToUnix(time),
+                        latitude = position.latitude,
+                        longitude = position.longitude,
+                        localName = ""
+                    )
+                )
+
+                onSuccess()
+            } catch (e: Exception) {
+                onFailure(e.message)
+            }
+
+            isLoading = false
+        }
+    }
+
+    override fun remove(
+        postId: Int,
+        onSuccess: () -> Unit,
+        onFailure: (String?) -> Unit,
+    ) {
+        viewModelScope.launch {
+            try {
+                isLoading = true
+
+                EventFakeApi.remove(postId)
+
+                onSuccess()
+            } catch (e: Exception) {
+                onFailure(e.message)
+            }
+
+            isLoading = false
+        }
+    }
+
+    override fun getType(): String {
+        return "evento"
     }
 }
