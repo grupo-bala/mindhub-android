@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
@@ -70,39 +72,43 @@ fun PostUpdate(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            PostInputs(
-                viewModel = viewModel,
-                extraContent = extraFields
-            )
-
-            OutlinedButton(
-                onClick = { viewModel.remove(
-                    postId,
-                    onSuccess = {
-                        navigator.popBackStack()
-                    },
-                    onFailure = {
-                        feedbackError = it
-                    }
-                ) },
-                colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.error),
-                modifier = Modifier.padding(horizontal = 16.dp)
+            Column(
+                modifier = Modifier.verticalScroll(rememberScrollState())
             ) {
-                Text(
-                    text = "Remover ${viewModel.getType()}",
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.fillMaxWidth(),
-                    textAlign = TextAlign.Center
+                PostInputs(
+                    viewModel = viewModel,
+                    extraContent = extraFields
                 )
-            }
 
-            if (feedbackError != null) {
-                Text(
-                    text = feedbackError!!,
-                    color = MaterialTheme.colorScheme.error,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(vertical = 8.dp)
-                )
+                OutlinedButton(
+                    onClick = { viewModel.remove(
+                        postId,
+                        onSuccess = {
+                            navigator.popBackStack()
+                        },
+                        onFailure = {
+                            feedbackError = it
+                        }
+                    ) },
+                    colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.error),
+                    modifier = Modifier.padding(horizontal = 16.dp)
+                ) {
+                    Text(
+                        text = "Remover ${viewModel.getType()}",
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Center
+                    )
+                }
+
+                if (feedbackError != null) {
+                    Text(
+                        text = feedbackError!!,
+                        color = MaterialTheme.colorScheme.error,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(vertical = 8.dp)
+                    )
+                }
             }
         }
     }
