@@ -8,4 +8,9 @@ interface GetPostViewModel {
     var isLoading: Boolean
 
     fun get(id: Int)
+
+    fun updateScore(score: Int) {
+        post!!.score = score
+        post = post
+    }
 }
