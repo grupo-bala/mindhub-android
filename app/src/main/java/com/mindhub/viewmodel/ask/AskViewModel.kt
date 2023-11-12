@@ -18,7 +18,7 @@ import java.time.LocalDateTime
 class AskViewModel: ViewModel(), PostViewModelInterface {
     override var title by mutableStateOf("")
     override var content by mutableStateOf("")
-    override var expertise by mutableStateOf(Expertise(""))
+    override var expertise: Expertise? by mutableStateOf(Expertise(""))
     var file by mutableStateOf<Uri?>(null)
 
     override fun create(
@@ -31,7 +31,7 @@ class AskViewModel: ViewModel(), PostViewModelInterface {
                     id = -1,
                     title = title,
                     content = content,
-                    expertise = expertise,
+                    expertise = expertise!!,
                     file = file,
                     score = 0,
                     postDate = LocalDateTime.now(),
@@ -56,7 +56,7 @@ class AskViewModel: ViewModel(), PostViewModelInterface {
                     id = postId,
                     title = title,
                     content = content,
-                    expertise = expertise,
+                    expertise = expertise!!,
                     user = UserInfo!!,
                     file = file,
                     postDate = LocalDateTime.now(),

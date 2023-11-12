@@ -18,7 +18,7 @@ import java.time.LocalDateTime
 class MaterialViewModel: ViewModel(), PostViewModelInterface {
     override var title by mutableStateOf("")
     override var content by mutableStateOf("")
-    override var expertise by mutableStateOf(Expertise(""))
+    override var expertise: Expertise? by mutableStateOf(Expertise(""))
 
     override fun create(
         onSuccess: (Post) -> Unit,
@@ -30,7 +30,7 @@ class MaterialViewModel: ViewModel(), PostViewModelInterface {
                     MaterialRequest(
                         title = title,
                         content = content,
-                        expertise = expertise,
+                        expertise = expertise!!,
                         user = UserInfo!!
                     )
                 )
@@ -54,7 +54,7 @@ class MaterialViewModel: ViewModel(), PostViewModelInterface {
                         id = postId,
                         title = title,
                         content = content,
-                        expertise = expertise,
+                        expertise = expertise!!,
                         user = UserInfo!!,
                         postDate = LocalDateTime.now(),
                         score = 0
