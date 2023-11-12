@@ -38,7 +38,7 @@ import com.mindhub.view.composables.chips.LocationChip
 import com.mindhub.view.composables.chips.ScoreChip
 import com.mindhub.view.composables.chips.ShareChip
 import com.mindhub.view.destinations.AskUpdateDestination
-import com.mindhub.view.destinations.EventCreateDestination
+import com.mindhub.view.destinations.EventUpdateDestination
 import com.mindhub.view.destinations.MaterialUpdateDestination
 import com.mindhub.view.layouts.SpacedColumn
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -61,7 +61,7 @@ fun PostInfo(
         Text(text = post.title, style = MaterialTheme.typography.titleLarge)
         Text(text = "por ${post.user.username}", style = MaterialTheme.typography.labelLarge)
 
-        var destination: Direction = EventCreateDestination
+        var destination: Direction? = null
         var askFile: Uri? = null
 
         Row {
@@ -84,6 +84,8 @@ fun PostInfo(
                 )
 
                 destination = MaterialUpdateDestination(postWithExpertise)
+            } else {
+                destination = EventUpdateDestination(post as Event)
             }
         }
 
@@ -121,7 +123,7 @@ fun PostInfo(
 
             if (post.user == UserInfo) {
                 EditChip {
-                    navigator.navigate(destination)
+                    navigator.navigate(destination!!)
                 }
             }
         }
