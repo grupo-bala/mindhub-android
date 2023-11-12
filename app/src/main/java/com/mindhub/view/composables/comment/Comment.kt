@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -31,7 +32,10 @@ import com.mindhub.view.layouts.SpacedColumn
 
 @Composable
 fun CommentItem(
-    comment: Comment
+    comment: Comment,
+    isReply: Boolean = false,
+    onScoreUpdate: (Int, Int) -> Unit,
+    onReply: (Int) -> Unit,
 ) {
     SpacedColumn(
         spacing = 8,
@@ -77,20 +81,31 @@ fun CommentItem(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
         ) {
-            ScoreChip(score = comment.score)
+            if (!isReply) {
+                ScoreChip(
+                    score = comment.score,
+                    onIncreaseClick = { onScoreUpdate(comment.id, comment.score + 1) },
+                    onDecreaseClick = { onScoreUpdate(comment.id, comment.score - 1) },
+                )
+            }
 
             if (comment.replies.isNotEmpty()) {
                 CommentsChip(commentsQuantity = comment.replies.size)
             }
 
-            Button(
-                onClick = { /*TODO*/ },
-                contentPadding = PaddingValues(0.dp),
-                modifier = Modifier
-                    .weight(1.0f)
-                    .height(32.dp)
-            ) {
-                Text(text = "Responder", modifier = Modifier.align(Alignment.CenterVertically))
+            if (!isReply) {
+                Button(
+                    onClick = {
+                        onReply(comment.id)
+                    },
+                    contentPadding = PaddingValues(0.dp),
+                    shape = RoundedCornerShape(5.dp),
+                    modifier = Modifier
+                        .weight(1.0f)
+                        .height(32.dp)
+                ) {
+                    Text(text = "Responder", modifier = Modifier.align(Alignment.CenterVertically))
+                }
             }
         }
 
@@ -114,7 +129,12 @@ fun CommentItem(
                     }
             ) {
                 for (reply in comment.replies) {
-                    CommentItem(comment = reply)
+                    CommentItem(
+                        comment = reply,
+                        onReply = onReply,
+                        isReply = true,
+                        onScoreUpdate = onScoreUpdate,
+                    )
                 }
             }
         }
@@ -132,7 +152,7 @@ fun CommentPreview() {
         isBestAnswer = false,
         score = 4,
         userScore = 0,
-        replies = listOf()
+        replies = mutableListOf()
     )
 
     val comment2 = Comment(
@@ -143,7 +163,7 @@ fun CommentPreview() {
         isBestAnswer = false,
         score = -9,
         userScore = 0,
-        replies = listOf(comment1)
+        replies = mutableListOf(comment1)
     )
 
     val comment3 = Comment(
@@ -154,7 +174,7 @@ fun CommentPreview() {
         isBestAnswer = true,
         score = 4,
         userScore = 0,
-        replies = listOf(
+        replies = mutableListOf(
             comment1,
             comment2
         )
@@ -165,11 +185,14 @@ fun CommentPreview() {
             spacing = 16,
             verticalAlignment = Alignment.CenterVertically,
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.verticalScroll(rememberScrollState()).padding(8.dp)
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+                .padding(8.dp)
         ) {
             CommentItem(
-                comment = comment3
-            )
+                comment = comment3,
+                onScoreUpdate = { it1, it2 -> },
+            ) {}
         }
     }
 }

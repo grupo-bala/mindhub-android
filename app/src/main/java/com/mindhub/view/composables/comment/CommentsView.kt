@@ -13,16 +13,17 @@ import com.mindhub.viewmodel.comment.GetCommentViewModel
 
 @Composable
 fun CommentsView(
-    postId: Int
+    getCommentViewModel: GetCommentViewModel,
+    postId: Int,
+    onScoreUpdate: (Int, Int) -> Unit,
+    onReply: (Int) -> Unit,
 ) {
-    val viewModel: GetCommentViewModel = viewModel()
-
     LaunchedEffect(key1 = true) {
-        viewModel.get(postId)
+        getCommentViewModel.get(postId)
     }
 
     Suspended(
-        isLoading = viewModel.isLoading
+        isLoading = getCommentViewModel.isLoading
     ) {
         SpacedColumn(
             spacing = 8,
@@ -30,8 +31,12 @@ fun CommentsView(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.padding(8.dp)
         ) {
-            for (comment in viewModel.comments) {
-                CommentItem(comment = comment)
+            for (comment in getCommentViewModel.comments) {
+                CommentItem(
+                    comment = comment,
+                    onScoreUpdate = onScoreUpdate,
+                    onReply = onReply
+                )
             }
         }
     }
