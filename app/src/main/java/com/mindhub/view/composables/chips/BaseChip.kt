@@ -25,7 +25,7 @@ fun BaseChip(
             .clip(MaterialTheme.shapes.small)
             .background(MaterialTheme.colorScheme.surfaceVariant)
             .padding(horizontal = 8.dp)
-            .height(28.dp),
+            .height(32.dp),
         content = content
     )
 }
