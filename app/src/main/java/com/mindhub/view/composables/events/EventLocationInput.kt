@@ -2,8 +2,19 @@ package com.mindhub.view.composables.events
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.widget.Button
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -29,15 +40,11 @@ import com.mindhub.view.layouts.SpacedColumn
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun EventLocationInput(
-    currentPosition: LatLng,
+    currentPosition: LatLng?,
+    onConfirm: () -> Unit,
     onChange: (LatLng) -> Unit
 ) {
-    SpacedColumn(
-        spacing = 8,
-        verticalAlignment = Alignment.Top,
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.height(400.dp)
-    ) {
+    Box {
         val locationPermissionState = rememberPermissionState(
             permission = Manifest.permission.ACCESS_FINE_LOCATION
         )
@@ -69,25 +76,40 @@ fun EventLocationInput(
                 onMapClick = { onChange(it) },
                 properties = MapProperties(isMyLocationEnabled = true),
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1.0f)
+                    .fillMaxSize()
             ) {
-                Marker(
-                    state = MarkerState(currentPosition)
-                )
+                if (currentPosition != null) {
+                    Marker(
+                        state = MarkerState(currentPosition)
+                    )
+                }
             }
         } else {
             GoogleMap(
                 onMapClick = { onChange(it) },
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1.0f)
+                    .fillMaxSize()
             ) {
-                Marker(
-                    state = MarkerState(currentPosition)
-                )
+                if (currentPosition != null) {
+                    Marker(
+                        state = MarkerState(currentPosition)
+                    )
+                }
             }
         }
+
+        if (currentPosition != null) {
+            Button(
+                onClick = { onConfirm() },
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 8.dp)
+                    .width(256.dp)
+            ) {
+                Text(text = "Confirmar", color = MaterialTheme.colorScheme.onPrimary)
+            }
+        }
+
     }
 }
 @Preview(showBackground = true)
@@ -96,6 +118,7 @@ fun CreateEventLocationPreview() {
     MindHubTheme {
         EventLocationInput(
             currentPosition = LatLng(0.0, 0.0),
+            onConfirm = {},
             onChange = {}
         )
     }

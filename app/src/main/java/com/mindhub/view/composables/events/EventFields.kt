@@ -160,7 +160,7 @@ fun EventFields(
         }
 
         OutlinedTextField(
-            value = viewModel.position.toString(),
+            value = viewModel.positionName,
             onValueChange = { },
             label = { Text(text = "Local") },
             placeholder = { Text(text = "Selecione o local") },
@@ -174,12 +174,17 @@ fun EventFields(
             Dialog(
                 properties = DialogProperties(
                     dismissOnBackPress = true,
-                    dismissOnClickOutside = true
+                    dismissOnClickOutside = true,
+                    usePlatformDefaultWidth = false,
                 ),
                 onDismissRequest = { isMapExpanded = false },
             ) {
                 EventLocationInput(
                     currentPosition = viewModel.position,
+                    onConfirm = {
+                        isMapExpanded = false
+                        viewModel.loadPositionName()
+                    },
                     onChange = { viewModel.position = it }
                 )
             }

@@ -22,7 +22,7 @@ fun EventCreate(
     navigator: DestinationsNavigator
 ) {
     val viewModel = EventViewModel()
-    
+
     PostCreate(
         navigator = navigator,
         viewModel = viewModel,
