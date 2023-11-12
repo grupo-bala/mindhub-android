@@ -11,5 +11,5 @@ data class Comment(
     var isBestAnswer: Boolean,
     var score: Int,
     var userScore: Int,
-    var replies: List<Comment>,
+    var replies: MutableList<Comment>,
 )
