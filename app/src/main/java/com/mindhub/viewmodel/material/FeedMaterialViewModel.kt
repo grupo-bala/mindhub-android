@@ -20,15 +20,11 @@ class FeedMaterialViewModel : ViewModel(), FeedPostViewModel {
     override var isLoadingForYou by mutableStateOf(false)
     override var isLoadingRecents by mutableStateOf(false)
 
-    init {
-        this.getForYou()
-        this.getRecents()
-    }
-
     override fun getForYou() {
         viewModelScope.launch {
             try {
                 isLoadingForYou = true
+                forYou.clear()
                 forYou.addAll(MaterialFakeApi.getForYou(currentPageForYou))
                 currentPageForYou++
             } catch (_: Exception) { }
@@ -41,6 +37,7 @@ class FeedMaterialViewModel : ViewModel(), FeedPostViewModel {
         viewModelScope.launch {
             try {
                 isLoadingRecents = true
+                recents.clear()
                 recents.addAll(MaterialFakeApi.getRecents(currentPageRecents))
                 currentPageRecents++
             } catch (_: Exception) { }

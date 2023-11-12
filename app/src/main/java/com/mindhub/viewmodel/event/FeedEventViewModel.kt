@@ -20,15 +20,11 @@ class FeedEventViewModel : ViewModel(), FeedPostViewModel {
     override var isLoadingForYou by mutableStateOf(false)
     override var isLoadingRecents by mutableStateOf(false)
 
-    init {
-        this.getForYou()
-        this.getRecents()
-    }
-
     override fun getForYou() {
         viewModelScope.launch {
             try {
                 isLoadingForYou = true
+                forYou.clear()
                 forYou.addAll(EventFakeApi.getForYou(currentPageForYou))
                 currentPageForYou++
             } catch (_: Exception) { }
@@ -41,6 +37,7 @@ class FeedEventViewModel : ViewModel(), FeedPostViewModel {
         viewModelScope.launch {
             try {
                 isLoadingRecents = true
+                recents.clear()
                 recents.addAll(EventFakeApi.getRecents(currentPageRecents))
                 currentPageRecents++
             } catch (_: Exception) { }

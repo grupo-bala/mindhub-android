@@ -30,6 +30,7 @@ class EventViewModel : ViewModel(), PostViewModelInterface {
     var position by mutableStateOf<LatLng?>(null)
     var positionName by mutableStateOf("")
     var isLoading by mutableStateOf(false)
+    var isPositionNameLoading by mutableStateOf(false)
 
     override fun create(
         onSuccess: (Post) -> Unit,
@@ -121,6 +122,7 @@ class EventViewModel : ViewModel(), PostViewModelInterface {
     }
 
     fun loadPositionName() {
+        isPositionNameLoading = true
         positionName = "Carregando..."
 
         val context = GeoApiContext.Builder()
@@ -136,10 +138,10 @@ class EventViewModel : ViewModel(), PostViewModelInterface {
             }
 
             override fun onFailure(e: Throwable) {
-                /* TODO */
-
-                positionName = ""
+                positionName = "Sem endereço"
             }
         })
+
+        isPositionNameLoading = false
     }
 }

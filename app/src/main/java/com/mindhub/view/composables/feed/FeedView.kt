@@ -8,6 +8,7 @@ import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -28,6 +29,12 @@ fun FeedView(
     onClickItem: (Post) -> Unit,
     onClickAdd: () -> Unit
 ) {
+    LaunchedEffect(key1 = true) {
+        println("DENTROOOOOO")
+        viewModel.getRecents()
+        viewModel.getForYou()
+    }
+
     AppScaffold(
         currentView = currentView,
         navigator = navigator
