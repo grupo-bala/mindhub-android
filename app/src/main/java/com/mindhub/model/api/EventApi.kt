@@ -13,6 +13,8 @@ import java.time.LocalDateTime
 
 interface EventProvider {
     suspend fun create(event: Event): Event
+    suspend fun update(eventUpdated: Event)
+    suspend fun remove(eventId: Int)
     suspend fun get(id: Int): Event
     suspend fun getForYou(page: Int): List<Event>
     suspend fun getRecents(page: Int): List<Event>
@@ -29,6 +31,16 @@ object EventFakeApi : EventProvider {
     }
 
     override suspend fun create(event: Event): Event {
+        setLocalName(event)
+
+        events.add(
+            event.apply { this.id = count++ }
+        )
+
+        return event
+    }
+
+    private fun setLocalName(event: Event) {
         val context = GeoApiContext.Builder()
             .apiKey(BuildConfig.apiKey)
             .build()
@@ -45,12 +57,23 @@ object EventFakeApi : EventProvider {
         }
 
         event.localName = component.longName
+    }
 
-        events.add(
-            event.apply { this.id = count++ }
-        )
+    override suspend fun update(eventUpdated: Event) {
+        val event = events.find { it.id == eventUpdated.id} ?: throw Exception()
 
-        return event
+        event.title = eventUpdated.title
+        event.content = eventUpdated.content
+        event.latitude = eventUpdated.latitude
+        event.longitude = eventUpdated.longitude
+        event.date = eventUpdated.date
+        setLocalName(event)
+    }
+
+    override suspend fun remove(eventId: Int) {
+        if(!events.removeIf { it.id == eventId }) {
+            throw Exception()
+        }
     }
 
     override suspend fun get(id: Int): Event {
