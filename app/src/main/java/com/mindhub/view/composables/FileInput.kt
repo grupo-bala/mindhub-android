@@ -39,14 +39,10 @@ import com.mindhub.viewmodel.ask.AskViewModel
 fun FileInput(
     askViewModel: AskViewModel
 ) {
-//    var selectImageUri by remember {
-//        mutableStateOf<Uri?>(askViewModel.file)
-//    }
 
     val photoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
         onResult = {
-//            selectImageUri = it
             askViewModel.file = it
         }
     )
@@ -87,7 +83,6 @@ fun FileInput(
 
                 Button(
                     onClick = {
-//                        selectImageUri = null
                         askViewModel.file = null
                         buttonLabelFile = "Adicionar anexo"
                     },
