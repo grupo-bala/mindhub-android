@@ -6,7 +6,7 @@ import com.mindhub.model.entities.Post
 interface PostViewModelInterface {
     var title: String
     var content: String
-    var expertise: Expertise
+    var expertise: Expertise?
 
     fun create(
         onSuccess: (Post) -> Unit,
