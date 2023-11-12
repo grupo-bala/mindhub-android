@@ -1,5 +1,6 @@
 package com.mindhub.view.composables.chips
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -13,13 +14,17 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun ScoreChip(
-    score: Int
+    score: Int,
+    onIncreaseClick: () -> Unit,
+    onDecreaseClick: () -> Unit,
 ) {
     BaseChip {
         Icon(
             imageVector = Icons.Filled.KeyboardArrowUp,
             contentDescription = null,
-            modifier = Modifier.size(16.dp)
+            modifier = Modifier.size(16.dp).clickable {
+                onIncreaseClick()
+            }
         )
 
         Text(
@@ -30,7 +35,9 @@ fun ScoreChip(
         Icon(
             imageVector = Icons.Filled.KeyboardArrowDown,
             contentDescription = null,
-            modifier = Modifier.size(16.dp)
+            modifier = Modifier.size(16.dp).clickable {
+                onDecreaseClick()
+            }
         )
     }
 }
