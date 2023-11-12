@@ -9,7 +9,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -88,7 +92,8 @@ fun Ranking(
             Button(
                 onClick = {
                     navigator.navigate(ProfileDestination(rankingViewModel.leaderboardEntries[0].name))
-                }
+                },
+                shape = RoundedCornerShape(5.dp),
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -96,7 +101,15 @@ fun Ranking(
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     Text(text = "1. ${rankingViewModel.leaderboardEntries[0].name}")
-                    Text(text = "${rankingViewModel.leaderboardEntries[0].xp} XP")
+
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                    ) {
+                        Text(text = "${rankingViewModel.leaderboardEntries[0].xp} XP")
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Icon(imageVector = Icons.Filled.Star, contentDescription = null)
+                    }
                 }
             }
 
@@ -111,22 +124,19 @@ fun Ranking(
                 ) {
                     rankingViewModel.leaderboardEntries.forEachIndexed { index, e ->
                         if (index != 0) {
-                            MeasureViewWidth(viewToMeasure = {
-                                Row(modifier = Modifier.fillMaxWidth()) {}
-                            }) {
-                                OutlinedButton(
-                                    onClick = {
-                                        navigator.navigate(ProfileDestination(e.name))
-                                    }
+                            OutlinedButton(
+                                onClick = {
+                                    navigator.navigate(ProfileDestination(e.name))
+                                },
+                                shape = RoundedCornerShape(5.dp),
+                            ) {
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.SpaceBetween,
                                 ) {
-                                    Row(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        verticalAlignment = Alignment.CenterVertically,
-                                        horizontalArrangement = Arrangement.SpaceBetween,
-                                    ) {
-                                        Text(text = "${index + 1}. ${e.name}")
-                                        Text(text = "${e.xp} XP")
-                                    }
+                                    Text(text = "${index + 1}. ${e.name}")
+                                    Text(text = "${e.xp} XP")
                                 }
                             }
                         }
