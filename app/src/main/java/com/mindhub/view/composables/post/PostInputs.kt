@@ -59,10 +59,7 @@ fun PostInputs(
 
     expertiseViewModel.loadExpertises()
 
-    Surface(
-        modifier = Modifier
-            .verticalScroll(rememberScrollState()),
-    ) {
+    Surface {
         SpacedColumn(
             spacing = 8,
             verticalAlignment = Alignment.Top,
