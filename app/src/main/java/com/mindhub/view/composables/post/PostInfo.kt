@@ -50,8 +50,12 @@ import java.time.LocalDateTime
 @Composable
 fun PostInfo(
     post: Post,
-    navigator: DestinationsNavigator
+    howManyComments: Int,
+    navigator: DestinationsNavigator,
+    onScoreUpdate: (Int) -> Unit,
 ) {
+    println("Aqui\n\n")
+
     SpacedColumn(
         spacing = 8,
         verticalAlignment = Alignment.CenterVertically,
@@ -108,8 +112,17 @@ fun PostInfo(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier.horizontalScroll(rememberScrollState())
         ) {
-            ScoreChip(score = post.score)
-            CommentsChip(commentsQuantity = 10)
+            ScoreChip(
+                score = post.score,
+                onIncreaseClick = {
+                    onScoreUpdate(post.score + 1)
+                },
+                onDecreaseClick = {
+                    onScoreUpdate(post.score - 1)
+                },
+            )
+
+            CommentsChip(commentsQuantity = howManyComments)
 
             if (post.instanceOf(Event::class)) {
                 val event = post as Event
@@ -139,7 +152,7 @@ fun PostInfo(
             )
 
             Spacer(modifier = Modifier.size(16.dp))
-            Text(text = "10 comentários", style = MaterialTheme.typography.labelLarge)
+            Text(text = "$howManyComments comentários", style = MaterialTheme.typography.labelLarge)
         }
     }
 }
@@ -163,6 +176,9 @@ fun PostInfoPreview() {
     )
 
     MindHubTheme {
-        PostInfo(post = ask, navigator = EmptyDestinationsNavigator)
+        PostInfo(post = ask,
+            howManyComments = 0,
+            navigator = EmptyDestinationsNavigator,
+        ) {}
     }
 }
