@@ -12,7 +12,7 @@ import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 
 @Destination
 @Composable
-fun CreateMaterial(
+fun MaterialCreate(
     navigator: DestinationsNavigator,
     title: String? = null
 ) {
@@ -32,6 +32,6 @@ fun CreateMaterial(
 @Composable
 fun CreateMaterialPreview() {
     MindHubTheme {
-        CreateMaterial(navigator = EmptyDestinationsNavigator)
+        MaterialCreate(navigator = EmptyDestinationsNavigator)
     }
 }

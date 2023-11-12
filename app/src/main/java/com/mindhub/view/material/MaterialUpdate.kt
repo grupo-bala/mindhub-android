@@ -17,7 +17,7 @@ import java.time.LocalDateTime
 
 @Destination
 @Composable
-fun UpdateMaterial(
+fun MaterialUpdate(
     navigator: DestinationsNavigator,
     material: Material
 ) {
@@ -58,7 +58,7 @@ fun UpdateMaterialPreview() {
     )
 
     MaterialTheme {
-        UpdateMaterial(
+        MaterialUpdate(
             navigator = EmptyDestinationsNavigator,
             material = material
         )
