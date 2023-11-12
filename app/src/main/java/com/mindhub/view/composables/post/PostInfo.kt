@@ -39,7 +39,7 @@ import com.mindhub.view.composables.chips.ScoreChip
 import com.mindhub.view.composables.chips.ShareChip
 import com.mindhub.view.destinations.AskUpdateDestination
 import com.mindhub.view.destinations.EventCreateDestination
-import com.mindhub.view.destinations.UpdateMaterialDestination
+import com.mindhub.view.destinations.MaterialUpdateDestination
 import com.mindhub.view.layouts.SpacedColumn
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
@@ -83,7 +83,7 @@ fun PostInfo(
                     label = { Text(text = postWithExpertise.expertise.title) }
                 )
 
-                destination = UpdateMaterialDestination(postWithExpertise)
+                destination = MaterialUpdateDestination(postWithExpertise)
             }
         }
 

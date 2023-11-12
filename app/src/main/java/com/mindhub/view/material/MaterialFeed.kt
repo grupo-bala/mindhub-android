@@ -3,7 +3,7 @@ package com.mindhub.view.material
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mindhub.view.composables.feed.FeedView
-import com.mindhub.view.destinations.CreateMaterialDestination
+import com.mindhub.view.destinations.MaterialCreateDestination
 import com.mindhub.view.destinations.MaterialViewDestination
 import com.mindhub.view.layouts.Views
 import com.mindhub.viewmodel.material.FeedMaterialViewModel
@@ -22,6 +22,6 @@ fun MaterialFeed(
         viewModel = feed,
         currentView = Views.MATERIAL,
         onClickItem = { navigator.navigate(MaterialViewDestination(it.id)) },
-        onClickAdd = { navigator.navigate(CreateMaterialDestination(null)) }
+        onClickAdd = { navigator.navigate(MaterialCreateDestination(null)) }
     )
 }
