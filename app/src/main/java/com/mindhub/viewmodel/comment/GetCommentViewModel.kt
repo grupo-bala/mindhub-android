@@ -55,6 +55,7 @@ class GetCommentViewModel : ViewModel() {
             updatedComment.score += updatedComment.userScore * -1
             updatedComment.userScore = 0
         } else {
+            updatedComment.score += updatedComment.userScore * -1
             updatedComment.userScore = userScore
             updatedComment.score += userScore
         }

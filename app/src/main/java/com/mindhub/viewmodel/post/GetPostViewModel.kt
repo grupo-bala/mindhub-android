@@ -14,8 +14,11 @@ interface GetPostViewModel {
             post!!.score += post!!.userScore * -1
             post!!.userScore = 0
         } else {
-            post!!.score += userScore
+            println("AAWDIJDWIDJWIDJWJDI\n\n")
+            println(userScore)
+            post!!.score += post!!.userScore * -1
             post!!.userScore = userScore
+            post!!.score += userScore
         }
 
         post = post
