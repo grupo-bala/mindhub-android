@@ -15,6 +15,7 @@ interface AskProvider {
     suspend fun get(title: String): List<Ask>
     suspend fun getForYou(page: Int): List<Ask>
     suspend fun getRecents(page: Int): List<Ask>
+    suspend fun getUserAsks(username: String): List<Ask>
 }
 
 object AskFakeApi : AskProvider {
@@ -65,6 +66,14 @@ object AskFakeApi : AskProvider {
         return asks.filter {
             it.user.username != UserInfo!!.username
         }.sortedBy { it.postDate }
+    }
+
+    override suspend fun getUserAsks(username: String): List<Ask> {
+        val filtered = asks.filter {
+            it.user.username == username
+        }
+
+        return filtered.reversed()
     }
 
     override suspend fun remove(id: Int) {

@@ -1,6 +1,7 @@
 package com.mindhub.model.api
 
 import com.mindhub.common.services.UserInfo
+import com.mindhub.model.entities.Ask
 import com.mindhub.model.entities.Badge
 import com.mindhub.model.entities.Expertise
 import com.mindhub.model.entities.Material
@@ -24,6 +25,7 @@ interface MaterialProvider {
     suspend fun get(title: String): List<Material>
     suspend fun getForYou(page: Int): List<Material>
     suspend fun getRecents(page: Int): List<Material>
+    suspend fun getUserMaterials(username: String): List<Material>
 }
 
 object MaterialFakeApi: MaterialProvider {
@@ -45,7 +47,7 @@ object MaterialFakeApi: MaterialProvider {
             user = material.user,
             postDate = LocalDateTime.now(),
             userScore = 0,
-            score = 10
+            score = 0
         )
 
         materials.add(material)
@@ -69,6 +71,14 @@ object MaterialFakeApi: MaterialProvider {
 
     override suspend fun getOne(id: Int): Material {
         return materials.find { it.id == id } ?: throw Exception()
+    }
+
+    override suspend fun getUserMaterials(username: String): List<Material> {
+        val filtered = materials.filter {
+            it.user.username == username
+        }
+
+        return filtered.reversed()
     }
 
     override suspend fun get(title: String): List<Material> {

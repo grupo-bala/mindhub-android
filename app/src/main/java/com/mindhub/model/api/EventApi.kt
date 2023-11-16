@@ -5,6 +5,7 @@ import com.google.maps.GeocodingApi
 import com.google.maps.model.LatLng
 import com.mindhub.BuildConfig
 import com.mindhub.common.services.UserInfo
+import com.mindhub.model.entities.Ask
 import com.mindhub.model.entities.Badge
 import com.mindhub.model.entities.Event
 import com.mindhub.model.entities.User
@@ -18,6 +19,7 @@ interface EventProvider {
     suspend fun get(id: Int): Event
     suspend fun getForYou(page: Int): List<Event>
     suspend fun getRecents(page: Int): List<Event>
+    suspend fun getUserEvents(username: String): List<Event>
 }
 
 object EventFakeApi : EventProvider {
@@ -78,6 +80,14 @@ object EventFakeApi : EventProvider {
 
     override suspend fun get(id: Int): Event {
         return events.find { it.id == id } ?: throw Exception()
+    }
+
+    override suspend fun getUserEvents(username: String): List<Event> {
+        val filtered = events.filter {
+            it.user.username == username
+        }
+
+        return filtered.reversed()
     }
 
     override suspend fun getForYou(page: Int): List<Event> {

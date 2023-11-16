@@ -10,13 +10,20 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mindhub.common.services.ErrorParser
 import com.mindhub.common.services.UserInfo
+import com.mindhub.model.api.AskFakeApi
+import com.mindhub.model.api.EventFakeApi
+import com.mindhub.model.api.MaterialFakeApi
 import com.mindhub.model.api.ProfileFakeApi
 import com.mindhub.model.entities.Badge
 import com.mindhub.model.entities.Expertise
+import com.mindhub.model.entities.Post
 import kotlinx.coroutines.launch
 
 class ProfileViewModel(): ViewModel() {
     var username by mutableStateOf("carregando...")
+    var askPosts: MutableList<Post> = mutableStateListOf<Post>()
+    var materialPosts: MutableList<Post> = mutableStateListOf<Post>()
+    var eventsPosts: MutableList<Post> = mutableStateListOf<Post>()
     var xp by mutableIntStateOf(0)
     var badge by mutableStateOf<Badge>(Badge(""))
     var expertises = mutableStateListOf<Expertise>()
@@ -28,6 +35,8 @@ class ProfileViewModel(): ViewModel() {
             return
         }
 
+        isLoading = true
+
         if (usernameToLoad == null) {
             username = UserInfo!!.username
             badge = UserInfo!!.currentBadge
@@ -35,6 +44,24 @@ class ProfileViewModel(): ViewModel() {
 
             for (expertise in UserInfo!!.expertises) {
                 expertises.add(expertise)
+            }
+
+            viewModelScope.launch {
+                try {
+                    for (post in AskFakeApi.getUserAsks(UserInfo!!.username)) {
+                        askPosts.add(post)
+                    }
+
+                    for (post in MaterialFakeApi.getUserMaterials(UserInfo!!.username)) {
+                        materialPosts.add(post)
+                    }
+
+                    for (post in EventFakeApi.getUserEvents(UserInfo!!.username)) {
+                        eventsPosts.add(post)
+                    }
+                } catch (e: Exception) {
+                    /* TODO */
+                }
             }
         } else {
             viewModelScope.launch {
@@ -44,6 +71,18 @@ class ProfileViewModel(): ViewModel() {
                     username = user.username
                     badge = user.currentBadge
                     xp = user.xp
+
+                    for (post in AskFakeApi.getUserAsks(username)) {
+                        askPosts.add(post)
+                    }
+
+                    for (post in MaterialFakeApi.getUserMaterials(username)) {
+                        materialPosts.add(post)
+                    }
+
+                    for (post in EventFakeApi.getUserEvents(username)) {
+                        eventsPosts.add(post)
+                    }
 
                     for (expertise in user.expertises) {
                         expertises.add(expertise)

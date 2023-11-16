@@ -46,7 +46,13 @@ import com.mindhub.ui.theme.MindHubTheme
 import com.mindhub.view.composables.MeasureViewWidth
 import com.mindhub.view.composables.Suspended
 import com.mindhub.view.composables.Tabs
+import com.mindhub.view.composables.feed.FeedView
+import com.mindhub.view.composables.post.PostList
+import com.mindhub.view.destinations.AskResultsDestination
+import com.mindhub.view.destinations.AskViewDestination
 import com.mindhub.view.destinations.EditProfileDestination
+import com.mindhub.view.destinations.EventViewDestination
+import com.mindhub.view.destinations.MaterialViewDestination
 import com.mindhub.view.destinations.RankingDestination
 import com.mindhub.view.layouts.AppScaffold
 import com.mindhub.view.layouts.Views
@@ -68,7 +74,7 @@ fun Profile(
         mutableIntStateOf(0)
     }
 
-    val tabs = listOf("Perguntas", "Materiais")
+    val tabs = listOf("Perguntas", "Materiais", "Eventos")
 
     profileViewModel.loadProfile(username)
 
@@ -186,7 +192,34 @@ fun Profile(
                         .height(1.dp)
                 )
 
-                Tabs(tabs = tabs, tabsContent = listOf({}, {}))
+                Tabs(
+                    tabs = tabs,
+                    tabsContent = listOf({
+                        Suspended(isLoading = profileViewModel.isLoading) {
+                            PostList(
+                                posts = profileViewModel.askPosts,
+                                modifier = Modifier.padding(horizontal = 16.dp),
+                                onClick = { navigator.navigate(AskViewDestination(it.id)) }
+                            )
+                        }
+                    }, {
+                        Suspended(isLoading = profileViewModel.isLoading) {
+                            PostList(
+                                posts = profileViewModel.materialPosts,
+                                modifier = Modifier.padding(horizontal = 16.dp),
+                                onClick = { navigator.navigate(MaterialViewDestination(it.id)) }
+                            )
+                        }
+                    }, {
+                        Suspended(isLoading = profileViewModel.isLoading) {
+                            PostList(
+                                posts = profileViewModel.eventsPosts,
+                                modifier = Modifier.padding(horizontal = 16.dp),
+                                onClick = { navigator.navigate(EventViewDestination(it.id)) }
+                            )
+                        }
+                    })
+                )
             }
 
             if (username == null) {
