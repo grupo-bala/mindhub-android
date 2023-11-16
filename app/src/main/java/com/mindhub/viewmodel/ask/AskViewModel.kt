@@ -35,6 +35,7 @@ class AskViewModel: ViewModel(), PostViewModelInterface {
                     file = file,
                     score = 0,
                     postDate = LocalDateTime.now(),
+                    userScore = 0,
                     user = UserInfo!!
                 ))
 
@@ -60,6 +61,7 @@ class AskViewModel: ViewModel(), PostViewModelInterface {
                     user = UserInfo!!,
                     file = file,
                     postDate = LocalDateTime.now(),
+                    userScore = 0,
                     score = 0
                 ))
 

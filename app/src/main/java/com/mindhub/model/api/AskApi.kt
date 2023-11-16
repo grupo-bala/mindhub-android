@@ -22,9 +22,9 @@ object AskFakeApi : AskProvider {
 
     val asks = mutableListOf<Ask>().also {
         val user = User("João", "joaum123@gmail.com", "jjaum", 0, Badge(""), listOf(), "")
-        it.add(Ask(count++, "Como aplicar o teorema de pitágoras em um círculo?", "teste", 76, user, LocalDateTime.now(), Expertise("Matemática")))
-        it.add(Ask(count++, "A ligação metálica pode ser feita entre hidrogênio e sódio?", "teste", 76, user, LocalDateTime.now(), Expertise("Química")))
-        it.add(Ask(count++, "Qual movimento literário foi introduzido no Brasil a partir da semana de 22", "teste", 76, user, LocalDateTime.now(), Expertise("Literatura")))
+        it.add(Ask(count++, "Como aplicar o teorema de pitágoras em um círculo?", 0, "teste", 76, user, LocalDateTime.now(), Expertise("Matemática")))
+        it.add(Ask(count++, "A ligação metálica pode ser feita entre hidrogênio e sódio?", userScore = 0, "teste", 76, user, LocalDateTime.now(), Expertise("Química")))
+        it.add(Ask(count++, "Qual movimento literário foi introduzido no Brasil a partir da semana de 22", userScore = 0, "teste", 76, user, LocalDateTime.now(), Expertise("Literatura")))
     }
 
     override suspend fun create(ask: Ask): Ask {

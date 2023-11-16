@@ -9,6 +9,7 @@ data class Event(
     override var id: Int,
     override var user: User,
     override var title: String,
+    override var userScore: Int,
     override var content: String,
     override var score: Int,
     @Serializable(DateSerializer::class)

@@ -84,8 +84,9 @@ fun CommentItem(
             if (!isReply) {
                 ScoreChip(
                     score = comment.score,
-                    onIncreaseClick = { onScoreUpdate(comment.id, comment.score + 1) },
-                    onDecreaseClick = { onScoreUpdate(comment.id, comment.score - 1) },
+                    userScore = comment.userScore,
+                    onIncreaseClick = { onScoreUpdate(comment.id, 1) },
+                    onDecreaseClick = { onScoreUpdate(comment.id, -1) },
                 )
             }
 

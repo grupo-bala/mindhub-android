@@ -9,8 +9,15 @@ interface GetPostViewModel {
 
     fun get(id: Int)
 
-    fun updateScore(score: Int) {
-        post!!.score = score
+    fun updateScore(userScore: Int) {
+        if (userScore == post!!.userScore) {
+            post!!.score += post!!.userScore * -1
+            post!!.userScore = 0
+        } else {
+            post!!.score += userScore
+            post!!.userScore = userScore
+        }
+
         post = post
     }
 }

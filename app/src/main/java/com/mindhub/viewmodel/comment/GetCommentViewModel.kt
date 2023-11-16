@@ -3,7 +3,6 @@ package com.mindhub.viewmodel.comment
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.neverEqualPolicy
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -45,17 +44,22 @@ class GetCommentViewModel : ViewModel() {
         toReply.replies.add(comment)
     }
 
-    fun updateScore(commentId: Int, score: Int) {
+    fun updateScore(commentId: Int, userScore: Int) {
         val index = comments.indexOfFirst { it.id == commentId }
 
         val updatedComment = comments[index]
 
         comments.remove(updatedComment)
 
-        updatedComment.score = score
+        if (userScore == updatedComment.userScore) {
+            updatedComment.score += updatedComment.userScore * -1
+            updatedComment.userScore = 0
+        } else {
+            updatedComment.userScore = userScore
+            updatedComment.score += userScore
+        }
 
         comments.add(updatedComment)
-
         comments.sortByDescending { it.score }
     }
 }

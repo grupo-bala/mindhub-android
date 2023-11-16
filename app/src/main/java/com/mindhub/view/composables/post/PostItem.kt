@@ -130,6 +130,7 @@ fun PostItemPreview() {
         latitude = 0.0,
         longitude = 0.0,
         user = user,
+        userScore = 0,
         localName = "Quixadá"
     )
 

@@ -43,7 +43,7 @@ fun EventUpdate(
 fun EventUpdatePreview() {
     MindHubTheme {
         val UserInfo = User("João", "joaum123@gmail.com", "jjaum", 0, Badge(""), listOf(), "")
-        EventUpdate(navigator = EmptyDestinationsNavigator, event = Event(6, UserInfo, "Teste 10", "teste", 2, LocalDateTime.now(), LocalDateTime.now(), 0.0, 0.0, "Quixadá"))
+        EventUpdate(navigator = EmptyDestinationsNavigator, event = Event(6, UserInfo, "Teste 10", userScore = 0, "teste", 2, LocalDateTime.now(), LocalDateTime.now(), 0.0, 0.0, "Quixadá"))
 
     }
 }

@@ -58,7 +58,8 @@ fun AskUpdatePreview() {
         expertise = Expertise("Matemática"),
         user = UserInfo!!,
         postDate = LocalDateTime.now(),
-        score = 0
+        score = 0,
+        userScore = 0,
     )
 
     MaterialTheme {

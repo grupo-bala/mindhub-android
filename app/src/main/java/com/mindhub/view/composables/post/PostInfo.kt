@@ -54,8 +54,6 @@ fun PostInfo(
     navigator: DestinationsNavigator,
     onScoreUpdate: (Int) -> Unit,
 ) {
-    println("Aqui\n\n")
-
     SpacedColumn(
         spacing = 8,
         verticalAlignment = Alignment.CenterVertically,
@@ -114,11 +112,12 @@ fun PostInfo(
         ) {
             ScoreChip(
                 score = post.score,
+                userScore = post.userScore,
                 onIncreaseClick = {
-                    onScoreUpdate(post.score + 1)
+                    onScoreUpdate(1)
                 },
                 onDecreaseClick = {
-                    onScoreUpdate(post.score - 1)
+                    onScoreUpdate(-1)
                 },
             )
 
@@ -172,6 +171,7 @@ fun PostInfoPreview() {
         expertise = Expertise("Matemática"),
         score = 76,
         postDate = LocalDateTime.now(),
+        userScore = 0,
         user = user
     )
 

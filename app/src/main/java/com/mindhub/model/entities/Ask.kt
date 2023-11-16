@@ -10,6 +10,7 @@ import java.time.LocalDateTime
 data class Ask(
     override var id: Int,
     override var title: String,
+    override var userScore: Int,
     override var content: String,
     override var score: Int,
     override var user: User,

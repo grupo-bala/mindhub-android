@@ -54,7 +54,7 @@ fun Ranking(
     AppScaffold(
         currentView = Views.USER,
         navigator = navigator,
-        hasBackArrow = false,
+        hasBackArrow = true,
     ) {
         Column(
             modifier = Modifier

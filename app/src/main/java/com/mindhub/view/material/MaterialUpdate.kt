@@ -54,6 +54,7 @@ fun UpdateMaterialPreview() {
         expertise = Expertise("Matemática"),
         user = UserInfo!!,
         postDate = LocalDateTime.now(),
+        userScore = 0,
         score = 0
     )
 

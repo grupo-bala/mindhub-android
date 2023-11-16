@@ -51,6 +51,7 @@ class EventViewModel : ViewModel(), PostViewModelInterface {
                         date = date.dateToUnix(time),
                         latitude = position!!.latitude,
                         longitude = position!!.longitude,
+                        userScore = 0,
                         localName = ""
                     )
                 )
@@ -84,6 +85,7 @@ class EventViewModel : ViewModel(), PostViewModelInterface {
                         date = date.dateToUnix(time),
                         latitude = position!!.latitude,
                         longitude = position!!.longitude,
+                        userScore = 0,
                         localName = ""
                     )
                 )

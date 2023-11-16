@@ -57,6 +57,7 @@ class MaterialViewModel: ViewModel(), PostViewModelInterface {
                         expertise = expertise!!,
                         user = UserInfo!!,
                         postDate = LocalDateTime.now(),
+                        userScore = 0,
                         score = 0
                     )
                 )
