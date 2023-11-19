@@ -42,7 +42,6 @@ fun PostUpdate(
     onSuccess: () -> Unit,
     extraFields: @Composable () -> Unit = {}
 ) {
-    var feedbackError: String? = null
     var isRemoveModalOpen by remember {
         mutableStateOf(false)
     }
@@ -65,14 +64,16 @@ fun PostUpdate(
                 },
                 actions = {
                     Button(onClick = {
-                        viewModel.update(
-                            onSuccess = onSuccess,
-                            onFailure = {
-                                feedbackError = it
-                            },
-                            postId = postId
-                        )
-                    }) {
+                            viewModel.update(
+                                onSuccess = onSuccess,
+                                onFailure = {
+                                    viewModel.feedback = it
+                                },
+                                postId = postId
+                            )
+                        },
+                        enabled = viewModel.isFilled()
+                    ) {
                         Text(text = "Alterar")
                     }
                 }
@@ -83,6 +84,16 @@ fun PostUpdate(
             Column(
                 modifier = Modifier.verticalScroll(rememberScrollState())
             ) {
+                if (viewModel.feedback != "") {
+                    Text(
+                        text = "${viewModel.feedback!!} (*)",
+                        textAlign = TextAlign.Center,
+                        color = MaterialTheme.colorScheme.error,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(bottom = 16.dp).fillMaxWidth()
+                    )
+                }
+
                 PostInputs(
                     viewModel = viewModel,
                     extraContent = extraFields
@@ -112,20 +123,11 @@ fun PostUpdate(
                                     navigator.popBackStack()
                                 },
                                 onFailure = {
-                                    feedbackError = it
+                                    viewModel.feedback = it
                                 }
                             )
                             isRemoveModalOpen = false
                         }
-                    )
-                }
-
-                if (feedbackError != null) {
-                    Text(
-                        text = feedbackError!!,
-                        color = MaterialTheme.colorScheme.error,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(vertical = 8.dp)
                     )
                 }
             }

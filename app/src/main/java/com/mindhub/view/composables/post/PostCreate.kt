@@ -21,6 +21,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.mindhub.model.entities.Post
 import com.mindhub.viewmodel.post.PostViewModelInterface
@@ -34,8 +35,6 @@ fun PostCreate(
     onSuccess: (Post) -> Unit,
     extraFields: @Composable () -> Unit = {}
 ) {
-    var feedbackError: String? = null
-
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -54,16 +53,18 @@ fun PostCreate(
                 },
                 actions = {
                     Button(onClick = {
-                        viewModel.create(
-                            onSuccess = {
-                                navigator.popBackStack()
-                                onSuccess(it)
-                            },
-                            onFailure = {
-                                feedbackError = it
-                            }
-                        )
-                    }) {
+                            viewModel.create(
+                                onSuccess = {
+                                    navigator.popBackStack()
+                                    onSuccess(it)
+                                },
+                                onFailure = {
+                                    viewModel.feedback = it
+                                }
+                            )
+                        },
+                        enabled = viewModel.isFilled()
+                    ) {
                         Text(text = "Publicar")
                     }
                 }
@@ -74,19 +75,23 @@ fun PostCreate(
             Column(
                 modifier = Modifier.verticalScroll(rememberScrollState())
             ) {
-                PostInputs(
-                    viewModel = viewModel,
-                    extraContent = extraFields
-                )
-
-                if (feedbackError != null) {
+                if (viewModel.feedback != "") {
                     Text(
-                        text = feedbackError!!,
+                        text = "${viewModel.feedback!!} (*)",
+                        textAlign = TextAlign.Center,
                         color = MaterialTheme.colorScheme.error,
                         fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(vertical = 8.dp)
+                        modifier = Modifier.padding(bottom = 16.dp).fillMaxWidth()
                     )
                 }
+
+                PostInputs(
+                    viewModel = viewModel,
+                    extraContent = {
+                        extraFields()
+                    }
+                )
+
             }
         }
     }
