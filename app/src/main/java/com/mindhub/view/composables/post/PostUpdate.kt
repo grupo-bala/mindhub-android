@@ -21,10 +21,15 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.mindhub.view.composables.RemoveConfirmationModal
 import com.mindhub.viewmodel.post.PostViewModelInterface
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -38,6 +43,9 @@ fun PostUpdate(
     extraFields: @Composable () -> Unit = {}
 ) {
     var feedbackError: String? = null
+    var isRemoveModalOpen by remember {
+        mutableStateOf(false)
+    }
 
     Surface(
         modifier = Modifier
@@ -81,15 +89,7 @@ fun PostUpdate(
                 )
 
                 OutlinedButton(
-                    onClick = { viewModel.remove(
-                        postId,
-                        onSuccess = {
-                            navigator.popBackStack()
-                        },
-                        onFailure = {
-                            feedbackError = it
-                        }
-                    ) },
+                    onClick = { isRemoveModalOpen = true },
                     colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.error),
                     modifier = Modifier.padding(horizontal = 16.dp)
                 ) {
@@ -98,6 +98,25 @@ fun PostUpdate(
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.fillMaxWidth(),
                         textAlign = TextAlign.Center
+                    )
+                }
+
+                if (isRemoveModalOpen) {
+                    RemoveConfirmationModal(
+                        onDismissRequest = { isRemoveModalOpen = false },
+                        onConfirmation = {
+                            viewModel.remove(
+                                postId,
+                                onSuccess = {
+                                    navigator.popBackStack()
+                                    navigator.popBackStack()
+                                },
+                                onFailure = {
+                                    feedbackError = it
+                                }
+                            )
+                            isRemoveModalOpen = false
+                        }
                     )
                 }
 
