@@ -94,7 +94,7 @@ fun Register(
             
             OutlinedTextField(
                 value = registerViewModel.name,
-                label = { Text(text = "Nome") },
+                label = { Text(text = "Nome*") },
                 placeholder = { Text(text = "Digite o seu nome") },
                 onValueChange = { registerViewModel.name = it },
                 singleLine = true,
@@ -103,7 +103,7 @@ fun Register(
 
             OutlinedTextField(
                 value = registerViewModel.email,
-                label = { Text(text = "Email") },
+                label = { Text(text = "Email*") },
                 placeholder = { Text(text = "Digite o seu email") },
                 onValueChange = { registerViewModel.email = it },
                 singleLine = true,
@@ -112,7 +112,7 @@ fun Register(
 
             OutlinedTextField(
                 value = registerViewModel.username,
-                label = { Text(text = "Nome de usuário") },
+                label = { Text(text = "Nome de usuário*") },
                 placeholder = { Text(text = "Digite o seu nome de usuário") },
                 onValueChange = { registerViewModel.username = it },
                 singleLine = true,
@@ -128,7 +128,7 @@ fun Register(
                     }
                 },
                 readOnly = true,
-                label = { Text(text = "Expertises") },
+                label = { Text(text = "Expertises*") },
                 onValueChange = {},
                 placeholder = { Text(text = "Selecione suas expertises") },
                 trailingIcon = { Icon(imageVector = Icons.Default.Create, contentDescription = null) },
@@ -176,7 +176,7 @@ fun Register(
 
             OutlinedTextField(
                 value = registerViewModel.password,
-                label = { Text(text = "Senha") },
+                label = { Text(text = "Senha*") },
                 placeholder = { Text(text = "Digite a sua senha") },
                 visualTransformation = PasswordVisualTransformation(),
                 onValueChange = { registerViewModel.password = it },
@@ -186,7 +186,7 @@ fun Register(
 
             OutlinedTextField(
                 value = registerViewModel.passwordConfirmation,
-                label = { Text(text = "Confirmar senha") },
+                label = { Text(text = "Confirmar senha*") },
                 placeholder = { Text(text = "Digite a sua senha novamente") },
                 visualTransformation = PasswordVisualTransformation(),
                 onValueChange = { registerViewModel.passwordConfirmation = it },

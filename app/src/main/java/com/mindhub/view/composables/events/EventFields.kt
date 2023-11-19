@@ -84,7 +84,7 @@ fun EventFields(
         OutlinedTextField(
             value = viewModel.date,
             onValueChange = { },
-            label = { Text(text = "Data") },
+            label = { Text(text = "Data*") },
             placeholder = { Text(text = "Selecione a data") },
             modifier = Modifier
                 .fillMaxWidth(),
@@ -140,7 +140,7 @@ fun EventFields(
         OutlinedTextField(
             value = viewModel.time,
             onValueChange = { },
-            label = { Text(text = "Horário") },
+            label = { Text(text = "Horário*") },
             placeholder = { Text(text = "Selecione o horário") },
             modifier = Modifier
                 .fillMaxWidth(),
@@ -162,7 +162,7 @@ fun EventFields(
         OutlinedTextField(
             value = viewModel.positionName,
             onValueChange = { },
-            label = { Text(text = "Local") },
+            label = { Text(text = "Local*") },
             placeholder = { Text(text = "Selecione o local") },
             modifier = Modifier
                 .fillMaxWidth(),

@@ -70,7 +70,7 @@ fun PostInputs(
         ) {
             OutlinedTextField(
                 value = viewModel.title ?: "",
-                label = { Text(text = "Título") },
+                label = { Text(text = "Título*") },
                 placeholder = { Text(text = "Digite o título") },
                 onValueChange = { viewModel.title = it },
                 modifier = Modifier.fillMaxWidth()
@@ -87,7 +87,7 @@ fun PostInputs(
                         OutlinedTextField(
                             value = viewModel.expertise!!.title ?: "",
                             readOnly = true,
-                            label = { Text(text = "Categoria") },
+                            label = { Text(text = "Categoria*") },
                             onValueChange = {},
                             trailingIcon = {
                                 Icon(
@@ -124,7 +124,7 @@ fun PostInputs(
 
             OutlinedTextField(
                 value = viewModel.content ?: "",
-                label = { Text(text = "Descrição") },
+                label = { Text(text = "Descrição*") },
                 placeholder = { Text(text = "Digite a descrição") },
                 onValueChange = { viewModel.content = it },
                 modifier = Modifier
