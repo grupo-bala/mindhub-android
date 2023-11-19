@@ -7,6 +7,7 @@ interface PostViewModelInterface {
     var title: String
     var content: String
     var expertise: Expertise?
+    var feedback: String?
 
     fun create(
         onSuccess: (Post) -> Unit,
@@ -23,4 +24,6 @@ interface PostViewModelInterface {
         onFailure: (String?) -> Unit
     )
     fun getType(): String
+    fun isValid(): Boolean
+    fun isFilled(): Boolean
 }
