@@ -25,6 +25,7 @@ class EventViewModel : ViewModel(), PostViewModelInterface {
     override var title by mutableStateOf("")
     override var content by mutableStateOf("")
     override var expertise: Expertise? = null
+    override var feedback: String? by mutableStateOf("")
     var date by mutableStateOf("")
     var time by mutableStateOf("")
     var position by mutableStateOf<LatLng?>(null)
@@ -39,6 +40,8 @@ class EventViewModel : ViewModel(), PostViewModelInterface {
         viewModelScope.launch {
             try {
                 isLoading = true
+
+                isValid()
 
                 val event = EventFakeApi.create(
                     Event(
@@ -70,6 +73,8 @@ class EventViewModel : ViewModel(), PostViewModelInterface {
         onSuccess: () -> Unit,
         onFailure: (String?) -> Unit,
     ) {
+        isValid()
+
         viewModelScope.launch {
             try {
                 isLoading = true
@@ -145,5 +150,17 @@ class EventViewModel : ViewModel(), PostViewModelInterface {
         })
 
         isPositionNameLoading = false
+    }
+
+    override fun isValid(): Boolean {
+        if (!isFilled()) {
+            this.feedback = "Preencha todos campos obrigatórios"
+            return false
+        }
+        return true
+    }
+
+    override fun isFilled(): Boolean {
+        return this.title != "" && this.content != "" && this.expertise != null && this.time != "" && this.date != "" && this.position != null
     }
 }

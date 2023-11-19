@@ -18,6 +18,7 @@ import java.time.LocalDateTime
 class AskViewModel: ViewModel(), PostViewModelInterface {
     override var title by mutableStateOf("")
     override var content by mutableStateOf("")
+    override var feedback: String? by mutableStateOf("")
     override var expertise: Expertise? by mutableStateOf(Expertise(""))
     var file by mutableStateOf<Uri?>(null)
 
@@ -27,6 +28,8 @@ class AskViewModel: ViewModel(), PostViewModelInterface {
     ) {
         viewModelScope.launch {
             try {
+                isValid()
+
                 val post = AskFakeApi.create(Ask(
                     id = -1,
                     title = title,
@@ -51,6 +54,8 @@ class AskViewModel: ViewModel(), PostViewModelInterface {
         onSuccess: () -> Unit,
         onFailure: (String?) -> Unit,
     ) {
+        isValid()
+
         viewModelScope.launch {
             try {
                 AskFakeApi.update(Ask(
@@ -89,5 +94,17 @@ class AskViewModel: ViewModel(), PostViewModelInterface {
 
     override fun getType(): String {
         return "pergunta"
+    }
+
+    override fun isValid(): Boolean {
+        if (!isFilled()) {
+            this.feedback = "Preencha todos campos obrigatórios"
+            return false
+        }
+        return true
+    }
+
+    override fun isFilled(): Boolean {
+        return this.title != "" && this.content != "" && this.expertise != null
     }
 }

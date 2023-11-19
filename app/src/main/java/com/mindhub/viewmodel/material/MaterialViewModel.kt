@@ -18,12 +18,14 @@ import java.time.LocalDateTime
 class MaterialViewModel: ViewModel(), PostViewModelInterface {
     override var title by mutableStateOf("")
     override var content by mutableStateOf("")
+    override var feedback: String? by mutableStateOf("")
     override var expertise: Expertise? by mutableStateOf(Expertise(""))
 
     override fun create(
         onSuccess: (Post) -> Unit,
         onFailure: (String?) -> Unit,
     ) {
+        isValid()
         viewModelScope.launch {
             try {
                 val post = MaterialFakeApi.create(
@@ -49,6 +51,8 @@ class MaterialViewModel: ViewModel(), PostViewModelInterface {
     ) {
         viewModelScope.launch {
             try {
+                isValid()
+
                 MaterialFakeApi.update(
                     Material(
                         id = postId,
@@ -86,5 +90,17 @@ class MaterialViewModel: ViewModel(), PostViewModelInterface {
 
     override fun getType(): String {
         return "material"
+    }
+
+    override fun isValid(): Boolean {
+        if (!isFilled()) {
+            this.feedback = "Preencha todos campos obrigatórios"
+            return false
+        }
+        return true
+    }
+
+    override fun isFilled(): Boolean {
+        return this.title != "" && this.content != "" && this.expertise != null
     }
 }
