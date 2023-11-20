@@ -1,5 +1,6 @@
 package com.mindhub.viewmodel.profile
 
+import android.net.Uri
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -15,6 +16,7 @@ import kotlinx.coroutines.launch
 class EditProfileViewModel() : ViewModel() {
     var name by mutableStateOf(UserInfo!!.name)
     var email by mutableStateOf(UserInfo!!.email)
+    var photo by mutableStateOf<Uri?>(null)
     var isLoading by mutableStateOf(false)
 
     fun update(
@@ -27,7 +29,7 @@ class EditProfileViewModel() : ViewModel() {
             try {
                 isLoading = true
 
-                UserFakeApi.update(UpdateRequest(name, email, selectedExpertises, selectedBadge))
+                UserFakeApi.update(UpdateRequest(name, email, selectedExpertises, selectedBadge, photo))
 
                 onSuccess()
             } catch (e: Exception) {
