@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import com.mindhub.R
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -32,7 +33,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -70,10 +73,6 @@ fun Profile(
 ) {
     val profileViewModel: ProfileViewModel = viewModel()
 
-    var currentTabIndex by remember {
-        mutableIntStateOf(0)
-    }
-
     val tabs = listOf("Perguntas", "Materiais", "Eventos")
 
     profileViewModel.loadProfile(username)
@@ -96,7 +95,7 @@ fun Profile(
                 ) {
                     AsyncImage(
                         model = ImageRequest.Builder(LocalContext.current)
-                            .data("https://picsum.photos/200") // TODO: change with the user profile picture
+                            .data(UserInfo!!.profilePicture ?: "https://picsum.photos/200")
                             .crossfade(true)
                             .build(),
                         contentDescription = null,
@@ -130,7 +129,9 @@ fun Profile(
                                     if (username == null) {
                                         IconButton(
                                             onClick = { navigator.navigate(EditProfileDestination) },
-                                            modifier = Modifier.padding(start = width + 32.dp).height(20.dp)
+                                            modifier = Modifier
+                                                .padding(start = width + 32.dp)
+                                                .height(20.dp)
                                         ) {
                                             Icon(imageVector = Icons.Default.Create, contentDescription = null)
                                         }
@@ -231,7 +232,11 @@ fun Profile(
                         .padding(16.dp)
                         .align(Alignment.BottomEnd)
                 ) {
-                    Icon(imageVector = Icons.Outlined.Star, contentDescription = null)
+                    Icon(
+                        imageVector = ImageVector.vectorResource(R.drawable.podium),
+                        contentDescription = null,
+                        modifier = Modifier.height(32.dp).width(32.dp)
+                    )
                 }
             }
         }
