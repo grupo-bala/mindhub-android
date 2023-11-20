@@ -30,3 +30,7 @@ fun LocalDateTime.toBrazilianDateFormat(): String {
     val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
     return this.format(formatter)
 }
+
+fun LocalDateTime.getTime(): String {
+    return "${this.hour.toString().padStart(2, '0')}:${this.minute.toString().padStart(2, '0')}"
+}

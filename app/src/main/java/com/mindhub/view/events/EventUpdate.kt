@@ -3,6 +3,7 @@ package com.mindhub.view.events
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.google.android.gms.maps.model.LatLng
+import com.mindhub.common.ext.getTime
 import com.mindhub.common.ext.toBrazilianDateFormat
 import com.mindhub.model.entities.Badge
 import com.mindhub.model.entities.Event
@@ -28,7 +29,7 @@ fun EventUpdate(
     viewModel.date = event.date.toBrazilianDateFormat()
     viewModel.position = LatLng(event.latitude, event.longitude)
     viewModel.positionName = event.localName
-    viewModel.time
+    viewModel.time = event.date.getTime()
 
     PostUpdate(
         navigator = navigator,
