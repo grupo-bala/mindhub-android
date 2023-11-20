@@ -63,4 +63,16 @@ class GetCommentViewModel : ViewModel() {
         comments.add(updatedComment)
         comments.sortByDescending { it.score }
     }
+
+    fun removeComment(commentId: Int, isReply: Int?) {
+        if (isReply == null) {
+            comments.removeIf { it.id == commentId }
+
+            return
+        }
+
+        val comment = comments.find { it.id == commentId } ?: throw Exception()
+
+        comment.replies.removeIf { it.id == isReply }
+    }
 }

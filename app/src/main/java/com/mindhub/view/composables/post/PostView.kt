@@ -44,6 +44,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mindhub.ui.theme.MindHubTheme
+import com.mindhub.view.composables.RemoveConfirmationModal
 import com.mindhub.view.composables.Suspended
 import com.mindhub.view.composables.comment.CommentsView
 import com.mindhub.view.composables.comment.CreateComment
@@ -70,9 +71,15 @@ fun PostView(
         mutableStateOf(false)
     }
 
+    var isRemoveModalToggle by remember {
+        mutableStateOf(false)
+    }
+
     var commentIdToReply by remember {
         mutableStateOf<Int?>(null)
     }
+
+    var handleRemove: () -> Unit = {}
 
     LaunchedEffect(key1 = true) {
         viewModel.get(postId)
@@ -111,11 +118,19 @@ fun PostView(
                             onScoreUpdate = { commentId, score ->
                                 getCommentViewModel.updateScore(commentId, score)
                             },
-                            postId = postId
-                        ) {
-                            isCreateCommentMenuExpanded = true
-                            commentIdToReply = it
-                        }
+                            postId = postId,
+                            onRemove = { commentId, replyId ->
+                                handleRemove = {
+                                    getCommentViewModel.removeComment(commentId, replyId)
+                                }
+
+                                isRemoveModalToggle = true
+                            },
+                            onReply = {
+                                isCreateCommentMenuExpanded = true
+                                commentIdToReply = it
+                            }
+                        )
                     }
                 }
 
@@ -155,6 +170,20 @@ fun PostView(
                             isCreateCommentMenuExpanded = false
                             commentIdToReply = null
                         },
+                    )
+                }
+
+                if (isRemoveModalToggle) {
+                    RemoveConfirmationModal(
+                        onConfirmation = {
+                            handleRemove()
+                            isRemoveModalToggle = false
+                            handleRemove = {}
+                        },
+                        onDismissRequest = {
+                            handleRemove = {}
+                            isRemoveModalToggle = false
+                        }
                     )
                 }
             }

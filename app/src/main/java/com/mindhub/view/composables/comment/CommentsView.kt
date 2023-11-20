@@ -16,6 +16,7 @@ fun CommentsView(
     getCommentViewModel: GetCommentViewModel,
     postId: Int,
     onScoreUpdate: (Int, Int) -> Unit,
+    onRemove: (Int, Int?) -> Unit,
     onReply: (Int) -> Unit,
 ) {
     LaunchedEffect(key1 = true) {
@@ -35,7 +36,8 @@ fun CommentsView(
                 CommentItem(
                     comment = comment,
                     onScoreUpdate = onScoreUpdate,
-                    onReply = onReply
+                    onReply = onReply,
+                    onRemove = onRemove
                 )
             }
         }

@@ -9,11 +9,18 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Create
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
+import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,8 +29,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.mindhub.common.services.UserInfo
 import com.mindhub.model.entities.Comment
 import com.mindhub.ui.theme.MindHubTheme
 import com.mindhub.view.composables.chips.CommentsChip
@@ -33,9 +42,10 @@ import com.mindhub.view.layouts.SpacedColumn
 @Composable
 fun CommentItem(
     comment: Comment,
-    isReply: Boolean = false,
+    isReply: Int? = null,
     onScoreUpdate: (Int, Int) -> Unit,
     onReply: (Int) -> Unit,
+    onRemove: (Int, Int?) -> Unit,
 ) {
     SpacedColumn(
         spacing = 8,
@@ -50,7 +60,6 @@ fun CommentItem(
             modifier = Modifier.fillMaxWidth()
         ) {
             Row(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Spacer(
@@ -60,10 +69,45 @@ fun CommentItem(
                         .background(MaterialTheme.colorScheme.surfaceVariant)
                 )
 
+                Spacer(modifier = Modifier.width(8.dp))
+
                 Text(
                     text = comment.username,
                     style = MaterialTheme.typography.labelLarge
                 )
+
+                Spacer(modifier = Modifier.width(8.dp))
+
+                if (UserInfo!!.username == comment.username) {
+                    Divider(modifier = Modifier
+                        .width(2.dp)
+                        .height(15.dp)
+                    )
+
+                    IconButton(onClick = {
+                        onRemove(comment.id, isReply)
+                    }) {
+                        Icon(
+                            imageVector = Icons.Filled.Delete,
+                            contentDescription = null,
+                            tint = Color.Red,
+                            modifier = Modifier.size(16.dp)
+                        )
+                    }
+
+                    Divider(modifier = Modifier
+                        .width(2.dp)
+                        .height(15.dp)
+                    )
+
+                    IconButton(onClick = { /*TODO*/ }) {
+                        Icon(
+                            imageVector = Icons.Filled.Create,
+                            contentDescription = null,
+                            modifier = Modifier.size(16.dp)
+                        )
+                    }
+                }
             }
 
             if (comment.isBestAnswer) {
@@ -81,7 +125,7 @@ fun CommentItem(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
         ) {
-            if (!isReply) {
+            if (isReply == null) {
                 ScoreChip(
                     score = comment.score,
                     userScore = comment.userScore,
@@ -94,7 +138,7 @@ fun CommentItem(
                 CommentsChip(commentsQuantity = comment.replies.size)
             }
 
-            if (!isReply) {
+            if (isReply == null) {
                 Button(
                     onClick = {
                         onReply(comment.id)
@@ -133,8 +177,9 @@ fun CommentItem(
                     CommentItem(
                         comment = reply,
                         onReply = onReply,
-                        isReply = true,
+                        isReply = comment.id,
                         onScoreUpdate = onScoreUpdate,
+                        onRemove = onRemove,
                     )
                 }
             }
@@ -193,7 +238,9 @@ fun CommentPreview() {
             CommentItem(
                 comment = comment3,
                 onScoreUpdate = { it1, it2 -> },
-            ) {}
+                onReply = {},
+                onRemove = { it1, it2 ->}
+            )
         }
     }
 }
