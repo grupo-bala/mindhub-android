@@ -210,7 +210,10 @@ fun Register(
                 onClick = {
                     registerViewModel.register(
                         expertiseViewModel.selectedExpertises,
-                        onSuccess = { navigator.navigate(AskHomeDestination) },
+                        onSuccess = {
+                            navigator.popBackStack()
+                            navigator.navigate(AskHomeDestination)
+                        },
                         onFailure = { registerViewModel.feedback = ErrorParser.from(it) }
                     )
                 },
