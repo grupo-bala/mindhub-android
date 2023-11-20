@@ -21,6 +21,7 @@ interface CommentProvider {
     suspend fun createReply(data: CreateReplyRequest): Comment
     suspend fun removeComment(commentId: Int, isReply: Int?)
     suspend fun updateComment(commentId: Int, isReply: Int?, newComment: String)
+    suspend fun toggleBestAnswer(commentId: Int): Unit
 }
 
 object CommentFakeApi : CommentProvider {
@@ -114,7 +115,11 @@ object CommentFakeApi : CommentProvider {
 
         val comment = comments.find { it.id == commentId } ?: throw Exception()
 
+        comments.remove(comment)
+
         comment.replies.removeIf { it.id == isReply }
+
+        comments.add(comment)
     }
 
     override suspend fun updateComment(commentId: Int, isReply: Int?, newComment: String) {
@@ -129,6 +134,11 @@ object CommentFakeApi : CommentProvider {
         val comment = comments.find { it.id == commentId } ?: throw Exception()
 
         comment.content = newComment
+    }
+
+    override suspend fun toggleBestAnswer(commentId: Int) {
+        val comment = comments.find { it.id == commentId } ?: throw Exception()
+        comment.isBestAnswer = !comment.isBestAnswer
     }
 }
 

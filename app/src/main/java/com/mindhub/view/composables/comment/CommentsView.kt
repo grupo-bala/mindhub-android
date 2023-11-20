@@ -7,6 +7,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.mindhub.model.entities.Comment
 import com.mindhub.view.composables.Suspended
 import com.mindhub.view.layouts.SpacedColumn
 import com.mindhub.viewmodel.comment.GetCommentViewModel
@@ -14,6 +15,7 @@ import com.mindhub.viewmodel.comment.GetCommentViewModel
 @Composable
 fun CommentsView(
     getCommentViewModel: GetCommentViewModel,
+    showBestAnswerButton: Boolean,
     postId: Int,
     onScoreUpdate: (Int, Int) -> Unit,
     onRemove: (Int, Int?) -> Unit,
@@ -36,10 +38,12 @@ fun CommentsView(
             for (comment in getCommentViewModel.comments) {
                 CommentItem(
                     comment = comment,
+                    showBestAnswerButton = showBestAnswerButton,
                     onScoreUpdate = onScoreUpdate,
                     onReply = onReply,
                     onRemove = onRemove,
                     onUpdate = onUpdate,
+                    onMarkBestAnswer = { getCommentViewModel.toggleBestAnswer(it.id, postId) }
                 )
             }
         }

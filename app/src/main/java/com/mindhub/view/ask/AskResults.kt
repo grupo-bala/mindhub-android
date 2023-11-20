@@ -51,6 +51,12 @@ fun AskResults(
 ) {
     val searchViewModel: SearchAskViewModel = viewModel()
 
+    LaunchedEffect(key1 = true) {
+        if (searchViewModel.inputTitle != "") {
+            searchViewModel.get {  }
+        }
+    }
+
     AppScaffold(
         currentView = Views.ASK,
         navigator = navigator,

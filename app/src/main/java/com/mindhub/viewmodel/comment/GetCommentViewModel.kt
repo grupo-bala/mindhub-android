@@ -21,6 +21,7 @@ class GetCommentViewModel : ViewModel() {
             try {
                 feedback = ""
                 isLoading = true
+                comments.clear()
                 comments.addAll(CommentFakeApi.get(postId, 1))
             } catch (e: Exception) {
                 feedback = ErrorParser.from(e.message)
@@ -73,7 +74,11 @@ class GetCommentViewModel : ViewModel() {
 
         val comment = comments.find { it.id == commentId } ?: throw Exception()
 
+        comments.remove(comment)
+
         comment.replies.removeIf { it.id == isReply }
+
+        comments.add(comment)
     }
 
     fun updateComment(commentId: Int, isReply: Int?, newComment: String) {
@@ -93,5 +98,14 @@ class GetCommentViewModel : ViewModel() {
 
         comments.add(updatedComment)
         comments.sortByDescending { it.score }
+    }
+    
+    fun toggleBestAnswer(commentId: Int, postId: Int) {
+        viewModelScope.launch {
+            try {
+                CommentFakeApi.toggleBestAnswer(commentId)
+                get(postId)
+            } catch (e: Exception) {}
+        }
     }
 }

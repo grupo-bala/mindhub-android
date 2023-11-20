@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.mindhub.common.services.UserInfo
 import com.mindhub.ui.theme.MindHubTheme
 import com.mindhub.view.composables.RemoveConfirmationModal
 import com.mindhub.view.composables.Suspended
@@ -35,6 +36,7 @@ import com.mindhub.viewmodel.comment.GetCommentViewModel
 import com.mindhub.viewmodel.post.GetPostViewModel
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
+import io.ktor.util.reflect.instanceOf
 
 @Composable
 fun PostView(
@@ -121,7 +123,10 @@ fun PostView(
                             onUpdate = { it1, it2 ->
                                 isUpdateCommentMenuExpanded = true
                                 commentToUpdate = Pair(it1, it2)
-                            }
+                            },
+                            showBestAnswerButton = viewModel.instanceOf(GetAskViewModel::class)
+                                    && !viewModel.isLoading
+                                    && viewModel.post!!.user.username == UserInfo!!.username,
                         )
                     }
                 }

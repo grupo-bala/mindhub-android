@@ -161,6 +161,6 @@ class EventViewModel : ViewModel(), PostViewModelInterface {
     }
 
     override fun isFilled(): Boolean {
-        return this.title != "" && this.content != "" && this.expertise != null && this.time != "" && this.date != "" && this.position != null
+        return this.title != "" && this.content != "" && this.time != "" && this.date != "" && this.position != null
     }
 }

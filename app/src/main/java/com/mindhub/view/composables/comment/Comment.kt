@@ -24,6 +24,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,11 +34,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mindhub.common.services.UserInfo
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mindhub.model.entities.Comment
 import com.mindhub.ui.theme.MindHubTheme
 import com.mindhub.view.composables.chips.CommentsChip
 import com.mindhub.view.composables.chips.ScoreChip
 import com.mindhub.view.layouts.SpacedColumn
+import com.mindhub.viewmodel.ask.GetAskViewModel
+import com.mindhub.viewmodel.post.GetPostViewModel
 
 @Composable
 fun CommentItem(
@@ -47,6 +51,8 @@ fun CommentItem(
     onReply: (Int) -> Unit,
     onRemove: (Int, Int?) -> Unit,
     onUpdate: (Int, Int?) -> Unit,
+    showBestAnswerButton: Boolean,
+    onMarkBestAnswer: (Comment) -> Unit
 ) {
     SpacedColumn(
         spacing = 8,
@@ -115,8 +121,9 @@ fun CommentItem(
 
             if (comment.isBestAnswer) {
                 Text(
-                    text = "✅ Melhor resposta",
-                    style = MaterialTheme.typography.labelLarge
+                    text = "✓ Melhor resposta",
+                    style = MaterialTheme.typography.labelLarge,
+                    color = Color(red = 10, green = 163, blue = 36, alpha = 255)
                 )
             }
         }
@@ -139,6 +146,18 @@ fun CommentItem(
 
             if (comment.replies.isNotEmpty()) {
                 CommentsChip(commentsQuantity = comment.replies.size)
+            }
+
+            if (showBestAnswerButton) {
+                Button(
+                    onClick = { onMarkBestAnswer(comment) },
+                    contentPadding = PaddingValues(0.dp),
+                    shape = RoundedCornerShape(5.dp),
+                    modifier = Modifier
+                        .height(32.dp)
+                ) {
+                    Text(text = "✓")
+                }
             }
 
             if (isReply == null) {
@@ -180,10 +199,12 @@ fun CommentItem(
                     CommentItem(
                         comment = reply,
                         onReply = onReply,
-                        isReply = comment.id,
                         onScoreUpdate = onScoreUpdate,
                         onRemove = onRemove,
                         onUpdate = onUpdate,
+                        isReply = comment.id,
+                        showBestAnswerButton = false,
+                        onMarkBestAnswer = { }
                     )
                 }
             }
@@ -241,10 +262,12 @@ fun CommentPreview() {
         ) {
             CommentItem(
                 comment = comment3,
+                showBestAnswerButton = true,
                 onScoreUpdate = { it1, it2 -> },
                 onReply = {},
                 onRemove = { it1, it2 -> },
                 onUpdate = { it1, it2 -> },
+                onMarkBestAnswer = { }
             )
         }
     }

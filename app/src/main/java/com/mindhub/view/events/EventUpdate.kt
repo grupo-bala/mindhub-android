@@ -27,6 +27,8 @@ fun EventUpdate(
     viewModel.content = event.content
     viewModel.date = event.date.toBrazilianDateFormat()
     viewModel.position = LatLng(event.latitude, event.longitude)
+    viewModel.positionName = event.localName
+    viewModel.time
 
     PostUpdate(
         navigator = navigator,

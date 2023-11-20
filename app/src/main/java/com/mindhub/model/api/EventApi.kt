@@ -23,20 +23,18 @@ interface EventProvider {
 }
 
 object EventFakeApi : EventProvider {
-    private var count = 0
-
     val events = mutableListOf<Event>().also {
         val user = User("João", "joaum123@gmail.com", "jjaum", 0, Badge(""), listOf(), "")
-        it.add(Event(count++, user, "Teste 1", userScore = 0, "teste", 2, LocalDateTime.now(), LocalDateTime.now(), 0.0, 0.0, "Quixadá"))
-        it.add(Event(count++, user, "Teste 2", userScore = 0, "teste", 2, LocalDateTime.now(), LocalDateTime.now(), 0.0, 0.0, "Fortaleza"))
-        it.add(Event(count++, user, "Teste 3", userScore = 0, "teste", 2, LocalDateTime.now(), LocalDateTime.now(), 0.0, 0.0, "Quixeramobim"))
+        it.add(Event(IdManager.id++, user, "Teste 1", userScore = 0, "teste", 2, LocalDateTime.now(), LocalDateTime.now(), 0.0, 0.0, "Quixadá"))
+        it.add(Event(IdManager.id++, user, "Teste 2", userScore = 0, "teste", 2, LocalDateTime.now(), LocalDateTime.now(), 0.0, 0.0, "Fortaleza"))
+        it.add(Event(IdManager.id++, user, "Teste 3", userScore = 0, "teste", 2, LocalDateTime.now(), LocalDateTime.now(), 0.0, 0.0, "Quixeramobim"))
     }
 
     override suspend fun create(event: Event): Event {
         setLocalName(event)
 
         events.add(
-            event.apply { this.id = count++ }
+            event.apply { this.id = IdManager.id++ }
         )
 
         return event
