@@ -80,7 +80,7 @@ dependencies {
 
     implementation("com.google.accompanist:accompanist-permissions:0.33.2-alpha")
 
-    implementation("io.github.raamcosta.compose-destinations:core:1.9.53")
+    implementation("io.github.raamcosta.compose-destinations:animations-core:1.9.53")
     ksp("io.github.raamcosta.compose-destinations:ksp:1.9.53")
 
     implementation("io.ktor:ktor-client-core:2.3.4")

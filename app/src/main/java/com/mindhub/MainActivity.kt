@@ -3,13 +3,25 @@ package com.mindhub
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.mindhub.ui.theme.MindHubTheme
 import com.mindhub.view.NavGraphs
 import com.ramcosta.composedestinations.DestinationsNavHost
+import com.ramcosta.composedestinations.animations.defaults.NestedNavGraphDefaultAnimations
+import com.ramcosta.composedestinations.animations.defaults.RootNavGraphDefaultAnimations
+import com.ramcosta.composedestinations.animations.rememberAnimatedNavHostEngine
 
 class MainActivity : ComponentActivity() {
+    @OptIn(ExperimentalAnimationApi::class, ExperimentalMaterialNavigationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -18,7 +30,20 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             MindHubTheme {
-                DestinationsNavHost(navGraph = NavGraphs.root)
+                val navHostEngine = rememberAnimatedNavHostEngine(
+                    navHostContentAlignment = Alignment.TopCenter,
+                    rootDefaultAnimations = RootNavGraphDefaultAnimations.ACCOMPANIST_FADING,
+                    defaultAnimationsForNestedNavGraph = mapOf(
+                        NavGraphs.root to NestedNavGraphDefaultAnimations(
+                            enterTransition = {
+                                fadeIn(animationSpec = tween(1000))
+                            },
+                            exitTransition = { fadeOut(animationSpec = tween(1000)) }
+                        )
+                    )
+                )
+
+                DestinationsNavHost(navGraph = NavGraphs.root, engine = navHostEngine)
             }
         }
     }
