@@ -46,6 +46,7 @@ fun CommentItem(
     onScoreUpdate: (Int, Int) -> Unit,
     onReply: (Int) -> Unit,
     onRemove: (Int, Int?) -> Unit,
+    onUpdate: (Int, Int?) -> Unit,
 ) {
     SpacedColumn(
         spacing = 8,
@@ -100,7 +101,9 @@ fun CommentItem(
                         .height(15.dp)
                     )
 
-                    IconButton(onClick = { /*TODO*/ }) {
+                    IconButton(onClick = {
+                        onUpdate(comment.id, isReply)
+                    }) {
                         Icon(
                             imageVector = Icons.Filled.Create,
                             contentDescription = null,
@@ -180,6 +183,7 @@ fun CommentItem(
                         isReply = comment.id,
                         onScoreUpdate = onScoreUpdate,
                         onRemove = onRemove,
+                        onUpdate = onUpdate,
                     )
                 }
             }
@@ -239,7 +243,8 @@ fun CommentPreview() {
                 comment = comment3,
                 onScoreUpdate = { it1, it2 -> },
                 onReply = {},
-                onRemove = { it1, it2 ->}
+                onRemove = { it1, it2 -> },
+                onUpdate = { it1, it2 -> },
             )
         }
     }

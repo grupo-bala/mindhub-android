@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -23,14 +24,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.mindhub.view.layouts.SpacedColumn
-import com.mindhub.viewmodel.comment.CreateCommentViewModel
+import com.mindhub.viewmodel.comment.HandleCommentViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CreateComment(
-    isReply: Boolean,
-    createCommentViewModel: CreateCommentViewModel,
-    onCreate: () -> Unit,
+fun HandleComment(
+    isUpdate: Boolean,
+    handleCommentViewModel: HandleCommentViewModel,
+    onSuccess: () -> Unit,
     onDismissRequest: () -> Unit
 ) {
     ModalBottomSheet(
@@ -46,16 +47,16 @@ fun CreateComment(
             modifier = Modifier.padding(16.dp),
         ) {
             Text(
-                text = if (isReply) "Adicionar resposta" else "Adicionar comentário",
+                text = if (isUpdate) "Atualizar comentário" else "Adicionar comentário",
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()
             )
 
             OutlinedTextField(
-                value = createCommentViewModel.commentText,
+                value = handleCommentViewModel.commentText,
                 label = { Text(text = "Comentário") },
                 placeholder = { Text(text = "Digite seu comentário") },
-                onValueChange = { createCommentViewModel.commentText = it },
+                onValueChange = { handleCommentViewModel.commentText = it },
                 modifier = Modifier
                     .height(250.dp)
                     .fillMaxWidth()
@@ -64,21 +65,21 @@ fun CreateComment(
             Row {
                 Button(
                     onClick = {
-                        onCreate()
+                        onSuccess()
                     },
                     shape = RoundedCornerShape(5.dp),
                     modifier = Modifier.weight(1f),
                 ) {
-                    Icon(imageVector = Icons.Filled.Add, contentDescription = null)
+                    Icon(imageVector = if (isUpdate) Icons.Filled.Create else Icons.Filled.Add, contentDescription = null)
                     Spacer(modifier = Modifier.width(2.dp))
-                    Text(text = "Adicionar")
+                    Text(text = if (isUpdate) "Atualizar" else "Adicionar")
                 }
 
                 Spacer(modifier = Modifier.width(4.dp))
 
-                if (createCommentViewModel.commentText.isNotEmpty()) {
+                if (handleCommentViewModel.commentText.isNotEmpty()) {
                     Button(
-                        onClick = { createCommentViewModel.clear() },
+                        onClick = { handleCommentViewModel.clear() },
                         shape = RoundedCornerShape(5.dp)
                     ) {
                         Icon(imageVector = Icons.Filled.Delete, contentDescription = null)

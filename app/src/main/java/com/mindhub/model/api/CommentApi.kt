@@ -19,6 +19,8 @@ interface CommentProvider {
     suspend fun get(postId: Int, page: Int): List<Comment>
     suspend fun vote(commentId: Int, score: Int)
     suspend fun createReply(data: CreateReplyRequest): Comment
+    suspend fun removeComment(commentId: Int, isReply: Int?)
+    suspend fun updateComment(commentId: Int, isReply: Int?, newComment: String)
 }
 
 object CommentFakeApi : CommentProvider {
@@ -75,6 +77,8 @@ object CommentFakeApi : CommentProvider {
 
         comments.add(comment)
 
+        comments.sortByDescending { it.score }
+
         return comment
     }
 
@@ -99,6 +103,32 @@ object CommentFakeApi : CommentProvider {
             userScore = 0,
             replies = mutableListOf(),
         )
+    }
+
+    override suspend fun removeComment(commentId: Int, isReply: Int?) {
+        if (isReply == null) {
+            comments.removeIf { it.id == commentId }
+
+            return
+        }
+
+        val comment = comments.find { it.id == commentId } ?: throw Exception()
+
+        comment.replies.removeIf { it.id == isReply }
+    }
+
+    override suspend fun updateComment(commentId: Int, isReply: Int?, newComment: String) {
+        if (isReply == null) {
+            val comment = comments.find { it.id == commentId } ?: throw Exception()
+
+            comment.content = newComment
+
+            return
+        }
+
+        val comment = comments.find { it.id == commentId } ?: throw Exception()
+
+        comment.content = newComment
     }
 }
 

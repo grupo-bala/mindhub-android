@@ -75,4 +75,23 @@ class GetCommentViewModel : ViewModel() {
 
         comment.replies.removeIf { it.id == isReply }
     }
+
+    fun updateComment(commentId: Int, isReply: Int?, newComment: String) {
+        val index = comments.indexOfFirst { it.id == commentId }
+
+        val updatedComment = comments[index]
+
+        comments.remove(updatedComment)
+
+        if (isReply == null) {
+            updatedComment.content = newComment
+        } else {
+            val comment = updatedComment.replies.find { it.id == isReply } ?: throw Exception()
+
+            comment.content = newComment
+        }
+
+        comments.add(updatedComment)
+        comments.sortByDescending { it.score }
+    }
 }
