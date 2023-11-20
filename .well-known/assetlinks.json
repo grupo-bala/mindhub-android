@@ -1,9 +1,9 @@
 [{
-    "relation": ["delegate_permission/common.handle_all_urls"],
-    "target": {
-      "namespace": "android_app",
-      "package_name": "com.mindhub",
-      "sha256_cert_fingerprints":
-      ["C0:5F:01:29:36:04:72:9B:68:FF:F5:B3:95:4C:0F:AC:AF:47:E6:53:D5:04:10:A7:3E:AD:AD:1C:BE:F6:82:B4"]
-    }
-  }]
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.mindhub",
+    "sha256_cert_fingerprints":
+    ["7C:1F:1A:6C:B6:A2:81:7B:D7:D2:A1:82:8F:8C:CF:11:D4:32:94:E9:02:68:CF:99:AE:4D:B1:B1:9A:C2:5B:3D"]
+  }
+}]
