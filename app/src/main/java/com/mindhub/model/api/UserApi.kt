@@ -1,5 +1,7 @@
 package com.mindhub.model.api
 
+import android.net.Uri
+import com.mindhub.common.serialize.UriSerializer
 import com.mindhub.model.entities.Badge
 import com.mindhub.model.entities.Expertise
 import com.mindhub.model.entities.User
@@ -37,7 +39,9 @@ data class UpdateRequest(
     val name: String,
     val email: String,
     val expertises: List<Expertise>,
-    val badge: Badge
+    val badge: Badge,
+    @Serializable(UriSerializer::class)
+    val profilePicture: Uri?,
 )
 
 @Serializable
@@ -139,6 +143,7 @@ object UserFakeApi : UserProvider {
         user.email = params.email
         user.expertises = params.expertises
         user.currentBadge = params.badge
+        user.profilePicture = params.profilePicture
 
         UserInfo = user
     }
