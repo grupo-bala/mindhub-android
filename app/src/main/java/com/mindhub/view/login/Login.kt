@@ -104,6 +104,7 @@ fun Login(
                         }
                     )
                 },
+                enabled = viewModel.email != "" && viewModel.password != "",
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Suspended(isLoading = viewModel.isLoading) {

@@ -113,12 +113,14 @@ object UserFakeApi : UserProvider {
 
     override suspend fun login(params: LoginRequest) {
         UserInfo = users.find { it.email == params.email && params.password == "123" }
-            ?: throw Exception()
+            ?: throw Exception("WRONG CREDENTIALS")
     }
 
     override suspend fun register(params: RegisterRequest) {
         if (users.find { it.username == params.username } != null) {
-            throw Exception()
+            throw Exception("DUPLICATE USERNAME")
+        } else if (users.find { it.email == params.email } != null) {
+            throw Exception("DUPLICATE EMAIL")
         }
 
         val user = User(
