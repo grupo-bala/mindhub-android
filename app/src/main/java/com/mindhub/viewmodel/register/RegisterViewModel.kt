@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mindhub.model.api.RegisterRequest
+import com.mindhub.model.api.UserApi
 import com.mindhub.model.api.UserFakeApi
 import com.mindhub.model.entities.Expertise
 import kotlinx.coroutines.launch
@@ -31,9 +32,10 @@ class RegisterViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 isLoading = true
-                val res = UserFakeApi.register(RegisterRequest(name, email, username, password, selectedExpertises))
+                UserApi.register(RegisterRequest(name, email, username, password, selectedExpertises.map { it.title }))
                 onSuccess()
             } catch (e: Exception) {
+                println(e)
                 onFailure(e.message)
             }
 

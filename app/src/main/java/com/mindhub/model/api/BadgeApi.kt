@@ -8,9 +8,9 @@ interface BadgeProvider {
 
 object BadgeFakeApi: BadgeProvider {
     private val badges = listOf(
-        Badge("Aprendiz"),
-        Badge("Expert"),
-        Badge("Mestre")
+        Badge("Aprendiz", 0),
+        Badge("Expert", 1),
+        Badge("Mestre", 2)
     )
 
     override suspend fun getUnlockedBadges(xp: Int): List<Badge> {

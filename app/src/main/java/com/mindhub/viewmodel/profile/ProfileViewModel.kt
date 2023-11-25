@@ -7,7 +7,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mindhub.common.services.ErrorParser
 import com.mindhub.common.services.UserInfo
 import com.mindhub.model.api.AskFakeApi
@@ -25,7 +24,7 @@ class ProfileViewModel(): ViewModel() {
     var materialPosts: MutableList<Post> = mutableStateListOf<Post>()
     var eventsPosts: MutableList<Post> = mutableStateListOf<Post>()
     var xp by mutableIntStateOf(0)
-    var badge by mutableStateOf<Badge>(Badge(""))
+    var badge by mutableStateOf<Badge>(Badge("", 0))
     var expertises = mutableStateListOf<Expertise>()
     var isLoading by mutableStateOf(true)
     var feedback by mutableStateOf("")

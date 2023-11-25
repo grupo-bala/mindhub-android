@@ -4,13 +4,20 @@ import com.google.maps.GeoApiContext
 import com.google.maps.GeocodingApi
 import com.google.maps.model.LatLng
 import com.mindhub.BuildConfig
+import com.mindhub.common.services.Config
 import com.mindhub.common.services.UserInfo
-import com.mindhub.model.entities.Ask
 import com.mindhub.model.entities.Badge
 import com.mindhub.model.entities.Event
 import com.mindhub.model.entities.User
+import io.ktor.client.call.body
+import io.ktor.client.request.header
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.client.statement.HttpResponse
+import io.ktor.http.ContentType
+import io.ktor.http.HttpStatusCode
+import io.ktor.http.contentType
 import java.time.LocalDateTime
-
 
 interface EventProvider {
     suspend fun create(event: Event): Event
@@ -24,7 +31,17 @@ interface EventProvider {
 
 object EventFakeApi : EventProvider {
     val events = mutableListOf<Event>().also {
-        val user = User("João", "joaum123@gmail.com", "jjaum", 0, Badge(""), listOf(), "")
+        val user = User(
+            "João",
+            "joaum123@gmail.com",
+            "jjaum",
+            0,
+            Badge("", 0),
+            listOf(),
+            listOf(),
+            "",
+            null
+        )
         it.add(Event(IdManager.id++, user, "Teste 1", userScore = 0, "teste", 2, LocalDateTime.now(), LocalDateTime.now(), 0.0, 0.0, "Quixadá"))
         it.add(Event(IdManager.id++, user, "Teste 2", userScore = 0, "teste", 2, LocalDateTime.now(), LocalDateTime.now(), 0.0, 0.0, "Fortaleza"))
         it.add(Event(IdManager.id++, user, "Teste 3", userScore = 0, "teste", 2, LocalDateTime.now(), LocalDateTime.now(), 0.0, 0.0, "Quixeramobim"))
@@ -99,4 +116,66 @@ object EventFakeApi : EventProvider {
             it.user.username != UserInfo!!.username
         }.sortedBy { it.postDate }
     }
+}
+
+object EventApi : EventProvider {
+    private fun setLocalName(event: Event) {
+        val context = GeoApiContext.Builder()
+            .apiKey(BuildConfig.apiKey)
+            .build()
+
+        val results = GeocodingApi.reverseGeocode(
+            context,
+            LatLng(event.latitude, event.longitude)
+        ).await()
+
+        val component = results[0].addressComponents.first {
+            it.types.any { localType ->
+                localType.name.lowercase() == "administrative_area_level_2"
+            }
+        }
+
+        event.localName = component.longName
+    }
+
+    override suspend fun create(event: Event): Event {
+        setLocalName(event)
+
+        val response: HttpResponse = Api.post("${Config.API_PREFIX}/events") {
+            contentType(ContentType.Application.Json)
+            header("Authorization", "Bearer ${UserInfo!!.token}")
+            setBody(event)
+        }
+
+        if (response.status != HttpStatusCode.Created) {
+            throw Exception(response.body<ApiError>().message)
+        }
+
+        return response.body()
+    }
+
+    override suspend fun update(eventUpdated: Event) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun remove(eventId: Int) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun get(id: Int): Event {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getForYou(page: Int): List<Event> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getRecents(page: Int): List<Event> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getUserEvents(username: String): List<Event> {
+        TODO("Not yet implemented")
+    }
+
 }

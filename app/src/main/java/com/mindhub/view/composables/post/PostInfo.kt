@@ -159,7 +159,7 @@ fun PostInfo(
 @Preview(showBackground = true)
 @Composable
 fun PostInfoPreview() {
-    val user = User("", "", "teste76", 0, Badge(""), listOf(), "")
+    val user = User("", "", "teste76", 0, Badge("", 0), listOf(), listOf(), "")
     val ask = Ask(
         id = 0,
         title = "Produto das raízes com equação de 2 grau",

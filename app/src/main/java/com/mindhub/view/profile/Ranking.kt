@@ -31,7 +31,6 @@ import com.mindhub.model.entities.Badge
 import com.mindhub.model.entities.Expertise
 import com.mindhub.model.entities.User
 import com.mindhub.ui.theme.MindHubTheme
-import com.mindhub.view.composables.MeasureViewWidth
 import com.mindhub.view.composables.Suspended
 import com.mindhub.view.destinations.ProfileDestination
 import com.mindhub.view.layouts.AppScaffold
@@ -155,7 +154,8 @@ fun RankingPreview() {
         email = "admin@admin.com",
         username = "admin",
         xp = 0,
-        currentBadge = Badge("Aprendiz"),
+        currentBadge = Badge("Aprendiz", 0),
+        badges = listOf(),
         expertises = listOf(
             Expertise("Matemática"),
             Expertise("Física"),

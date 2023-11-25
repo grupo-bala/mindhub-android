@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mindhub.model.api.LoginRequest
+import com.mindhub.model.api.UserApi
 import com.mindhub.model.api.UserFakeApi
 import kotlinx.coroutines.launch
 
@@ -20,13 +21,13 @@ class LoginViewModel : ViewModel() {
             try {
                 isLoading = true
                 feedback = ""
-                UserFakeApi.login(LoginRequest(email, password))
+                UserApi.login(LoginRequest(email, password))
                 onSuccess()
             } catch (e: Exception) {
+                println(e)
                 onFailure(e.message)
             }
 
-            email = ""
             password = ""
             isLoading = false
         }

@@ -1,7 +1,6 @@
 package com.mindhub.model.api
 
 import com.mindhub.common.services.UserInfo
-import com.mindhub.model.entities.Ask
 import com.mindhub.model.entities.Badge
 import com.mindhub.model.entities.Expertise
 import com.mindhub.model.entities.Material
@@ -30,7 +29,17 @@ interface MaterialProvider {
 
 object MaterialFakeApi: MaterialProvider {
     private val materials = mutableListOf<Material>().also {
-        val user = User("João", "joaum123@gmail.com", "jjaum", 0, Badge(""), listOf(), "")
+        val user = User(
+            "João",
+            "joaum123@gmail.com",
+            "jjaum",
+            0,
+            Badge("", 0),
+            listOf(),
+            listOf(),
+            "",
+            null
+        )
         it.add(Material(IdManager.id++, user, "Relações trigonométricas em 1 minuto!", userScore = 0, "teste", 87, LocalDateTime.now(), Expertise("Matemática")))
         it.add(Material(IdManager.id++, user, "As três leis de Newton com exemplos", userScore = 0, "teste", 87, LocalDateTime.now(), Expertise("Física")))
         it.add(Material(IdManager.id++, user, "Os biomas brasileiros explicados", userScore = 0, "teste", 87, LocalDateTime.now(), Expertise("Geografia")))

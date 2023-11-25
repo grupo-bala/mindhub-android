@@ -13,6 +13,7 @@ import com.google.maps.model.GeocodingResult
 import com.mindhub.BuildConfig
 import com.mindhub.common.ext.dateToUnix
 import com.mindhub.common.services.UserInfo
+import com.mindhub.model.api.EventApi
 import com.mindhub.model.api.EventFakeApi
 import com.mindhub.model.entities.Event
 import com.mindhub.model.entities.Expertise
@@ -43,7 +44,7 @@ class EventViewModel : ViewModel(), PostViewModelInterface {
 
                 isValid()
 
-                val event = EventFakeApi.create(
+                val event = EventApi.create(
                     Event(
                         id = 0,
                         user = UserInfo!!,

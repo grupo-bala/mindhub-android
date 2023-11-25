@@ -15,21 +15,14 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Create
-import androidx.compose.material.icons.outlined.Email
-import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.InputChip
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -49,9 +42,7 @@ import com.mindhub.ui.theme.MindHubTheme
 import com.mindhub.view.composables.MeasureViewWidth
 import com.mindhub.view.composables.Suspended
 import com.mindhub.view.composables.Tabs
-import com.mindhub.view.composables.feed.FeedView
 import com.mindhub.view.composables.post.PostList
-import com.mindhub.view.destinations.AskResultsDestination
 import com.mindhub.view.destinations.AskViewDestination
 import com.mindhub.view.destinations.EditProfileDestination
 import com.mindhub.view.destinations.EventViewDestination
@@ -251,7 +242,8 @@ fun ProfilePreview() {
         username = "username",
         email = "user@gmail.com",
         xp = 727,
-        currentBadge = Badge("Aprendiz"),
+        currentBadge = Badge("Aprendiz", 0),
+        badges = listOf(),
         expertises = listOf(Expertise("Matemática"), Expertise("Geografia"), Expertise("Química")),
         token = ""
     )

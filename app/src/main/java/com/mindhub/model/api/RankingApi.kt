@@ -19,7 +19,8 @@ object RankingFakeApi: RankingProvider {
                 email = "admin@admin.com",
                 username = "admin",
                 xp = 0,
-                currentBadge = Badge("Aprendiz"),
+                currentBadge = Badge("Aprendiz", 0),
+                badges = listOf(),
                 expertises = listOf(
                     Expertise("Matemática"),
                     Expertise("Física"),
@@ -35,42 +36,11 @@ object RankingFakeApi: RankingProvider {
                 email = "ana@gmail.com",
                 username = "anamaria",
                 xp = 100,
-                currentBadge = Badge("Aprendiz"),
+                currentBadge = Badge("Aprendiz", 0),
+                badges = listOf(),
                 expertises = listOf(
                     Expertise("Geografia"),
                     Expertise("Física"),
-                    Expertise("Inglês")
-                ),
-                token = ""
-            )
-        )
-
-        it.add(
-            User(
-                name = "João Pedro",
-                email = "jp@gmail.com",
-                username = "joaopedro",
-                xp = 200,
-                currentBadge = Badge("Aprendiz"),
-                expertises = listOf(
-                    Expertise("Português"),
-                    Expertise("Física"),
-                    Expertise("Inglês")
-                ),
-                token = ""
-            )
-        )
-
-        it.add(
-            User(
-                name = "Mario Silva",
-                email = "msilva@gmail.com",
-                username = "msilva",
-                xp = 250,
-                currentBadge = Badge("Aprendiz"),
-                expertises = listOf(
-                    Expertise("Português"),
-                    Expertise("Geografia"),
                     Expertise("Inglês")
                 ),
                 token = ""

@@ -11,6 +11,7 @@ data class User(
     var username: String,
     var xp: Int,
     var currentBadge: Badge,
+    var badges: List<Badge>,
     var expertises: List<Expertise>,
     var token: String,
     @Serializable(UriSerializer::class)

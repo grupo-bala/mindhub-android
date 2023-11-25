@@ -13,7 +13,6 @@ import io.ktor.client.request.patch
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.HttpResponse
-import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
@@ -31,7 +30,7 @@ data class RegisterRequest(
     val email: String,
     val username: String,
     val password: String,
-    val expertises: List<Expertise>
+    val expertises: List<String>
 )
 
 @Serializable
@@ -43,9 +42,6 @@ data class UpdateRequest(
     @Serializable(UriSerializer::class)
     val profilePicture: Uri?,
 )
-
-@Serializable
-data class RegisterResponse(val token: String)
 
 interface UserProvider {
     suspend fun login(params: LoginRequest)
@@ -61,10 +57,13 @@ object UserApi : UserProvider {
         }
 
         if (response.status != HttpStatusCode.Created) {
+            println(response.body<ApiError>().message)
             throw Exception(response.body<ApiError>().message)
         }
 
         UserInfo = response.body<User>()
+
+        println(UserInfo!!)
     }
 
     override suspend fun register(params: RegisterRequest) {
@@ -74,10 +73,10 @@ object UserApi : UserProvider {
         }
 
         if (response.status != HttpStatusCode.Created) {
+            println(response.body<ApiError>().message)
             throw Exception(response.body<ApiError>().message)
         }
 
-        println(response.bodyAsText())
         UserInfo = response.body<User>()
     }
 
@@ -100,7 +99,8 @@ object UserFakeApi : UserProvider {
                 email = "admin@admin.com",
                 username = "admin",
                 xp = 0,
-                currentBadge = Badge("Aprendiz"),
+                currentBadge = Badge("Aprendiz", 0),
+                badges = listOf(),
                 expertises = listOf(
                     Expertise("Matemática"),
                     Expertise("Física"),
@@ -128,8 +128,9 @@ object UserFakeApi : UserProvider {
             email = params.email,
             username = params.username,
             xp = 0,
-            currentBadge = Badge("Aprendiz"),
-            expertises = params.expertises.map { it },
+            currentBadge = Badge("Aprendiz", 0),
+            badges = listOf(),
+            expertises = params.expertises.map { Expertise(it) },
             token = ""
         )
 

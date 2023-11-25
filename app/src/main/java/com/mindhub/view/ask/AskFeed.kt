@@ -41,7 +41,8 @@ fun AskFeedPreview() {
         username = "username",
         email = "user@gmail.com",
         xp = 727,
-        currentBadge = Badge("Aprendiz"),
+        currentBadge = Badge("Aprendiz", 0),
+        badges = listOf(),
         expertises = listOf(Expertise("Matemática"), Expertise("Geografia"), Expertise("Química")),
         token = ""
     )

@@ -96,7 +96,7 @@ fun Login(
                 onClick = {
                     viewModel.login(
                         onSuccess = {
-                            navigator.popBackStack()
+                            // navigator.popBackStack()
                             navigator.navigate(AskHomeDestination)
                         },
                         onFailure = {
