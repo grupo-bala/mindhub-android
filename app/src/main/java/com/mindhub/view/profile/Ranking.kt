@@ -67,7 +67,7 @@ fun Ranking(
             ) {
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data("https://picsum.photos/200") // TODO: change with the user profile picture
+                        .data(UserInfo!!.profilePicture ?: "https://picsum.photos/200") // TODO: change with the user profile picture
                         .crossfade(true)
                         .build(),
                     contentDescription = null,
