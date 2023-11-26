@@ -9,7 +9,9 @@ import androidx.compose.ui.test.hasTextExactly
 import androidx.compose.ui.test.isPopup
 import androidx.compose.ui.test.isRoot
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onAncestors
+import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onParent
 import androidx.compose.ui.test.onRoot
@@ -60,13 +62,16 @@ class RegisterInstrumentedTest {
     }
 
     private fun selectExpertises() {
-        rule.onNodeWithText("Expertises*")
+        rule.onAllNodesWithText("Expertises*")
+            .onFirst()
             .performClick()
 
-        rule.onNodeWithText("Matemática")
+        rule.onAllNodesWithText("Matemática")
+            .onFirst()
             .performClick()
 
-        rule.onNode(isPopup())
+        rule.onAllNodes(isPopup())
+            .onFirst()
             .performClick()
     }
 
