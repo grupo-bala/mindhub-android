@@ -1,11 +1,33 @@
 package com.mindhub.model.api
 
+import com.mindhub.common.services.Config
 import com.mindhub.model.entities.Badge
 import com.mindhub.model.entities.Expertise
 import com.mindhub.model.entities.User
+import io.ktor.client.call.body
+import io.ktor.client.request.get
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.client.statement.HttpResponse
+import io.ktor.http.ContentType
+import io.ktor.http.HttpStatusCode
+import io.ktor.http.contentType
 
 interface ProfileProvider {
     suspend fun getUserInformation(username: String): User
+}
+
+object ProfileApi: ProfileProvider {
+    override suspend fun getUserInformation(username: String): User {
+        val response: HttpResponse = Api.get("${Config.API_PREFIX}/user/$username")
+
+        if (response.status != HttpStatusCode.OK) {
+            println(response.body<ApiError>().message)
+            throw Exception(response.body<ApiError>().message)
+        }
+
+        return response.body()
+    }
 }
 
 object ProfileFakeApi: ProfileProvider {

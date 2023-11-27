@@ -150,5 +150,4 @@ object UserFakeApi : UserProvider {
 
         UserInfo = user
     }
-
 }

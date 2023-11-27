@@ -12,6 +12,7 @@ import com.mindhub.common.services.UserInfo
 import com.mindhub.model.api.AskFakeApi
 import com.mindhub.model.api.EventFakeApi
 import com.mindhub.model.api.MaterialFakeApi
+import com.mindhub.model.api.ProfileApi
 import com.mindhub.model.api.ProfileFakeApi
 import com.mindhub.model.entities.Badge
 import com.mindhub.model.entities.Expertise
@@ -65,7 +66,7 @@ class ProfileViewModel(): ViewModel() {
         } else {
             viewModelScope.launch {
                 try {
-                    val user = ProfileFakeApi.getUserInformation(usernameToLoad)
+                    val user = ProfileApi.getUserInformation(usernameToLoad)
 
                     username = user.username
                     badge = user.currentBadge
