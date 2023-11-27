@@ -14,6 +14,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
@@ -38,7 +40,12 @@ fun NavBar(
                 .fillMaxWidth()
         ) {
             for (view in Views.entries) {
-                IconButton(onClick = { navigator.navigate(view.destination) }) {
+                IconButton(
+                    onClick = { navigator.navigate(view.destination) },
+                    modifier = Modifier.semantics {
+                        contentDescription = "NavBarButton"
+                    }
+                ) {
                     Icon(
                         imageVector = view.icon,
                         contentDescription = null,
