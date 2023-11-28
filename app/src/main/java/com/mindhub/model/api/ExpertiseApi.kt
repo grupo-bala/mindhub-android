@@ -8,9 +8,6 @@ import io.ktor.client.statement.HttpResponse
 import io.ktor.http.HttpStatusCode
 import kotlinx.serialization.Serializable
 
-@Serializable
-data class GetAllResponse(val expertises: List<Expertise>)
-
 interface ExpertiseProvider {
     suspend fun getExpertise(title: String): Expertise
     suspend fun getAllExpertises(): List<Expertise>
@@ -34,7 +31,7 @@ object ExpertiseApi : ExpertiseProvider {
             throw Exception(response.body<ApiError>().message)
         }
 
-        return response.body<GetAllResponse>().expertises
+        return response.body()
     }
 }
 

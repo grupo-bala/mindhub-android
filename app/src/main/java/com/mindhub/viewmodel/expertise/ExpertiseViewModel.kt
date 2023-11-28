@@ -3,9 +3,9 @@ package com.mindhub.viewmodel.expertise
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mindhub.model.api.ExpertiseFakeApi
 import com.mindhub.model.entities.Expertise
 import com.mindhub.common.services.CurrentUser
+import com.mindhub.model.api.ExpertiseApi
 import kotlinx.coroutines.launch
 
 class ExpertiseViewModel() : ViewModel() {
@@ -22,7 +22,7 @@ class ExpertiseViewModel() : ViewModel() {
 
             viewModelScope.launch {
                 try {
-                    expertises.addAll(ExpertiseFakeApi.getAllExpertises())
+                    expertises.addAll(ExpertiseApi.getAllExpertises())
                 } catch (_: Exception) { }
             }
 
