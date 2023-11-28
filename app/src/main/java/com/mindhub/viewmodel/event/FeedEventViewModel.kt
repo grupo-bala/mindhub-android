@@ -7,7 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mindhub.model.api.EventFakeApi
+import com.mindhub.model.api.EventApi
 import com.mindhub.model.entities.Post
 import com.mindhub.viewmodel.post.FeedPostViewModel
 import kotlinx.coroutines.launch
@@ -23,7 +23,7 @@ class FeedEventViewModel : ViewModel(), FeedPostViewModel {
             try {
                 isLoadingForYou = true
                 forYou.clear()
-                forYou.addAll(EventFakeApi.getForYou(1))
+                forYou.addAll(EventApi.getForYou(1))
             } catch (_: Exception) { }
 
             isLoadingForYou = false
@@ -35,7 +35,7 @@ class FeedEventViewModel : ViewModel(), FeedPostViewModel {
             try {
                 isLoadingRecents = true
                 recents.clear()
-                recents.addAll(EventFakeApi.getRecents(1))
+                recents.addAll(EventApi.getRecents(1))
             } catch (_: Exception) { }
 
             isLoadingRecents = false

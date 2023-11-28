@@ -79,7 +79,9 @@ object MaterialApi: MaterialProvider {
     }
 
     override suspend fun getOne(id: Int): Material {
-        val response: HttpResponse = Api.get("${BuildConfig.apiPrefix}/material/id/$id")
+        val response: HttpResponse = Api.get("${BuildConfig.apiPrefix}/material/id/$id") {
+            header("Authorization", "Bearer ${CurrentUser.token}")
+        }
 
         if (response.status != HttpStatusCode.OK) {
             println(response.body<ApiError>().message)
@@ -98,7 +100,9 @@ object MaterialApi: MaterialProvider {
     }
 
     override suspend fun getUserMaterials(username: String): List<Material> {
-        val response: HttpResponse = Api.get("${BuildConfig.apiPrefix}/material/user/${username}")
+        val response: HttpResponse = Api.get("${BuildConfig.apiPrefix}/material/user/${username}") {
+            header("Authorization", "Bearer ${CurrentUser.token}")
+        }
 
         if (response.status != HttpStatusCode.OK) {
             println(response.body<ApiError>().message)

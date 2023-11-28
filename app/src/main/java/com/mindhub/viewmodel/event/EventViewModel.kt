@@ -14,13 +14,14 @@ import com.mindhub.BuildConfig
 import com.mindhub.common.ext.dateToUnix
 import com.mindhub.common.services.CurrentUser
 import com.mindhub.model.api.EventApi
-import com.mindhub.model.api.EventFakeApi
+import com.mindhub.model.api.EventRequest
 import com.mindhub.model.entities.Event
 import com.mindhub.model.entities.Expertise
 import com.mindhub.model.entities.Post
 import com.mindhub.viewmodel.post.PostViewModelInterface
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
+import java.time.ZoneOffset
 
 class EventViewModel : ViewModel(), PostViewModelInterface {
     override var title by mutableStateOf("")
@@ -45,17 +46,13 @@ class EventViewModel : ViewModel(), PostViewModelInterface {
                 isValid()
 
                 val event = EventApi.create(
-                    Event(
-                        id = 0,
-                        user = CurrentUser.user!!,
+                    EventRequest(
                         title = title,
                         content = content,
-                        score = 0,
-                        postDate = LocalDateTime.now(),
-                        date = date.dateToUnix(time),
-                        latitude = position!!.latitude,
                         longitude = position!!.longitude,
-                        userScore = 0,
+                        latitude = position!!.latitude,
+                        date = "${date.dateToUnix(time).toEpochSecond(ZoneOffset.UTC)}",
+                        postDate = "${LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)}",
                         localName = ""
                     )
                 )
@@ -80,7 +77,7 @@ class EventViewModel : ViewModel(), PostViewModelInterface {
             try {
                 isLoading = true
 
-                EventFakeApi.update(
+                EventApi.update(
                     Event(
                         id = postId,
                         user = CurrentUser.user!!,
@@ -114,7 +111,7 @@ class EventViewModel : ViewModel(), PostViewModelInterface {
             try {
                 isLoading = true
 
-                EventFakeApi.remove(postId)
+                EventApi.remove(postId)
 
                 onSuccess()
             } catch (e: Exception) {

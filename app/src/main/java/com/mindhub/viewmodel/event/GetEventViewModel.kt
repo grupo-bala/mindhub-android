@@ -7,7 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mindhub.common.services.ErrorParser
-import com.mindhub.model.api.EventFakeApi
+import com.mindhub.model.api.EventApi
 import com.mindhub.model.entities.Post
 import com.mindhub.viewmodel.post.GetPostViewModel
 import kotlinx.coroutines.launch
@@ -23,7 +23,7 @@ class GetEventViewModel : ViewModel(), GetPostViewModel {
             isLoading = true
 
             try {
-                post = EventFakeApi.get(id)
+                post = EventApi.get(id)
             } catch (e: Exception) {
                 feedback = ErrorParser.from(e.message)
             }
