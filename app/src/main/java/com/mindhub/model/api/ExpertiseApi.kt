@@ -1,7 +1,7 @@
 package com.mindhub.model.api
 
+import com.mindhub.BuildConfig
 import com.mindhub.model.entities.Expertise
-import com.mindhub.common.services.Config
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.statement.HttpResponse
@@ -18,7 +18,7 @@ interface ExpertiseProvider {
 
 object ExpertiseApi : ExpertiseProvider {
     override suspend fun getExpertise(title: String): Expertise {
-        val response: HttpResponse = Api.get("${Config.API_PREFIX}/expertise/$title")
+        val response: HttpResponse = Api.get("${BuildConfig.apiPrefix}/expertise/$title")
 
         if (response.status != HttpStatusCode.OK) {
             throw Exception(response.body<ApiError>().message)
@@ -28,7 +28,7 @@ object ExpertiseApi : ExpertiseProvider {
     }
 
     override suspend fun getAllExpertises(): List<Expertise> {
-        val response: HttpResponse = Api.get("${Config.API_PREFIX}/expertise")
+        val response: HttpResponse = Api.get("${BuildConfig.apiPrefix}/expertise")
 
         if (response.status != HttpStatusCode.OK) {
             throw Exception(response.body<ApiError>().message)

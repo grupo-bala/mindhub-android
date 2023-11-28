@@ -1,11 +1,11 @@
 package com.mindhub.model.api
 
 import android.net.Uri
+import com.mindhub.BuildConfig
 import com.mindhub.common.serialize.UriSerializer
 import com.mindhub.model.entities.Badge
 import com.mindhub.model.entities.Expertise
 import com.mindhub.model.entities.User
-import com.mindhub.common.services.Config
 import com.mindhub.common.services.CurrentUser
 import com.mindhub.common.services.UserInfo
 import io.ktor.client.call.body
@@ -14,7 +14,6 @@ import io.ktor.client.request.patch
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.HttpResponse
-import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
@@ -53,7 +52,7 @@ interface UserProvider {
 
 object UserApi : UserProvider {
     override suspend fun login(params: LoginRequest) {
-        val response: HttpResponse = Api.post("${Config.API_PREFIX}/auth/login") {
+        val response: HttpResponse = Api.post("${BuildConfig.apiPrefix}/auth/login") {
             contentType(ContentType.Application.Json)
             setBody(params)
         }
@@ -69,7 +68,7 @@ object UserApi : UserProvider {
     }
 
     override suspend fun register(params: RegisterRequest) {
-        val response: HttpResponse = Api.post("${Config.API_PREFIX}/user") {
+        val response: HttpResponse = Api.post("${BuildConfig.apiPrefix}/user") {
             contentType(ContentType.Application.Json)
             setBody(params)
         }
@@ -85,7 +84,7 @@ object UserApi : UserProvider {
     }
 
     override suspend fun update(params: UpdateRequest) {
-        Api.patch("${Config.API_PREFIX}/user/${CurrentUser.user!!.username}") {
+        Api.patch("${BuildConfig.apiPrefix}/user/${CurrentUser.user!!.username}") {
             contentType(ContentType.Application.Json)
             headers {
                 append("Authorization", "Bearer ${CurrentUser.token}")

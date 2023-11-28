@@ -59,7 +59,7 @@ class ProfileViewModel(): ViewModel() {
                         eventsPosts.add(post)
                     }
                 } catch (e: Exception) {
-                    /* TODO */
+                    e.printStackTrace()
                 }
             }
         } else {

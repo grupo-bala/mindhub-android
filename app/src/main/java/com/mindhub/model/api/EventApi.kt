@@ -4,7 +4,6 @@ import com.google.maps.GeoApiContext
 import com.google.maps.GeocodingApi
 import com.google.maps.model.LatLng
 import com.mindhub.BuildConfig
-import com.mindhub.common.services.Config
 import com.mindhub.common.services.CurrentUser
 import com.mindhub.model.entities.Badge
 import com.mindhub.model.entities.Event
@@ -140,7 +139,7 @@ object EventApi : EventProvider {
     override suspend fun create(event: Event): Event {
         setLocalName(event)
 
-        val response: HttpResponse = Api.post("${Config.API_PREFIX}/events") {
+        val response: HttpResponse = Api.post("${BuildConfig.apiPrefix}/events") {
             contentType(ContentType.Application.Json)
             header("Authorization", "Bearer ${CurrentUser.token}")
             setBody(event)

@@ -1,11 +1,8 @@
 package com.mindhub.model.api
 
-import com.mindhub.common.serialize.DateSerializer
-import com.mindhub.common.services.Config
+import com.mindhub.BuildConfig
 import com.mindhub.common.services.CurrentUser
-import com.mindhub.model.entities.Expertise
 import com.mindhub.model.entities.Material
-import com.mindhub.model.entities.User
 import io.ktor.client.call.body
 import io.ktor.client.request.delete
 import io.ktor.client.request.get
@@ -18,7 +15,6 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
 import kotlinx.serialization.Serializable
-import java.time.LocalDateTime
 
 @Serializable
 data class MaterialRequest(
@@ -40,7 +36,7 @@ interface MaterialProvider {
 
 object MaterialApi: MaterialProvider {
     override suspend fun create(material: MaterialRequest): Material {
-        val response: HttpResponse = Api.post("${Config.API_PREFIX}/material") {
+        val response: HttpResponse = Api.post("${BuildConfig.apiPrefix}/material") {
             contentType(ContentType.Application.Json)
             setBody(material)
             header("Authorization", "Bearer ${CurrentUser.token}")
@@ -55,7 +51,7 @@ object MaterialApi: MaterialProvider {
     }
 
     override suspend fun update(materialUpdated: Material) {
-        val response: HttpResponse = Api.patch("${Config.API_PREFIX}/material/${materialUpdated.id}") {
+        val response: HttpResponse = Api.patch("${BuildConfig.apiPrefix}/material/${materialUpdated.id}") {
             contentType(ContentType.Application.Json)
             setBody(materialUpdated)
             header("Authorization", "Bearer ${CurrentUser.token}")
@@ -70,7 +66,7 @@ object MaterialApi: MaterialProvider {
     }
 
     override suspend fun remove(materialId: Int) {
-        val response: HttpResponse = Api.delete("${Config.API_PREFIX}/material/$materialId") {
+        val response: HttpResponse = Api.delete("${BuildConfig.apiPrefix}/material/$materialId") {
             header("Authorization", "Bearer ${CurrentUser.token}")
         }
 
@@ -83,7 +79,7 @@ object MaterialApi: MaterialProvider {
     }
 
     override suspend fun getOne(id: Int): Material {
-        val response: HttpResponse = Api.get("${Config.API_PREFIX}/material/id/$id")
+        val response: HttpResponse = Api.get("${BuildConfig.apiPrefix}/material/id/$id")
 
         if (response.status != HttpStatusCode.OK) {
             println(response.body<ApiError>().message)
@@ -102,7 +98,7 @@ object MaterialApi: MaterialProvider {
     }
 
     override suspend fun getUserMaterials(username: String): List<Material> {
-        val response: HttpResponse = Api.get("${Config.API_PREFIX}/material/user/${username}")
+        val response: HttpResponse = Api.get("${BuildConfig.apiPrefix}/material/user/${username}")
 
         if (response.status != HttpStatusCode.OK) {
             println(response.body<ApiError>().message)
