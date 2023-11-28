@@ -1,6 +1,6 @@
 package com.mindhub.model.api
 
-import com.mindhub.common.services.UserInfo
+import com.mindhub.common.services.CurrentUser
 import com.mindhub.model.entities.Ask
 import com.mindhub.model.entities.Badge
 import com.mindhub.model.entities.Expertise
@@ -28,8 +28,7 @@ object AskFakeApi : AskProvider {
             Badge("", 0),
             listOf(),
             listOf(),
-            "",
-            null
+            null,
         )
         it.add(Ask(IdManager.id++, "Como aplicar o teorema de pitágoras em um círculo?", 0, "teste", 76, user, LocalDateTime.now(), Expertise("Matemática")))
         it.add(Ask(IdManager.id++, "A ligação metálica pode ser feita entre hidrogênio e sódio?", userScore = 0, "teste", 76, user, LocalDateTime.now(), Expertise("Química")))
@@ -62,7 +61,7 @@ object AskFakeApi : AskProvider {
 
     override suspend fun getForYou(page: Int): List<Ask> {
         val filtered = asks.filter {
-            it.expertise in UserInfo!!.expertises && it.user.username != UserInfo!!.username
+            it.expertise in CurrentUser.user!!.expertises && it.user.username != CurrentUser.user!!.username
         }
 
         return filtered.sortedBy { it.score }
@@ -70,7 +69,7 @@ object AskFakeApi : AskProvider {
 
     override suspend fun getRecents(page: Int): List<Ask> {
         return asks.filter {
-            it.user.username != UserInfo!!.username
+            it.user.username != CurrentUser.user!!.username
         }.sortedBy { it.postDate }
     }
 

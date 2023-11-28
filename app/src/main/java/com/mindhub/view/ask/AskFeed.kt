@@ -3,7 +3,7 @@ package com.mindhub.view.ask
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.mindhub.common.services.UserInfo
+import com.mindhub.common.services.CurrentUser
 import com.mindhub.model.entities.Badge
 import com.mindhub.model.entities.Expertise
 import com.mindhub.model.entities.User
@@ -36,15 +36,14 @@ fun AskFeed(
 @Preview
 @Composable
 fun AskFeedPreview() {
-    UserInfo = User(
+    CurrentUser.user = User(
         name = "User",
         username = "username",
         email = "user@gmail.com",
         xp = 727,
         currentBadge = Badge("Aprendiz", 0),
         badges = listOf(),
-        expertises = listOf(Expertise("Matemática"), Expertise("Geografia"), Expertise("Química")),
-        token = ""
+        expertises = listOf(Expertise("Matemática"), Expertise("Geografia"), Expertise("Química"))
     )
 
     MindHubTheme {

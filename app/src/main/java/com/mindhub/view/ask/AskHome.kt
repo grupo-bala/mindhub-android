@@ -20,7 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.mindhub.common.services.UserInfo
+import com.mindhub.common.services.CurrentUser
 import com.mindhub.model.entities.Badge
 import com.mindhub.model.entities.User
 import com.mindhub.ui.theme.MindHubTheme
@@ -49,7 +49,7 @@ fun AskHome(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.fillMaxSize()
         ) {
-            Text(text = "Olá, ${UserInfo!!.name}!")
+            Text(text = "Olá, ${CurrentUser.user!!.name}!")
 
             Text(
                 text = "O que você precisa saber?",
@@ -85,15 +85,14 @@ fun AskHome(
 @Preview(showBackground = true)
 @Composable
 fun AskHomePreview() {
-    UserInfo = User(
+    CurrentUser.user = User(
         name = "Pedro",
         email = "pedro@gmail.com",
         username = "pedro123",
         xp = 0,
         currentBadge = Badge("Teste", 0),
         badges = listOf(),
-        expertises = listOf(),
-        token = ""
+        expertises = listOf()
     )
 
     MindHubTheme {

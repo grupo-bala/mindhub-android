@@ -1,19 +1,31 @@
 package com.mindhub.model.api
 
-import com.mindhub.common.services.UserInfo
-import com.mindhub.model.entities.Badge
+import com.mindhub.common.serialize.DateSerializer
+import com.mindhub.common.services.Config
+import com.mindhub.common.services.CurrentUser
 import com.mindhub.model.entities.Expertise
 import com.mindhub.model.entities.Material
 import com.mindhub.model.entities.User
+import io.ktor.client.call.body
+import io.ktor.client.request.delete
+import io.ktor.client.request.get
+import io.ktor.client.request.header
+import io.ktor.client.request.patch
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.client.statement.HttpResponse
+import io.ktor.http.ContentType
+import io.ktor.http.HttpStatusCode
+import io.ktor.http.contentType
 import kotlinx.serialization.Serializable
 import java.time.LocalDateTime
 
 @Serializable
 data class MaterialRequest(
-    val user: User,
     val title: String,
     val content: String,
-    val expertise: Expertise,
+    val expertise: String,
+    val postDate: String,
 )
 
 interface MaterialProvider {
@@ -21,88 +33,158 @@ interface MaterialProvider {
     suspend fun update(materialUpdated: Material)
     suspend fun remove(materialId: Int)
     suspend fun getOne(id: Int): Material
-    suspend fun get(title: String): List<Material>
-    suspend fun getForYou(page: Int): List<Material>
-    suspend fun getRecents(page: Int): List<Material>
+    suspend fun getForYou(): List<Material>
+    suspend fun getRecents(): List<Material>
     suspend fun getUserMaterials(username: String): List<Material>
 }
 
-object MaterialFakeApi: MaterialProvider {
-    private val materials = mutableListOf<Material>().also {
-        val user = User(
-            "João",
-            "joaum123@gmail.com",
-            "jjaum",
-            0,
-            Badge("", 0),
-            listOf(),
-            listOf(),
-            "",
-            null
-        )
-        it.add(Material(IdManager.id++, user, "Relações trigonométricas em 1 minuto!", userScore = 0, "teste", 87, LocalDateTime.now(), Expertise("Matemática")))
-        it.add(Material(IdManager.id++, user, "As três leis de Newton com exemplos", userScore = 0, "teste", 87, LocalDateTime.now(), Expertise("Física")))
-        it.add(Material(IdManager.id++, user, "Os biomas brasileiros explicados", userScore = 0, "teste", 87, LocalDateTime.now(), Expertise("Geografia")))
-    }
-
+object MaterialApi: MaterialProvider {
     override suspend fun create(material: MaterialRequest): Material {
-        val material = Material(
-            id = IdManager.id++,
-            title = material.title,
-            content = material.content,
-            expertise = material.expertise,
-            user = material.user,
-            postDate = LocalDateTime.now(),
-            userScore = 0,
-            score = 0
-        )
+        val response: HttpResponse = Api.post("${Config.API_PREFIX}/material") {
+            contentType(ContentType.Application.Json)
+            setBody(material)
+            header("Authorization", "Bearer ${CurrentUser.token}")
+        }
 
-        materials.add(material)
+        if (response.status != HttpStatusCode.Created) {
+            println(response.body<ApiError>().message)
+            throw Exception(response.body<ApiError>().message)
+        }
 
-        return material
+        return response.body()
     }
 
     override suspend fun update(materialUpdated: Material) {
-        val material = materials.find { it.id == materialUpdated.id } ?: throw Exception()
+        val response: HttpResponse = Api.patch("${Config.API_PREFIX}/material/${materialUpdated.id}") {
+            contentType(ContentType.Application.Json)
+            setBody(materialUpdated)
+            header("Authorization", "Bearer ${CurrentUser.token}")
+        }
 
-        material.content = materialUpdated.content
-        material.title = materialUpdated.title
-        material.expertise = materialUpdated.expertise
+        if (response.status != HttpStatusCode.OK) {
+            println(response.body<ApiError>().message)
+            throw Exception(response.body<ApiError>().message)
+        }
+
+        return response.body()
     }
 
     override suspend fun remove(materialId: Int) {
-        if (!materials.removeIf { it.id == materialId }) {
-            throw Exception()
+        val response: HttpResponse = Api.delete("${Config.API_PREFIX}/material/$materialId") {
+            header("Authorization", "Bearer ${CurrentUser.token}")
         }
+
+        if (response.status != HttpStatusCode.OK) {
+            println(response.body<ApiError>().message)
+            throw Exception(response.body<ApiError>().message)
+        }
+
+        return response.body()
     }
 
     override suspend fun getOne(id: Int): Material {
-        return materials.find { it.id == id } ?: throw Exception()
+        val response: HttpResponse = Api.get("${Config.API_PREFIX}/material/id/$id")
+
+        if (response.status != HttpStatusCode.OK) {
+            println(response.body<ApiError>().message)
+            throw Exception(response.body<ApiError>().message)
+        }
+
+        return response.body()
+    }
+
+    override suspend fun getForYou(): List<Material> {
+        return listOf()
+    }
+
+    override suspend fun getRecents(): List<Material> {
+        return listOf()
     }
 
     override suspend fun getUserMaterials(username: String): List<Material> {
-        val filtered = materials.filter {
-            it.user.username == username
+        val response: HttpResponse = Api.get("${Config.API_PREFIX}/material/user/${username}")
+
+        if (response.status != HttpStatusCode.OK) {
+            println(response.body<ApiError>().message)
+            throw Exception(response.body<ApiError>().message)
         }
 
-        return filtered.reversed()
-    }
-
-    override suspend fun get(title: String): List<Material> {
-        return materials.filter { it.title.contains(title) }
-    }
-
-    override suspend fun getForYou(page: Int): List<Material> {
-        val filtered = materials.filter {
-            it.expertise in UserInfo!!.expertises && it.user.username != UserInfo!!.username
-        }
-
-        return filtered.sortedBy { it.score }
-    }
-
-    override suspend fun getRecents(page: Int): List<Material> {
-        return materials.filter {
-            it.user.username != UserInfo!!.username
-        }.sortedBy { it.postDate }
+        return response.body()
     }
 }
+
+//object MaterialFakeApi: MaterialProvider {
+//    private val materials = mutableListOf<Material>().also {
+//        val user = User(
+//            "João",
+//            "joaum123@gmail.com",
+//            "jjaum",
+//            0,
+//            Badge("", 0),
+//            listOf(),
+//            listOf(),
+//            "",
+//            null
+//        )
+//        it.add(Material(IdManager.id++, user, "Relações trigonométricas em 1 minuto!", userScore = 0, "teste", 87, LocalDateTime.now(), Expertise("Matemática")))
+//        it.add(Material(IdManager.id++, user, "As três leis de Newton com exemplos", userScore = 0, "teste", 87, LocalDateTime.now(), Expertise("Física")))
+//        it.add(Material(IdManager.id++, user, "Os biomas brasileiros explicados", userScore = 0, "teste", 87, LocalDateTime.now(), Expertise("Geografia")))
+//    }
+//
+//    override suspend fun create(material: MaterialRequest): Material {
+//        val newMaterial = Material(
+//            id = IdManager.id++,
+//            title = material.title,
+//            content = material.content,
+//            expertise = Expertise(material.expertise),
+//            user = UserInfo!!,
+//            postDate = LocalDateTime.now(),
+//            userScore = 0,
+//            score = 0
+//        )
+//
+//        materials.add(newMaterial)
+//
+//        return newMaterial
+//    }
+//
+//    override suspend fun update(materialUpdated: Material) {
+//        val material = materials.find { it.id == materialUpdated.id } ?: throw Exception()
+//
+//        material.content = materialUpdated.content
+//        material.title = materialUpdated.title
+//        material.expertise = materialUpdated.expertise
+//    }
+//
+//    override suspend fun remove(materialId: Int) {
+//        if (!materials.removeIf { it.id == materialId }) {
+//            throw Exception()
+//        }
+//    }
+//
+//    override suspend fun getOne(id: Int): Material {
+//        return materials.find { it.id == id } ?: throw Exception()
+//    }
+//
+//    override suspend fun getUserMaterials(username: String): List<Material> {
+//        val filtered = materials.filter {
+//            it.user.username == username
+//        }
+//
+//        return filtered.reversed()
+//    }
+//
+//    override suspend fun getForYou(): List<Material> {
+//        val filtered = materials.filter {
+//            it.expertise in UserInfo!!.expertises && it.user.username != UserInfo!!.username
+//        }
+//
+//        return filtered.sortedBy { it.score }
+//    }
+//
+//    override suspend fun getRecents(): List<Material> {
+//        return materials.filter {
+//            it.user.username != UserInfo!!.username
+//        }.sortedBy { it.postDate }
+//    }
+//}

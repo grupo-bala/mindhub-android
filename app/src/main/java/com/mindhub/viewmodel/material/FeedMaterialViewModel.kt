@@ -7,7 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mindhub.model.api.MaterialFakeApi
+import com.mindhub.model.api.MaterialApi
 import com.mindhub.model.entities.Post
 import com.mindhub.viewmodel.post.FeedPostViewModel
 import kotlinx.coroutines.launch
@@ -15,8 +15,6 @@ import kotlinx.coroutines.launch
 class FeedMaterialViewModel : ViewModel(), FeedPostViewModel {
     override var forYou: MutableList<Post> = mutableStateListOf<Post>()
     override var recents: MutableList<Post> = mutableStateListOf<Post>()
-    override var currentPageForYou by mutableIntStateOf(1)
-    override var currentPageRecents by mutableIntStateOf(1)
     override var isLoadingForYou by mutableStateOf(false)
     override var isLoadingRecents by mutableStateOf(false)
 
@@ -25,8 +23,7 @@ class FeedMaterialViewModel : ViewModel(), FeedPostViewModel {
             try {
                 isLoadingForYou = true
                 forYou.clear()
-                forYou.addAll(MaterialFakeApi.getForYou(currentPageForYou))
-                currentPageForYou++
+                forYou.addAll(MaterialApi.getForYou())
             } catch (_: Exception) { }
 
             isLoadingForYou = false
@@ -38,8 +35,7 @@ class FeedMaterialViewModel : ViewModel(), FeedPostViewModel {
             try {
                 isLoadingRecents = true
                 recents.clear()
-                recents.addAll(MaterialFakeApi.getRecents(currentPageRecents))
-                currentPageRecents++
+                recents.addAll(MaterialApi.getRecents())
             } catch (_: Exception) { }
 
             isLoadingRecents = false

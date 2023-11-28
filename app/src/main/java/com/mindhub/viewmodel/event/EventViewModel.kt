@@ -12,7 +12,7 @@ import com.google.maps.PendingResult
 import com.google.maps.model.GeocodingResult
 import com.mindhub.BuildConfig
 import com.mindhub.common.ext.dateToUnix
-import com.mindhub.common.services.UserInfo
+import com.mindhub.common.services.CurrentUser
 import com.mindhub.model.api.EventApi
 import com.mindhub.model.api.EventFakeApi
 import com.mindhub.model.entities.Event
@@ -47,7 +47,7 @@ class EventViewModel : ViewModel(), PostViewModelInterface {
                 val event = EventApi.create(
                     Event(
                         id = 0,
-                        user = UserInfo!!,
+                        user = CurrentUser.user!!,
                         title = title,
                         content = content,
                         score = 0,
@@ -83,7 +83,7 @@ class EventViewModel : ViewModel(), PostViewModelInterface {
                 EventFakeApi.update(
                     Event(
                         id = postId,
-                        user = UserInfo!!,
+                        user = CurrentUser.user!!,
                         title = title,
                         content = content,
                         postDate = LocalDateTime.now(),

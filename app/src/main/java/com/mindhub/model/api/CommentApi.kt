@@ -1,7 +1,7 @@
 package com.mindhub.model.api
 
 import com.mindhub.model.entities.Comment
-import com.mindhub.common.services.UserInfo
+import com.mindhub.common.services.CurrentUser
 
 data class CreateCommentRequest(
     val content: String,
@@ -68,7 +68,7 @@ object CommentFakeApi : CommentProvider {
         val comment = Comment(
             id = id++,
             postId = data.postId,
-            username = UserInfo!!.username,
+            username = CurrentUser.user!!.username,
             content = data.content,
             isBestAnswer = false,
             score = 0,
@@ -97,7 +97,7 @@ object CommentFakeApi : CommentProvider {
         return Comment(
             id = id++,
             postId = data.postId,
-            username = UserInfo!!.username,
+            username = CurrentUser.user!!.username,
             content = data.content,
             isBestAnswer = false,
             score = 0,

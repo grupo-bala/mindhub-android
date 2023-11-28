@@ -13,7 +13,6 @@ data class User(
     var currentBadge: Badge,
     var badges: List<Badge>,
     var expertises: List<Expertise>,
-    var token: String,
     @Serializable(UriSerializer::class)
     var profilePicture: Uri? = null,
 )

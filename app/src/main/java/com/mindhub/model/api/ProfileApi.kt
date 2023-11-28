@@ -44,8 +44,7 @@ object ProfileFakeApi: ProfileProvider {
                     Expertise("Matemática"),
                     Expertise("Física"),
                     Expertise("Inglês")
-                ),
-                token = ""
+                )
             )
         )
 
@@ -61,8 +60,7 @@ object ProfileFakeApi: ProfileProvider {
                     Expertise("Geografia"),
                     Expertise("Física"),
                     Expertise("Inglês")
-                ),
-                token = ""
+                )
             )
         )
     }

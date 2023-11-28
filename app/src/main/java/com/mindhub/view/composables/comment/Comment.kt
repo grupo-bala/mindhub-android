@@ -24,7 +24,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,15 +32,12 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.mindhub.common.services.UserInfo
-import androidx.lifecycle.viewmodel.compose.viewModel
+import com.mindhub.common.services.CurrentUser
 import com.mindhub.model.entities.Comment
 import com.mindhub.ui.theme.MindHubTheme
 import com.mindhub.view.composables.chips.CommentsChip
 import com.mindhub.view.composables.chips.ScoreChip
 import com.mindhub.view.layouts.SpacedColumn
-import com.mindhub.viewmodel.ask.GetAskViewModel
-import com.mindhub.viewmodel.post.GetPostViewModel
 
 @Composable
 fun CommentItem(
@@ -85,7 +81,7 @@ fun CommentItem(
 
                 Spacer(modifier = Modifier.width(8.dp))
 
-                if (UserInfo!!.username == comment.username) {
+                if (CurrentUser.user!!.username == comment.username) {
                     Divider(modifier = Modifier
                         .width(2.dp)
                         .height(15.dp)

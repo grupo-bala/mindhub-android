@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.mindhub.common.services.UserInfo
+import com.mindhub.common.services.CurrentUser
 import com.mindhub.model.entities.Badge
 import com.mindhub.model.entities.Expertise
 import com.mindhub.model.entities.User
@@ -67,7 +67,7 @@ fun Ranking(
             ) {
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data(UserInfo!!.profilePicture ?: "https://picsum.photos/200") // TODO: change with the user profile picture
+                        .data(CurrentUser.user!!.profilePicture ?: "https://picsum.photos/200") // TODO: change with the user profile picture
                         .crossfade(true)
                         .build(),
                     contentDescription = null,
@@ -149,7 +149,7 @@ fun Ranking(
 @Preview(showBackground = true)
 @Composable
 fun RankingPreview() {
-    UserInfo = User(
+    CurrentUser.user = User(
         name = "Administrador",
         email = "admin@admin.com",
         username = "admin",
@@ -160,8 +160,7 @@ fun RankingPreview() {
             Expertise("Matemática"),
             Expertise("Física"),
             Expertise("Inglês")
-        ),
-        token = ""
+        )
     )
 
     MindHubTheme {

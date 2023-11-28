@@ -1,6 +1,6 @@
 package com.mindhub.model.api
 
-import com.mindhub.common.services.UserInfo
+import com.mindhub.common.services.CurrentUser
 import com.mindhub.model.entities.Badge
 import com.mindhub.model.entities.Expertise
 import com.mindhub.model.entities.LeaderboardEntry
@@ -25,8 +25,7 @@ object RankingFakeApi: RankingProvider {
                     Expertise("Matemática"),
                     Expertise("Física"),
                     Expertise("Inglês")
-                ),
-                token = ""
+                )
             )
         )
 
@@ -42,8 +41,7 @@ object RankingFakeApi: RankingProvider {
                     Expertise("Geografia"),
                     Expertise("Física"),
                     Expertise("Inglês")
-                ),
-                token = ""
+                )
             )
         )
     }
@@ -52,7 +50,7 @@ object RankingFakeApi: RankingProvider {
         users.sortByDescending { it.xp }
 
         users.forEachIndexed { index, e ->
-            if (UserInfo!!.username == e.username) {
+            if (CurrentUser.user!!.username == e.username) {
                 return index + 1
             }
         }

@@ -8,12 +8,11 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mindhub.common.services.ErrorParser
-import com.mindhub.common.services.UserInfo
+import com.mindhub.common.services.CurrentUser
 import com.mindhub.model.api.AskFakeApi
 import com.mindhub.model.api.EventFakeApi
-import com.mindhub.model.api.MaterialFakeApi
+import com.mindhub.model.api.MaterialApi
 import com.mindhub.model.api.ProfileApi
-import com.mindhub.model.api.ProfileFakeApi
 import com.mindhub.model.entities.Badge
 import com.mindhub.model.entities.Expertise
 import com.mindhub.model.entities.Post
@@ -31,32 +30,32 @@ class ProfileViewModel(): ViewModel() {
     var feedback by mutableStateOf("")
 
     fun loadProfile(usernameToLoad: String?) {
-        if (usernameToLoad == username || username == UserInfo!!.username) {
+        if (usernameToLoad == username || username == CurrentUser.user!!.username) {
             return
         }
 
         isLoading = true
 
         if (usernameToLoad == null) {
-            username = UserInfo!!.username
-            badge = UserInfo!!.currentBadge
-            xp = UserInfo!!.xp
+            username = CurrentUser.user!!.username
+            badge = CurrentUser.user!!.currentBadge
+            xp = CurrentUser.user!!.xp
 
-            for (expertise in UserInfo!!.expertises) {
+            for (expertise in CurrentUser.user!!.expertises) {
                 expertises.add(expertise)
             }
 
             viewModelScope.launch {
                 try {
-                    for (post in AskFakeApi.getUserAsks(UserInfo!!.username)) {
+                    for (post in AskFakeApi.getUserAsks(CurrentUser.user!!.username)) {
                         askPosts.add(post)
                     }
 
-                    for (post in MaterialFakeApi.getUserMaterials(UserInfo!!.username)) {
+                    for (post in MaterialApi.getUserMaterials(CurrentUser.user!!.username)) {
                         materialPosts.add(post)
                     }
 
-                    for (post in EventFakeApi.getUserEvents(UserInfo!!.username)) {
+                    for (post in EventFakeApi.getUserEvents(CurrentUser.user!!.username)) {
                         eventsPosts.add(post)
                     }
                 } catch (e: Exception) {
@@ -76,7 +75,7 @@ class ProfileViewModel(): ViewModel() {
                         askPosts.add(post)
                     }
 
-                    for (post in MaterialFakeApi.getUserMaterials(username)) {
+                    for (post in MaterialApi.getUserMaterials(username)) {
                         materialPosts.add(post)
                     }
 

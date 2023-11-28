@@ -11,6 +11,10 @@ data class ApiError(val statusCode: Int, val message: String)
 
 val Api = HttpClient() {
     install(ContentNegotiation) {
-        json()
+        json(
+            Json {
+                ignoreUnknownKeys = true
+            }
+        )
     }
 }

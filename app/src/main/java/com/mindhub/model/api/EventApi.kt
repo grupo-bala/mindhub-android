@@ -5,7 +5,7 @@ import com.google.maps.GeocodingApi
 import com.google.maps.model.LatLng
 import com.mindhub.BuildConfig
 import com.mindhub.common.services.Config
-import com.mindhub.common.services.UserInfo
+import com.mindhub.common.services.CurrentUser
 import com.mindhub.model.entities.Badge
 import com.mindhub.model.entities.Event
 import com.mindhub.model.entities.User
@@ -39,7 +39,6 @@ object EventFakeApi : EventProvider {
             Badge("", 0),
             listOf(),
             listOf(),
-            "",
             null
         )
         it.add(Event(IdManager.id++, user, "Teste 1", userScore = 0, "teste", 2, LocalDateTime.now(), LocalDateTime.now(), 0.0, 0.0, "Quixadá"))
@@ -107,13 +106,13 @@ object EventFakeApi : EventProvider {
 
     override suspend fun getForYou(page: Int): List<Event> {
         return events.filter {
-            it.user.username != UserInfo!!.username
+            it.user.username != CurrentUser.user!!.username
         }.sortedBy { it.score }
     }
 
     override suspend fun getRecents(page: Int): List<Event> {
         return events.filter {
-            it.user.username != UserInfo!!.username
+            it.user.username != CurrentUser.user!!.username
         }.sortedBy { it.postDate }
     }
 }
@@ -143,7 +142,7 @@ object EventApi : EventProvider {
 
         val response: HttpResponse = Api.post("${Config.API_PREFIX}/events") {
             contentType(ContentType.Application.Json)
-            header("Authorization", "Bearer ${UserInfo!!.token}")
+            header("Authorization", "Bearer ${CurrentUser.token}")
             setBody(event)
         }
 

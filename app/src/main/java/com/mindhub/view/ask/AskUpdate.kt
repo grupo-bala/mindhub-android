@@ -3,7 +3,7 @@ package com.mindhub.view.ask
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import com.mindhub.common.services.UserInfo
+import com.mindhub.common.services.CurrentUser
 import com.mindhub.model.entities.Ask
 import com.mindhub.model.entities.Badge
 import com.mindhub.model.entities.Expertise
@@ -41,15 +41,14 @@ fun AskUpdate(
 @Preview(showBackground = true)
 @Composable
 fun AskUpdatePreview() {
-    UserInfo = User(
+    CurrentUser.user = User(
         name = "User",
         username = "username",
         email = "user@gmail.com",
         xp = 727,
         currentBadge = Badge("Aprendiz", 0),
         badges = listOf(),
-        expertises = listOf(Expertise("Matemática"), Expertise("Geografia"), Expertise("Química")),
-        token = ""
+        expertises = listOf(Expertise("Matemática"), Expertise("Geografia"), Expertise("Química"))
     )
 
     var ask = Ask(
@@ -57,7 +56,7 @@ fun AskUpdatePreview() {
         title = "Soma de raízes",
         content = "Como somar duas raízes quadradas",
         expertise = Expertise("Matemática"),
-        user = UserInfo!!,
+        user = CurrentUser.user!!,
         postDate = LocalDateTime.now(),
         score = 0,
         userScore = 0,

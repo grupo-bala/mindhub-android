@@ -51,7 +51,7 @@ import coil.request.ImageRequest
 import com.mindhub.model.entities.Badge
 import com.mindhub.model.entities.Expertise
 import com.mindhub.model.entities.User
-import com.mindhub.common.services.UserInfo
+import com.mindhub.common.services.CurrentUser
 import com.mindhub.ui.theme.MindHubTheme
 import com.mindhub.view.composables.Suspended
 import com.mindhub.view.layouts.AppScaffold
@@ -121,10 +121,10 @@ fun EditProfile(
                         .data(
                             if (editProfileViewModel.photo != null) {
                                 editProfileViewModel.photo
-                            } else if (UserInfo!!.profilePicture == null) {
+                            } else if (CurrentUser.user!!.profilePicture == null) {
                                 "https://picsum.photos/200"
                             } else {
-                                UserInfo!!.profilePicture
+                                CurrentUser.user!!.profilePicture
                             }
                         )
                         .crossfade(true)
@@ -305,15 +305,14 @@ fun EditProfile(
 @Preview(showBackground = true)
 @Composable
 fun EditProfilePreview() {
-    UserInfo = User(
+    CurrentUser.user = User(
         name = "User",
         username = "username",
         email = "user@gmail.com",
         xp = 727,
         currentBadge = Badge("Aprendiz", 0),
         badges = listOf(),
-        expertises = listOf(Expertise("Matemática"), Expertise("Geografia"), Expertise("Química")),
-        token = ""
+        expertises = listOf(Expertise("Matemática"), Expertise("Geografia"), Expertise("Química"))
     )
 
     MindHubTheme {

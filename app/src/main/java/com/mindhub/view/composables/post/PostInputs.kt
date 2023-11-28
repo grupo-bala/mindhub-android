@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.dp
 import com.mindhub.model.entities.Badge
 import com.mindhub.model.entities.Expertise
 import com.mindhub.model.entities.User
-import com.mindhub.common.services.UserInfo
+import com.mindhub.common.services.CurrentUser
 import com.mindhub.ui.theme.MindHubTheme
 import com.mindhub.view.layouts.SpacedColumn
 import com.mindhub.viewmodel.event.EventViewModel
@@ -141,15 +141,14 @@ fun PostInputs(
 @Composable
 fun CreatePostPreview() {
     MindHubTheme {
-        UserInfo = User(
+        CurrentUser.user = User(
             name = "User",
             username = "username",
             email = "user@gmail.com",
             xp = 727,
             currentBadge = Badge("Aprendiz", 0),
             badges = listOf(),
-            expertises = listOf(Expertise("Matemática"), Expertise("Geografia"), Expertise("Química")),
-            token = ""
+            expertises = listOf(Expertise("Matemática"), Expertise("Geografia"), Expertise("Química"))
         )
 
         PostInputs(

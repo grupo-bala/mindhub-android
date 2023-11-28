@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mindhub.common.services.UserInfo
+import com.mindhub.common.services.CurrentUser
 import com.mindhub.model.api.AskFakeApi
 import com.mindhub.model.entities.Ask
 import com.mindhub.model.entities.Expertise
@@ -39,7 +39,7 @@ class AskViewModel: ViewModel(), PostViewModelInterface {
                     score = 0,
                     postDate = LocalDateTime.now(),
                     userScore = 0,
-                    user = UserInfo!!
+                    user = CurrentUser.user!!
                 ))
 
                 onSuccess(post)
@@ -63,7 +63,7 @@ class AskViewModel: ViewModel(), PostViewModelInterface {
                     title = title,
                     content = content,
                     expertise = expertise!!,
-                    user = UserInfo!!,
+                    user = CurrentUser.user!!,
                     file = file,
                     postDate = LocalDateTime.now(),
                     userScore = 0,

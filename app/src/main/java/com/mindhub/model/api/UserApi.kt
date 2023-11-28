@@ -6,6 +6,7 @@ import com.mindhub.model.entities.Badge
 import com.mindhub.model.entities.Expertise
 import com.mindhub.model.entities.User
 import com.mindhub.common.services.Config
+import com.mindhub.common.services.CurrentUser
 import com.mindhub.common.services.UserInfo
 import io.ktor.client.call.body
 import io.ktor.client.request.headers
@@ -13,6 +14,7 @@ import io.ktor.client.request.patch
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.HttpResponse
+import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
@@ -61,9 +63,9 @@ object UserApi : UserProvider {
             throw Exception(response.body<ApiError>().message)
         }
 
-        UserInfo = response.body<User>()
-
-        println(UserInfo!!)
+        val userInfo = response.body<UserInfo>()
+        CurrentUser.user = userInfo.user
+        CurrentUser.token = userInfo.token
     }
 
     override suspend fun register(params: RegisterRequest) {
@@ -77,14 +79,16 @@ object UserApi : UserProvider {
             throw Exception(response.body<ApiError>().message)
         }
 
-        UserInfo = response.body<User>()
+        val userInfo = response.body<UserInfo>()
+        CurrentUser.user = userInfo.user
+        CurrentUser.token = userInfo.token
     }
 
     override suspend fun update(params: UpdateRequest) {
-        val response: HttpResponse = Api.patch("${Config.API_PREFIX}/user/${UserInfo!!.username}") {
+        Api.patch("${Config.API_PREFIX}/user/${CurrentUser.user!!.username}") {
             contentType(ContentType.Application.Json)
             headers {
-                append("Authorization", "Bearer ${UserInfo!!.token}")
+                append("Authorization", "Bearer ${CurrentUser.token}")
             }
             setBody(params)
         }
@@ -105,14 +109,13 @@ object UserFakeApi : UserProvider {
                     Expertise("Matemática"),
                     Expertise("Física"),
                     Expertise("Inglês")
-                ),
-                token = ""
+                )
             )
         )
     }
 
     override suspend fun login(params: LoginRequest) {
-        UserInfo = users.find { it.email == params.email && params.password == "123" }
+        CurrentUser.user = users.find { it.email == params.email && params.password == "123" }
             ?: throw Exception("WRONG CREDENTIALS")
     }
 
@@ -131,15 +134,14 @@ object UserFakeApi : UserProvider {
             currentBadge = Badge("Aprendiz", 0),
             badges = listOf(),
             expertises = params.expertises.map { Expertise(it) },
-            token = ""
         )
 
         users.add(user)
-        UserInfo = user
+        CurrentUser.user = user
     }
 
     override suspend fun update(params: UpdateRequest) {
-        val user = users.find { it.username == UserInfo!!.username }
+        val user = users.find { it.username == CurrentUser.user!!.username }
             ?: throw Exception()
 
         user.name = params.name
@@ -148,6 +150,6 @@ object UserFakeApi : UserProvider {
         user.currentBadge = params.badge
         user.profilePicture = params.profilePicture
 
-        UserInfo = user
+        CurrentUser.user = user
     }
 }

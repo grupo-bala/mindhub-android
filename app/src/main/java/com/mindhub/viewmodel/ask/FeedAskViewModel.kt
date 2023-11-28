@@ -15,8 +15,6 @@ import kotlinx.coroutines.launch
 class FeedAskViewModel : ViewModel(), FeedPostViewModel {
     override var forYou: MutableList<Post> = mutableStateListOf<Post>()
     override var recents: MutableList<Post> = mutableStateListOf<Post>()
-    override var currentPageForYou by mutableIntStateOf(1)
-    override var currentPageRecents by mutableIntStateOf(1)
     override var isLoadingForYou by mutableStateOf(false)
     override var isLoadingRecents by mutableStateOf(false)
 
@@ -25,8 +23,7 @@ class FeedAskViewModel : ViewModel(), FeedPostViewModel {
             try {
                 isLoadingForYou = true
                 forYou.clear()
-                forYou.addAll(AskFakeApi.getForYou(currentPageForYou))
-                currentPageForYou++
+                forYou.addAll(AskFakeApi.getForYou(1))
             } catch (_: Exception) { }
 
             isLoadingForYou = false
@@ -38,8 +35,7 @@ class FeedAskViewModel : ViewModel(), FeedPostViewModel {
             try {
                 isLoadingRecents = true
                 recents.clear()
-                recents.addAll(AskFakeApi.getRecents(currentPageRecents))
-                currentPageRecents++
+                recents.addAll(AskFakeApi.getRecents(1))
             } catch (_: Exception) { }
 
             isLoadingRecents = false

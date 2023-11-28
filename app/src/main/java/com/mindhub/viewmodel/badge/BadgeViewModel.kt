@@ -8,11 +8,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mindhub.model.api.BadgeFakeApi
 import com.mindhub.model.entities.Badge
-import com.mindhub.common.services.UserInfo
+import com.mindhub.common.services.CurrentUser
 import kotlinx.coroutines.launch
 
 class BadgeViewModel() : ViewModel() {
-    var selectedBadge by mutableStateOf(UserInfo!!.currentBadge)
+    var selectedBadge by mutableStateOf(CurrentUser.user!!.currentBadge)
     var unlockedBadges = mutableStateListOf<Badge>()
 
     private var isBadgesLoaded = false
@@ -21,7 +21,7 @@ class BadgeViewModel() : ViewModel() {
         if (!isBadgesLoaded) {
             viewModelScope.launch {
                 try {
-                    unlockedBadges.addAll(BadgeFakeApi.getUnlockedBadges(UserInfo!!.xp))
+                    unlockedBadges.addAll(BadgeFakeApi.getUnlockedBadges(CurrentUser.user!!.xp))
                 } catch (_: Exception) {}
             }
 

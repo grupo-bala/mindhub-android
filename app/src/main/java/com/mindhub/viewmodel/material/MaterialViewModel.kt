@@ -5,8 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mindhub.common.services.UserInfo
-import com.mindhub.model.api.MaterialFakeApi
+import com.mindhub.common.ext.getTime
+import com.mindhub.common.services.CurrentUser
+import com.mindhub.model.api.MaterialApi
 import com.mindhub.model.api.MaterialRequest
 import com.mindhub.model.entities.Expertise
 import com.mindhub.model.entities.Material
@@ -14,6 +15,7 @@ import com.mindhub.model.entities.Post
 import com.mindhub.viewmodel.post.PostViewModelInterface
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
+import java.time.ZoneOffset
 
 class MaterialViewModel: ViewModel(), PostViewModelInterface {
     override var title by mutableStateOf("")
@@ -28,17 +30,20 @@ class MaterialViewModel: ViewModel(), PostViewModelInterface {
         isValid()
         viewModelScope.launch {
             try {
-                val post = MaterialFakeApi.create(
+                val post = MaterialApi.create(
                     MaterialRequest(
                         title = title,
                         content = content,
-                        expertise = expertise!!,
-                        user = UserInfo!!
+                        expertise = expertise!!.title,
+                        postDate = "${LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)}"
                     )
                 )
 
+                println(post.id)
+
                 onSuccess(post)
             } catch (e: Exception) {
+                e.printStackTrace()
                 onFailure(e.message)
             }
         }
@@ -53,13 +58,13 @@ class MaterialViewModel: ViewModel(), PostViewModelInterface {
             try {
                 isValid()
 
-                MaterialFakeApi.update(
+                MaterialApi.update(
                     Material(
                         id = postId,
                         title = title,
                         content = content,
                         expertise = expertise!!,
-                        user = UserInfo!!,
+                        user = CurrentUser.user!!,
                         postDate = LocalDateTime.now(),
                         userScore = 0,
                         score = 0
@@ -80,7 +85,7 @@ class MaterialViewModel: ViewModel(), PostViewModelInterface {
     ) {
         viewModelScope.launch {
             try {
-                MaterialFakeApi.remove(materialId = postId)
+                MaterialApi.remove(materialId = postId)
                 onSuccess()
             } catch (e: Exception) {
                 onFailure(e.message)

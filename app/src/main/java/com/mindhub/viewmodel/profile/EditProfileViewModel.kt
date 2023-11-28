@@ -10,12 +10,12 @@ import com.mindhub.model.api.UpdateRequest
 import com.mindhub.model.api.UserFakeApi
 import com.mindhub.model.entities.Badge
 import com.mindhub.model.entities.Expertise
-import com.mindhub.common.services.UserInfo
+import com.mindhub.common.services.CurrentUser
 import kotlinx.coroutines.launch
 
 class EditProfileViewModel() : ViewModel() {
-    var name by mutableStateOf(UserInfo!!.name)
-    var email by mutableStateOf(UserInfo!!.email)
+    var name by mutableStateOf(CurrentUser.user!!.name)
+    var email by mutableStateOf(CurrentUser.user!!.email)
     var photo by mutableStateOf<Uri?>(null)
     var isLoading by mutableStateOf(false)
 

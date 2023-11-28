@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mindhub.model.api.ExpertiseFakeApi
 import com.mindhub.model.entities.Expertise
-import com.mindhub.common.services.UserInfo
+import com.mindhub.common.services.CurrentUser
 import kotlinx.coroutines.launch
 
 class ExpertiseViewModel() : ViewModel() {
@@ -16,7 +16,7 @@ class ExpertiseViewModel() : ViewModel() {
 
     fun loadExpertises() {
         if (!isExpertisesLoaded) {
-            for (expertise in UserInfo?.expertises ?: listOf()) {
+            for (expertise in CurrentUser.user?.expertises ?: listOf()) {
                 selectedExpertises.add(expertise)
             }
 

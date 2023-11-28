@@ -23,7 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.mindhub.common.ext.getRoute
-import com.mindhub.common.services.UserInfo
+import com.mindhub.common.services.CurrentUser
 import com.mindhub.model.entities.Ask
 import com.mindhub.model.entities.Badge
 import com.mindhub.model.entities.Event
@@ -133,7 +133,7 @@ fun PostInfo(
 
             ShareChip(text = "${post.title}\n\n${post.getRoute()}")
 
-            if (post.user == UserInfo) {
+            if (post.user == CurrentUser.user) {
                 EditChip {
                     navigator.navigate(destination!!)
                 }
@@ -159,7 +159,7 @@ fun PostInfo(
 @Preview(showBackground = true)
 @Composable
 fun PostInfoPreview() {
-    val user = User("", "", "teste76", 0, Badge("", 0), listOf(), listOf(), "")
+    val user = User("", "", "teste76", 0, Badge("", 0), listOf(), listOf(), null)
     val ask = Ask(
         id = 0,
         title = "Produto das raízes com equação de 2 grau",

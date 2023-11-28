@@ -34,7 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.mindhub.common.services.UserInfo
+import com.mindhub.common.services.CurrentUser
 import com.mindhub.model.entities.Badge
 import com.mindhub.model.entities.Expertise
 import com.mindhub.model.entities.User
@@ -86,7 +86,7 @@ fun Profile(
                 ) {
                     AsyncImage(
                         model = ImageRequest.Builder(LocalContext.current)
-                            .data(UserInfo!!.profilePicture ?: "https://picsum.photos/200")
+                            .data(CurrentUser.user!!.profilePicture ?: "https://picsum.photos/200")
                             .crossfade(true)
                             .build(),
                         contentDescription = null,
@@ -237,15 +237,14 @@ fun Profile(
 @Preview(showBackground = true)
 @Composable
 fun ProfilePreview() {
-    UserInfo = User(
+    CurrentUser.user = User(
         name = "User",
         username = "username",
         email = "user@gmail.com",
         xp = 727,
         currentBadge = Badge("Aprendiz", 0),
         badges = listOf(),
-        expertises = listOf(Expertise("Matemática"), Expertise("Geografia"), Expertise("Química")),
-        token = ""
+        expertises = listOf(Expertise("Matemática"), Expertise("Geografia"), Expertise("Química"))
     )
 
     MindHubTheme {
