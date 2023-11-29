@@ -59,16 +59,13 @@ class MaterialViewModel: ViewModel(), PostViewModelInterface {
                 isValid()
 
                 MaterialApi.update(
-                    Material(
-                        id = postId,
+                    MaterialRequest(
                         title = title,
                         content = content,
-                        expertise = expertise!!,
-                        user = CurrentUser.user!!,
-                        postDate = LocalDateTime.now(),
-                        userScore = 0,
-                        score = 0
-                    )
+                        expertise = expertise!!.title,
+                        postDate = "${LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)}"
+                    ),
+                    materialId = postId
                 )
 
                 onSuccess()
