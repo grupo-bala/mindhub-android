@@ -34,6 +34,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mindhub.common.services.CurrentUser
 import com.mindhub.model.entities.Comment
+import com.mindhub.model.entities.Material
 import com.mindhub.ui.theme.MindHubTheme
 import com.mindhub.view.composables.chips.CommentsChip
 import com.mindhub.view.composables.chips.ScoreChip
@@ -46,7 +47,7 @@ fun CommentItem(
     onScoreUpdate: (Int, Int) -> Unit,
     onReply: (Int) -> Unit,
     onRemove: (Int, Int?) -> Unit,
-    onUpdate: (Int, Int?) -> Unit,
+    onUpdate: (Int, Int?, String) -> Unit,
     showBestAnswerButton: Boolean,
     onMarkBestAnswer: (Comment) -> Unit
 ) {
@@ -75,13 +76,13 @@ fun CommentItem(
                 Spacer(modifier = Modifier.width(8.dp))
 
                 Text(
-                    text = comment.username,
+                    text = comment.user,
                     style = MaterialTheme.typography.labelLarge
                 )
 
                 Spacer(modifier = Modifier.width(8.dp))
 
-                if (CurrentUser.user!!.username == comment.username) {
+                if (CurrentUser.user!!.username == comment.user) {
                     Divider(modifier = Modifier
                         .width(2.dp)
                         .height(15.dp)
@@ -104,7 +105,7 @@ fun CommentItem(
                     )
 
                     IconButton(onClick = {
-                        onUpdate(comment.id, isReply)
+                        onUpdate(comment.id, isReply, comment.content)
                     }) {
                         Icon(
                             imageVector = Icons.Filled.Create,
@@ -204,67 +205,6 @@ fun CommentItem(
                     )
                 }
             }
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun CommentPreview() {
-    val comment1 = Comment(
-        id = 0,
-        postId = 0,
-        username = "teste76",
-        content = "Massa demais tu é doido",
-        isBestAnswer = false,
-        score = 4,
-        userScore = 0,
-        replies = mutableListOf()
-    )
-
-    val comment2 = Comment(
-        id = 0,
-        postId = 0,
-        username = "jooa_xd",
-        content = "Mussum Ipsum, cacilds vidis litro abertis.  Interessantiss quisso pudia ce receita de bolis, mais bolis eu num gostis. Nulla id gravida magna, ut semper sapien. Manduma pindureta quium dia nois paga. Suco de cevadiss, é um leite divinis, qui tem lupuliz, matis, aguis e fermentis.",
-        isBestAnswer = false,
-        score = -9,
-        userScore = 0,
-        replies = mutableListOf(comment1)
-    )
-
-    val comment3 = Comment(
-        id = 0,
-        postId = 0,
-        username = "teste76",
-        content = "Suco de cevadiss deixa as pessoas mais interessantis. Mé faiz elementum girarzis, nisi eros vermeio. Quem num gosta di mim que vai caçá sua turmis! Praesent vel viverra nisi. Mauris aliquet nunc non turpis scelerisque, eget.",
-        isBestAnswer = true,
-        score = 4,
-        userScore = 0,
-        replies = mutableListOf(
-            comment1,
-            comment2
-        )
-    )
-
-    MindHubTheme {
-        SpacedColumn(
-            spacing = 16,
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .verticalScroll(rememberScrollState())
-                .padding(8.dp)
-        ) {
-            CommentItem(
-                comment = comment3,
-                showBestAnswerButton = true,
-                onScoreUpdate = { it1, it2 -> },
-                onReply = {},
-                onRemove = { it1, it2 -> },
-                onUpdate = { it1, it2 -> },
-                onMarkBestAnswer = { }
-            )
         }
     }
 }

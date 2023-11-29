@@ -13,6 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -23,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mindhub.common.services.CurrentUser
 import com.mindhub.ui.theme.MindHubTheme
+import com.mindhub.view.composables.ErrorModal
 import com.mindhub.view.composables.RemoveConfirmationModal
 import com.mindhub.view.composables.Suspended
 import com.mindhub.view.composables.comment.CommentsView
@@ -31,8 +33,8 @@ import com.mindhub.view.layouts.AppScaffold
 import com.mindhub.view.layouts.SpacedColumn
 import com.mindhub.view.layouts.Views
 import com.mindhub.viewmodel.ask.GetAskViewModel
-import com.mindhub.viewmodel.comment.HandleCommentViewModel
-import com.mindhub.viewmodel.comment.GetCommentViewModel
+import com.mindhub.viewmodel.comment.HandleCommentCreationViewModel
+import com.mindhub.viewmodel.comment.CommentViewModel
 import com.mindhub.viewmodel.post.GetPostViewModel
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
@@ -44,8 +46,8 @@ fun PostView(
     viewModel: GetPostViewModel,
     navigator: DestinationsNavigator
 ) {
-    val handleCommentViewModel: HandleCommentViewModel = viewModel()
-    val getCommentViewModel: GetCommentViewModel = viewModel()
+    val handleCommentCreationViewModel: HandleCommentCreationViewModel = viewModel()
+    val commentViewModel: CommentViewModel = viewModel()
 
     var isCreateCommentMenuExpanded by remember {
         mutableStateOf(false)
@@ -56,6 +58,10 @@ fun PostView(
     }
 
     var isRemoveModalToggle by remember {
+        mutableStateOf(false)
+    }
+
+    var isErrorModalToggle by remember {
         mutableStateOf(false)
     }
 
@@ -89,28 +95,30 @@ fun PostView(
                     spacing = 8,
                     verticalAlignment = Alignment.Top,
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.verticalScroll(rememberScrollState())
                 ) {
                     if (viewModel.post == null) {
                         Text(text = viewModel.feedback)
                     } else {
                         PostInfo(
                             post = viewModel.post!!,
-                            howManyComments = getCommentViewModel.comments.size,
+                            howManyComments = commentViewModel.comments.size,
                             navigator = navigator
                         ) {
                             viewModel.updateScore(it)
                         }
+
                         CommentsView(
-                            getCommentViewModel = getCommentViewModel,
+                            getCommentViewModel = commentViewModel,
                             onScoreUpdate = { commentId, score ->
-                                getCommentViewModel.updateScore(commentId, score)
+                                commentViewModel.updateScore(commentId, score) {
+                                    isErrorModalToggle = true
+                                }
                             },
                             postId = postId,
-                            onRemove = { commentId, replyId ->
+                            onRemove = { commentId, replyTo ->
                                 handleRemove = {
-                                    handleCommentViewModel.removeComment(commentId, replyId) {
-                                        getCommentViewModel.removeComment(commentId, replyId)
+                                    commentViewModel.removeComment(commentId, replyTo) {
+                                        isErrorModalToggle = true
                                     }
                                 }
 
@@ -120,14 +128,17 @@ fun PostView(
                                 isCreateCommentMenuExpanded = true
                                 commentIdToReply = it
                             },
-                            onUpdate = { it1, it2 ->
+                            onUpdate = { it1, it2, it3 ->
                                 isUpdateCommentMenuExpanded = true
                                 commentToUpdate = Pair(it1, it2)
+                                handleCommentCreationViewModel.commentText = it3
                             },
                             showBestAnswerButton = viewModel.instanceOf(GetAskViewModel::class)
                                     && !viewModel.isLoading
                                     && viewModel.post!!.user.username == CurrentUser.user!!.username,
-                        )
+                        ) {
+                            isErrorModalToggle = true
+                        }
                     }
                 }
 
@@ -145,23 +156,23 @@ fun PostView(
                 if (isCreateCommentMenuExpanded) {
                     HandleComment(
                         isUpdate = false,
-                        handleCommentViewModel = handleCommentViewModel,
+                        handleCommentViewModel = handleCommentCreationViewModel,
                         onSuccess = {
                             isCreateCommentMenuExpanded = false
 
                             if (commentIdToReply != null) {
-                                handleCommentViewModel.createReply(postId, commentIdToReply!!) { comment ->
-                                     getCommentViewModel.addReply(comment, commentIdToReply!!)
+                                commentViewModel.addReply(postId, commentIdToReply!!, handleCommentCreationViewModel.commentText) {
+                                    isErrorModalToggle = true
                                 }
 
                                 commentIdToReply = null
                             } else {
-                                handleCommentViewModel.createComment(postId) { comment ->
-                                    getCommentViewModel.addComment(comment)
+                                commentViewModel.addComment(postId, handleCommentCreationViewModel.commentText) {
+                                    isErrorModalToggle = true
                                 }
                             }
 
-                            handleCommentViewModel.clear()
+                            handleCommentCreationViewModel.clear()
                         },
                         onDismissRequest = {
                             isCreateCommentMenuExpanded = false
@@ -173,28 +184,26 @@ fun PostView(
                 if (isUpdateCommentMenuExpanded) {
                     HandleComment(
                         isUpdate = true,
-                        handleCommentViewModel = handleCommentViewModel,
+                        handleCommentViewModel = handleCommentCreationViewModel,
                         onSuccess = {
                             isUpdateCommentMenuExpanded = false
 
-                            handleCommentViewModel.updateComment(
+                            commentViewModel.updateComment(
                                 commentToUpdate!!.first,
                                 commentToUpdate!!.second,
+                                handleCommentCreationViewModel.commentText
                             ) {
-                                getCommentViewModel.updateComment(
-                                    commentToUpdate!!.first,
-                                    commentToUpdate!!.second,
-                                    it
-                                )
+                                isErrorModalToggle = true
                             }
 
                             commentToUpdate = null
 
-                            handleCommentViewModel.clear()
+                            handleCommentCreationViewModel.clear()
                         },
                         onDismissRequest = {
                             isUpdateCommentMenuExpanded = false
                             commentToUpdate = null
+                            handleCommentCreationViewModel.clear()
                         }
                     )
                 }
@@ -209,6 +218,16 @@ fun PostView(
                         onDismissRequest = {
                             handleRemove = {}
                             isRemoveModalToggle = false
+                        }
+                    )
+                }
+
+                if (isErrorModalToggle) {
+                    ErrorModal(
+                        text = commentViewModel.feedback,
+                        onConfirmation = {
+                            isErrorModalToggle = false
+                            commentViewModel.feedback = ""
                         }
                     )
                 }

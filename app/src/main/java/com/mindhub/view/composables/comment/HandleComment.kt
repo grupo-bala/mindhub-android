@@ -24,13 +24,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.mindhub.view.layouts.SpacedColumn
-import com.mindhub.viewmodel.comment.HandleCommentViewModel
+import com.mindhub.viewmodel.comment.HandleCommentCreationViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HandleComment(
     isUpdate: Boolean,
-    handleCommentViewModel: HandleCommentViewModel,
+    handleCommentViewModel: HandleCommentCreationViewModel,
     onSuccess: () -> Unit,
     onDismissRequest: () -> Unit
 ) {
