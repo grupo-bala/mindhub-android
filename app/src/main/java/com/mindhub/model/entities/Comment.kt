@@ -5,11 +5,12 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Comment(
     val id: Int,
-    val postId: Int,
-    val username: String,
     var content: String,
+    val post: Int,
+    val user: String,
     var isBestAnswer: Boolean,
-    var score: Int,
-    var userScore: Int,
     var replies: MutableList<Comment>,
+    var userScore: Int,
+    var score: Int,
+    var replyTo: Int?,
 )
