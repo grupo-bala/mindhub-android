@@ -1,13 +1,12 @@
 package com.mindhub.viewmodel.ask
 
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mindhub.model.api.AskFakeApi
+import com.mindhub.model.api.AskApi
 import com.mindhub.model.entities.Post
 import com.mindhub.viewmodel.post.FeedPostViewModel
 import kotlinx.coroutines.launch
@@ -23,7 +22,7 @@ class FeedAskViewModel : ViewModel(), FeedPostViewModel {
             try {
                 isLoadingForYou = true
                 forYou.clear()
-                forYou.addAll(AskFakeApi.getForYou(1))
+                forYou.addAll(AskApi.getForYou())
             } catch (_: Exception) { }
 
             isLoadingForYou = false
@@ -35,7 +34,7 @@ class FeedAskViewModel : ViewModel(), FeedPostViewModel {
             try {
                 isLoadingRecents = true
                 recents.clear()
-                recents.addAll(AskFakeApi.getRecents(1))
+                recents.addAll(AskApi.getRecents())
             } catch (_: Exception) { }
 
             isLoadingRecents = false

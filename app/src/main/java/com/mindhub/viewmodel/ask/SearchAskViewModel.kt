@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mindhub.model.api.AskFakeApi
+import com.mindhub.model.api.AskApi
 import com.mindhub.model.entities.Ask
 import kotlinx.coroutines.launch
 
@@ -23,7 +23,7 @@ class SearchAskViewModel : ViewModel() {
             try {
                 isLoading = true
                 asks.clear()
-                asks.addAll(AskFakeApi.get(inputTitle))
+                asks.addAll(AskApi.get(inputTitle))
             } catch (e: Exception) {
                 onFailure(e.message)
             }

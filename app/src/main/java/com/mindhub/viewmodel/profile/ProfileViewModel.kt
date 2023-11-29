@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mindhub.common.services.ErrorParser
 import com.mindhub.common.services.CurrentUser
-import com.mindhub.model.api.AskFakeApi
+import com.mindhub.model.api.AskApi
 import com.mindhub.model.api.EventApi
 import com.mindhub.model.api.MaterialApi
 import com.mindhub.model.api.ProfileApi
@@ -47,7 +47,7 @@ class ProfileViewModel(): ViewModel() {
 
             viewModelScope.launch {
                 try {
-                    for (post in AskFakeApi.getUserAsks(CurrentUser.user!!.username)) {
+                    for (post in AskApi.getUserAsks(CurrentUser.user!!.username)) {
                         askPosts.add(post)
                     }
 
@@ -71,7 +71,7 @@ class ProfileViewModel(): ViewModel() {
                     badge = user.currentBadge
                     xp = user.xp
 
-                    for (post in AskFakeApi.getUserAsks(username)) {
+                    for (post in AskApi.getUserAsks(username)) {
                         askPosts.add(post)
                     }
 

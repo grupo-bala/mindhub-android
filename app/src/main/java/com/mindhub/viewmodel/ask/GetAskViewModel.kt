@@ -4,11 +4,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.neverEqualPolicy
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mindhub.common.services.ErrorParser
-import com.mindhub.model.api.AskFakeApi
-import com.mindhub.model.entities.Ask
+import com.mindhub.model.api.AskApi
 import com.mindhub.model.entities.Post
 import com.mindhub.viewmodel.post.GetPostViewModel
 import kotlinx.coroutines.launch
@@ -24,7 +22,7 @@ class GetAskViewModel : GetPostViewModel() {
             isLoading = true
 
             try {
-                post = AskFakeApi.getOne(id)
+                post = AskApi.getOne(id)
             } catch (e: Exception) {
                 feedback = ErrorParser.from(e.message)
             }
