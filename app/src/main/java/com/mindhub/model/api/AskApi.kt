@@ -8,6 +8,7 @@ import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.client.request.patch
+import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.ContentType
@@ -37,7 +38,7 @@ data class AskRequest(
 
 object AskApi: AskProvider {
     override suspend fun create(ask: AskRequest): Ask {
-        val response: HttpResponse = Api.patch("${BuildConfig.apiPrefix}/ask") {
+        val response: HttpResponse = Api.post("${BuildConfig.apiPrefix}/ask") {
             contentType(ContentType.Application.Json)
             setBody(ask)
             header("Authorization", "Bearer ${CurrentUser.token}")
@@ -93,7 +94,16 @@ object AskApi: AskProvider {
     }
 
     override suspend fun get(askTitle: String): List<Ask> {
-        TODO("Not yet implemented")
+        val response: HttpResponse = Api.get("${BuildConfig.apiPrefix}/ask/$askTitle") {
+            header("Authorization", "Bearer ${CurrentUser.token}")
+        }
+
+        if (response.status != HttpStatusCode.OK) {
+            println(response.body<ApiError>().message)
+            throw Exception(response.body<ApiError>().message)
+        }
+
+        return response.body()
     }
 
     override suspend fun getForYou(): List<Ask> {
