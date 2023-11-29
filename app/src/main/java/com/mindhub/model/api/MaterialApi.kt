@@ -92,7 +92,7 @@ object MaterialApi: MaterialProvider {
     }
 
     override suspend fun getForYou(): List<Material> {
-        val response: HttpResponse = Api.get("${BuildConfig.apiPrefix}/material") {
+        val response: HttpResponse = Api.get("${BuildConfig.apiPrefix}/material/forYou") {
             header("Authorization", "Bearer ${CurrentUser.token}")
         }
 
