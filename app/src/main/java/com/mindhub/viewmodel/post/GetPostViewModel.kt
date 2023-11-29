@@ -1,24 +1,31 @@
 package com.mindhub.viewmodel.post
 
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.mindhub.model.api.ScoreApi
+import com.mindhub.model.api.ScoreRequest
 import com.mindhub.model.entities.Post
+import kotlinx.coroutines.launch
 
-interface GetPostViewModel {
-    var post: Post?
-    var feedback: String
-    var isLoading: Boolean
+abstract class GetPostViewModel : ViewModel() {
+    abstract var post: Post?
+    abstract var feedback: String
+    abstract var isLoading: Boolean
 
-    fun get(id: Int)
+    abstract fun get(id: Int)
 
     fun updateScore(userScore: Int) {
-        if (userScore == post!!.userScore) {
-            post!!.score += post!!.userScore * -1
-            post!!.userScore = 0
-        } else {
-            println("AAWDIJDWIDJWIDJWJDI\n\n")
-            println(userScore)
-            post!!.score += post!!.userScore * -1
-            post!!.userScore = userScore
-            post!!.score += userScore
+        viewModelScope.launch {
+            if (userScore == post!!.userScore) {
+                post!!.score += post!!.userScore * -1
+                ScoreApi.vote(ScoreRequest(post!!.id, 0))
+            } else {
+                post!!.score += post!!.userScore * -1
+                post!!.userScore = userScore
+                post!!.score += userScore
+
+                ScoreApi.vote(ScoreRequest(post!!.id, userScore))
+            }
         }
 
         post = post

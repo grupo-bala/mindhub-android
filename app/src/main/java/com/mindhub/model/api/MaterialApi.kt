@@ -92,7 +92,16 @@ object MaterialApi: MaterialProvider {
     }
 
     override suspend fun getForYou(): List<Material> {
-        return listOf()
+        val response: HttpResponse = Api.get("${BuildConfig.apiPrefix}/material") {
+            header("Authorization", "Bearer ${CurrentUser.token}")
+        }
+
+        if (response.status != HttpStatusCode.OK) {
+            println(response.body<ApiError>().message)
+            throw Exception(response.body<ApiError>().message)
+        }
+
+        return response.body()
     }
 
     override suspend fun getRecents(): List<Material> {

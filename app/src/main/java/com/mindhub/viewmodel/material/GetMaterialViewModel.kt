@@ -12,7 +12,7 @@ import com.mindhub.model.entities.Post
 import com.mindhub.viewmodel.post.GetPostViewModel
 import kotlinx.coroutines.launch
 
-class GetMaterialViewModel : ViewModel(), GetPostViewModel {
+class GetMaterialViewModel : GetPostViewModel() {
     override var post: Post? by mutableStateOf(null, policy = neverEqualPolicy())
     override var feedback by mutableStateOf("")
     override var isLoading by mutableStateOf(false)
