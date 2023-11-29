@@ -1,144 +1,143 @@
 package com.mindhub.model.api
 
+import com.mindhub.BuildConfig
 import com.mindhub.model.entities.Comment
 import com.mindhub.common.services.CurrentUser
+import io.ktor.client.call.body
+import io.ktor.client.request.delete
+import io.ktor.client.request.get
+import io.ktor.client.request.header
+import io.ktor.client.request.patch
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.client.statement.HttpResponse
+import io.ktor.client.statement.bodyAsText
+import io.ktor.http.ContentType
+import io.ktor.http.HttpStatusCode
+import io.ktor.http.contentType
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class CreateCommentRequest(
     val content: String,
     val postId: Int
 )
 
+@Serializable
 data class CreateReplyRequest(
     val content: String,
     val postId: Int,
-    val commentId: Int,
+    val replyTo: Int,
+)
+
+@Serializable
+data class UpdateCommentRequest(
+    val content: String
+)
+
+@Serializable
+data class UpdateBestAnswerRequest(
+    val postId: Int,
 )
 
 interface CommentProvider {
-    suspend fun create(data: CreateCommentRequest): Comment
-    suspend fun get(postId: Int, page: Int): List<Comment>
-    suspend fun vote(commentId: Int, score: Int)
-    suspend fun createReply(data: CreateReplyRequest): Comment
-    suspend fun removeComment(commentId: Int, isReply: Int?)
-    suspend fun updateComment(commentId: Int, isReply: Int?, newComment: String)
-    suspend fun toggleBestAnswer(commentId: Int): Unit
+    suspend fun create(comment: CreateCommentRequest): Comment
+    suspend fun createReply(reply: CreateReplyRequest): Comment
+    suspend fun findAll(postId: Int): List<Comment>
+    suspend fun remove(commentId: Int)
+    suspend fun update(commentId: Int, newContent: UpdateCommentRequest)
+
+    // TODO: Implement toggleBestAnswer
+    suspend fun toggleBestAnswer(commentId: Int, postId: Int)
 }
 
-object CommentFakeApi : CommentProvider {
-    private var id = 0
-    private val comments = mutableListOf<Comment>().also {
-        it.add(
-            Comment(
-                id = id++,
-                postId = 0,
-                username = "jjaum",
-                content = "Massa demais tu é doido",
-                isBestAnswer = true,
-                score = 4,
-                userScore = 0,
-                replies = mutableListOf(
-                    Comment(
-                        id = id++,
-                        postId = 0,
-                        username = "ecrt34",
-                        content = "Bom demaise",
-                        isBestAnswer = false,
-                        score = 1,
-                        userScore = 0,
-                        replies = mutableListOf()
-                    )
-                )
-            )
-        )
-
-        it.add(
-            Comment(
-                id = id++,
-                postId = 0,
-                username = "teste76",
-                content = "Lorem ipsum",
-                isBestAnswer = false,
-                score = -2,
-                userScore = 0,
-                replies = mutableListOf()
-            )
-        )
-    }
-    override suspend fun create(data: CreateCommentRequest): Comment {
-        val comment = Comment(
-            id = id++,
-            postId = data.postId,
-            username = CurrentUser.user!!.username,
-            content = data.content,
-            isBestAnswer = false,
-            score = 0,
-            userScore = 0,
-            replies = mutableListOf(),
-        )
-
-        comments.add(comment)
-
-        comments.sortByDescending { it.score }
-
-        return comment
-    }
-
-    override suspend fun get(postId: Int, page: Int): List<Comment> {
-        return comments.filter { it.postId == postId }
-    }
-
-    override suspend fun vote(commentId: Int, score: Int) {
-        val comment = comments.find { it.id == commentId } ?: throw Exception()
-        comment.userScore = score
-        comment.score += score
-    }
-
-    override suspend fun createReply(data: CreateReplyRequest): Comment {
-        return Comment(
-            id = id++,
-            postId = data.postId,
-            username = CurrentUser.user!!.username,
-            content = data.content,
-            isBestAnswer = false,
-            score = 0,
-            userScore = 0,
-            replies = mutableListOf(),
-        )
-    }
-
-    override suspend fun removeComment(commentId: Int, isReply: Int?) {
-        if (isReply == null) {
-            comments.removeIf { it.id == commentId }
-
-            return
+object CommentApi : CommentProvider {
+    override suspend fun create(comment: CreateCommentRequest): Comment {
+        val response: HttpResponse = Api.post("${BuildConfig.apiPrefix}/comment/") {
+            contentType(ContentType.Application.Json)
+            header("Authorization", "Bearer ${CurrentUser.token}")
+            setBody(comment)
         }
 
-        val comment = comments.find { it.id == commentId } ?: throw Exception()
+        if (response.status != HttpStatusCode.Created) {
+            println(response.body<ApiError>().message)
 
-        comments.remove(comment)
-
-        comment.replies.removeIf { it.id == isReply }
-
-        comments.add(comment)
-    }
-
-    override suspend fun updateComment(commentId: Int, isReply: Int?, newComment: String) {
-        if (isReply == null) {
-            val comment = comments.find { it.id == commentId } ?: throw Exception()
-
-            comment.content = newComment
-
-            return
+            throw Exception(response.body<ApiError>().message)
         }
 
-        val comment = comments.find { it.id == commentId } ?: throw Exception()
+        println(response.bodyAsText())
 
-        comment.content = newComment
+        return response.body()
     }
 
-    override suspend fun toggleBestAnswer(commentId: Int) {
-        val comment = comments.find { it.id == commentId } ?: throw Exception()
-        comment.isBestAnswer = !comment.isBestAnswer
+    override suspend fun createReply(reply: CreateReplyRequest): Comment {
+        val response: HttpResponse = Api.post("${BuildConfig.apiPrefix}/comment/reply") {
+            contentType(ContentType.Application.Json)
+            header("Authorization", "Bearer ${CurrentUser.token}")
+            setBody(reply)
+        }
+
+        if (response.status != HttpStatusCode.Created) {
+            println(response.body<ApiError>().message)
+
+            throw Exception(response.body<ApiError>().message)
+        }
+
+        return response.body()
+    }
+
+    override suspend fun findAll(postId: Int): List<Comment> {
+        val response: HttpResponse = Api.get("${BuildConfig.apiPrefix}/comment/$postId") {
+            header("Authorization", "Bearer ${CurrentUser.token}")
+        }
+
+        if (response.status != HttpStatusCode.OK) {
+            println(response.body<ApiError>().message)
+
+            throw Exception(response.body<ApiError>().message)
+        }
+
+        return response.body()
+    }
+
+    override suspend fun remove(commentId: Int) {
+        val response: HttpResponse = Api.delete("${BuildConfig.apiPrefix}/comment/$commentId") {
+            header("Authorization", "Bearer ${CurrentUser.token}")
+        }
+
+        if (response.status != HttpStatusCode.OK) {
+            println(response.body<ApiError>().message)
+
+            throw Exception(response.body<ApiError>().message)
+        }
+    }
+
+    override suspend fun update(commentId: Int, newContent: UpdateCommentRequest) {
+        val response: HttpResponse = Api.patch("${BuildConfig.apiPrefix}/comment/${commentId}") {
+            contentType(ContentType.Application.Json)
+            setBody(newContent)
+            header("Authorization", "Bearer ${CurrentUser.token}")
+        }
+
+        if (response.status != HttpStatusCode.OK) {
+            println(response.body<ApiError>().message)
+
+            throw Exception(response.body<ApiError>().message)
+        }
+    }
+
+    override suspend fun toggleBestAnswer(commentId: Int, postId: Int) {
+        val response: HttpResponse = Api.patch("${BuildConfig.apiPrefix}/comment/best-answer/$commentId") {
+            header("Authorization", "Bearer ${CurrentUser.token}")
+            setBody(UpdateBestAnswerRequest(postId))
+            contentType(ContentType.Application.Json)
+        }
+
+        if (response.status != HttpStatusCode.OK) {
+            println(response.body<ApiError>().message)
+
+            throw Exception(response.body<ApiError>().message)
+        }
     }
 }
 
