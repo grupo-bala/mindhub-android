@@ -8,7 +8,7 @@ import com.mindhub.model.entities.Ask
 import com.mindhub.model.entities.Badge
 import com.mindhub.model.entities.Expertise
 import com.mindhub.model.entities.User
-import com.mindhub.view.composables.FileInput
+import com.mindhub.view.composables.image.ImageInput
 import com.mindhub.view.composables.post.PostUpdate
 import com.mindhub.viewmodel.ask.AskViewModel
 import com.ramcosta.composedestinations.annotation.Destination
@@ -26,7 +26,7 @@ fun AskUpdate(
     viewModel.title = ask.title
     viewModel.content = ask.content
     viewModel.expertise = ask.expertise
-    viewModel.file = ask.file
+    viewModel.image = ask.image
 
     PostUpdate(
         navigator = navigator,
@@ -34,7 +34,7 @@ fun AskUpdate(
         postId = ask.id,
         onSuccess = { navigator.popBackStack() }
     ) {
-        FileInput(askViewModel = viewModel)
+        ImageInput { viewModel.tempImage = it }
     }
 }
 

@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mindhub.ui.theme.MindHubTheme
-import com.mindhub.view.composables.FileInput
+import com.mindhub.view.composables.image.ImageInput
 import com.mindhub.view.composables.post.PostCreate
 import com.mindhub.view.destinations.AskViewDestination
 import com.mindhub.viewmodel.ask.AskViewModel
@@ -29,7 +29,7 @@ fun AskCreate(
             navigator.navigate(AskViewDestination(it.id))
         }
     ) {
-        FileInput(viewModel)
+        ImageInput { viewModel.tempImage = it }
     }
 }
 

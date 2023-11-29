@@ -75,7 +75,7 @@ fun PostInfo(
                     label = { Text(text = postWithExpertise.expertise.title) }
                 )
 
-                askFile = post.file
+                askFile = post.image
                 destination = AskUpdateDestination(post)
             } else if (post.instanceOf(Material::class)) {
                 val postWithExpertise = post as Material
