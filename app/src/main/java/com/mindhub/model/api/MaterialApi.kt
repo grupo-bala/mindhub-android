@@ -26,7 +26,7 @@ data class MaterialRequest(
 
 interface MaterialProvider {
     suspend fun create(material: MaterialRequest): Material
-    suspend fun update(materialUpdated: Material)
+    suspend fun update(materialUpdated: MaterialRequest, materialId: Int)
     suspend fun remove(materialId: Int)
     suspend fun getOne(id: Int): Material
     suspend fun getForYou(): List<Material>
@@ -50,8 +50,8 @@ object MaterialApi: MaterialProvider {
         return response.body()
     }
 
-    override suspend fun update(materialUpdated: Material) {
-        val response: HttpResponse = Api.patch("${BuildConfig.apiPrefix}/material/${materialUpdated.id}") {
+    override suspend fun update(materialUpdated: MaterialRequest, materialId: Int) {
+        val response: HttpResponse = Api.patch("${BuildConfig.apiPrefix}/material/$materialId") {
             contentType(ContentType.Application.Json)
             setBody(materialUpdated)
             header("Authorization", "Bearer ${CurrentUser.token}")
