@@ -40,9 +40,9 @@ class AskViewModel: ViewModel(), PostViewModelInterface {
                         title = title,
                         content = content,
                         expertise = expertise!!.title,
-                        image = bitMapToByteArray(tempImage),
                         postDate = "${LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)}",
                     ),
+                    bitMapToByteArray(tempImage)
                 )
 
                 onSuccess(post)

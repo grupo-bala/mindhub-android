@@ -17,7 +17,7 @@ import io.ktor.http.contentType
 import kotlinx.serialization.Serializable
 
 interface AskProvider {
-    suspend fun create(ask: AskRequest): Ask
+    suspend fun create(ask: AskRequest, img: ByteArray?): Ask
     suspend fun update(askUpdated: Ask)
     suspend fun remove(askId: Int)
     suspend fun getOne(askId: Int): Ask
@@ -32,12 +32,11 @@ data class AskRequest(
     val title: String,
     val content: String,
     val expertise: String,
-    val postDate: String,
-    val image: ByteArray?,
+    val postDate: String
 )
 
 object AskApi: AskProvider {
-    override suspend fun create(ask: AskRequest): Ask {
+    override suspend fun create(ask: AskRequest, img: ByteArray?): Ask {
         val response: HttpResponse = Api.post("${BuildConfig.apiPrefix}/ask") {
             contentType(ContentType.Application.Json)
             setBody(ask)
@@ -49,7 +48,13 @@ object AskApi: AskProvider {
             throw Exception(response.body<ApiError>().message)
         }
 
-        return response.body()
+        val createdAsk = response.body<Ask>()
+
+        if (img != null) {
+            FileApi.upload("ask", createdAsk.id, img)
+        }
+
+        return createdAsk
     }
 
     override suspend fun update(askUpdated: Ask) {
