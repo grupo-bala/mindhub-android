@@ -24,7 +24,7 @@ class AskViewModel: ViewModel(), PostViewModelInterface {
     override var content by mutableStateOf("")
     override var feedback: String? by mutableStateOf("")
     override var expertise: Expertise? by mutableStateOf(Expertise(""))
-    var image by mutableStateOf<Uri?>(null)
+    var hasImage by mutableStateOf(false)
     var tempImage by mutableStateOf<Bitmap?>(null)
 
     override fun create(
@@ -41,9 +41,13 @@ class AskViewModel: ViewModel(), PostViewModelInterface {
                         content = content,
                         expertise = expertise!!.title,
                         postDate = "${LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)}",
+                        hasImage = tempImage != null
                     ),
                     bitMapToByteArray(tempImage)
                 )
+
+                hasImage = post.hasImage
+                tempImage = null
 
                 onSuccess(post)
             } catch (e: Exception) {
@@ -61,17 +65,21 @@ class AskViewModel: ViewModel(), PostViewModelInterface {
 
         viewModelScope.launch {
             try {
-                AskApi.update(Ask(
-                    id = postId,
-                    title = title,
-                    content = content,
-                    expertise = expertise!!,
-                    user = CurrentUser.user!!,
-                    image = image,
-                    postDate = LocalDateTime.now(),
-                    userScore = 0,
-                    score = 0
-                ))
+                AskApi.update(
+                    AskRequest(
+                        title = title,
+                        content = content,
+                        expertise = expertise!!.title,
+                        postDate = "${LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)}",
+                        hasImage = tempImage != null
+                    ),
+                    askId = postId,
+                    img = bitMapToByteArray(tempImage)
+                )
+
+                if (tempImage == null) {
+                    hasImage = false
+                }
 
                 onSuccess()
             } catch (e: Exception) {
