@@ -33,6 +33,7 @@ class ProfileViewModel(): ViewModel() {
         askPosts.clear()
         materialPosts.clear()
         eventsPosts.clear()
+        expertises.clear()
 
         isLoading = true
 
