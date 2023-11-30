@@ -1,6 +1,7 @@
 package com.mindhub.view.composables.post
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -47,6 +48,7 @@ import com.mindhub.view.composables.chips.ShareChip
 import com.mindhub.view.destinations.AskUpdateDestination
 import com.mindhub.view.destinations.EventUpdateDestination
 import com.mindhub.view.destinations.MaterialUpdateDestination
+import com.mindhub.view.destinations.ProfileDestination
 import com.mindhub.view.layouts.SpacedColumn
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
@@ -68,7 +70,14 @@ fun PostInfo(
         modifier = Modifier.padding(8.dp)
     ) {
         Text(text = post.title, style = MaterialTheme.typography.titleLarge)
-        Text(text = "por ${post.user.username}", style = MaterialTheme.typography.labelLarge)
+        Text(
+            text = "por ${post.user.username}",
+            style = MaterialTheme.typography.labelLarge,
+            modifier = Modifier
+                .clickable {
+                    navigator.navigate(ProfileDestination(post.user.username))
+                }
+        )
 
         var destination: Direction? = null
         var hasImage by remember {

@@ -23,6 +23,7 @@ fun CommentsView(
     onRemove: (Int, Int?) -> Unit,
     onUpdate: (Int, Int?, String) -> Unit,
     onReply: (Int) -> Unit,
+    onNavigate: (String) -> Unit,
     onFailure: () -> Unit,
 ) {
     LaunchedEffect(key1 = true) {
@@ -45,7 +46,10 @@ fun CommentsView(
                     onReply = onReply,
                     onRemove = onRemove,
                     onUpdate = onUpdate,
-                    onMarkBestAnswer = { targetComment -> getCommentViewModel.toggleBestAnswer(targetComment.id, postId, onFailure) }
+                    onMarkBestAnswer = { targetComment ->
+                        getCommentViewModel.toggleBestAnswer(targetComment.id, postId, onFailure)
+                    },
+                    onNavigate = onNavigate,
                 )
             }
         }

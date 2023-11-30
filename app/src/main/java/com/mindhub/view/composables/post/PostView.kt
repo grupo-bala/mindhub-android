@@ -29,6 +29,7 @@ import com.mindhub.view.composables.RemoveConfirmationModal
 import com.mindhub.view.composables.Suspended
 import com.mindhub.view.composables.comment.CommentsView
 import com.mindhub.view.composables.comment.HandleComment
+import com.mindhub.view.destinations.ProfileDestination
 import com.mindhub.view.layouts.AppScaffold
 import com.mindhub.view.layouts.SpacedColumn
 import com.mindhub.view.layouts.Views
@@ -136,6 +137,9 @@ fun PostView(
                             showBestAnswerButton = viewModel.instanceOf(GetAskViewModel::class)
                                     && !viewModel.isLoading
                                     && viewModel.post!!.user.username == CurrentUser.user!!.username,
+                            onNavigate = {
+                                navigator.navigate(ProfileDestination(it))
+                            },
                         ) {
                             isErrorModalToggle = true
                         }

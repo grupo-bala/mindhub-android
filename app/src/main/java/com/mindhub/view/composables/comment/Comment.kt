@@ -1,10 +1,12 @@
 package com.mindhub.view.composables.comment
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -22,6 +24,7 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -30,8 +33,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import coil.request.CachePolicy
+import coil.request.ImageRequest
+import com.mindhub.BuildConfig
 import com.mindhub.common.services.CurrentUser
 import com.mindhub.model.entities.Comment
 import com.mindhub.model.entities.Material
@@ -49,7 +58,8 @@ fun CommentItem(
     onRemove: (Int, Int?) -> Unit,
     onUpdate: (Int, Int?, String) -> Unit,
     showBestAnswerButton: Boolean,
-    onMarkBestAnswer: (Comment) -> Unit
+    onMarkBestAnswer: (Comment) -> Unit,
+    onNavigate: (String) -> Unit,
 ) {
     SpacedColumn(
         spacing = 8,
@@ -66,18 +76,33 @@ fun CommentItem(
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Spacer(
+                AsyncImage(
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(
+                            "${BuildConfig.apiPrefix}/static/user/${CurrentUser.user!!.username}"
+                        )
+                        .memoryCachePolicy(CachePolicy.DISABLED)
+                        .crossfade(true)
+                        .build(),
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
                     modifier = Modifier
-                        .size(32.dp)
                         .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                        .size(32.dp)
+                        .clickable {
+                            onNavigate(comment.user)
+                        }
                 )
 
                 Spacer(modifier = Modifier.width(8.dp))
 
                 Text(
                     text = comment.user,
-                    style = MaterialTheme.typography.labelLarge
+                    style = MaterialTheme.typography.labelLarge,
+                    modifier = Modifier
+                        .clickable {
+                            onNavigate(comment.user)
+                        }
                 )
 
                 Spacer(modifier = Modifier.width(8.dp))
@@ -201,7 +226,8 @@ fun CommentItem(
                         onUpdate = onUpdate,
                         isReply = comment.id,
                         showBestAnswerButton = false,
-                        onMarkBestAnswer = { }
+                        onMarkBestAnswer = {},
+                        onNavigate = onNavigate
                     )
                 }
             }
