@@ -11,7 +11,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 @Composable
 fun ShareChip(
@@ -37,8 +39,10 @@ fun ShareChip(
         )
 
         Text(
-            text = "Compartilhar",
-            style = MaterialTheme.typography.labelSmall
+            text = "COMPARTILHAR",
+            style = MaterialTheme.typography.labelSmall,
+            letterSpacing = 1.2.sp,
+            fontWeight = FontWeight.Bold
         )
     }
 }

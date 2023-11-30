@@ -12,13 +12,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
@@ -43,8 +42,6 @@ import coil.request.ImageRequest
 import com.mindhub.BuildConfig
 import com.mindhub.common.services.CurrentUser
 import com.mindhub.model.entities.Comment
-import com.mindhub.model.entities.Material
-import com.mindhub.ui.theme.MindHubTheme
 import com.mindhub.view.composables.chips.CommentsChip
 import com.mindhub.view.composables.chips.ScoreChip
 import com.mindhub.view.layouts.SpacedColumn
@@ -67,6 +64,7 @@ fun CommentItem(
         horizontalAlignment = Alignment.Start,
         modifier = Modifier
             .fillMaxWidth()
+            .padding(horizontal = 8.dp)
     ) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -119,7 +117,6 @@ fun CommentItem(
                         Icon(
                             imageVector = Icons.Filled.Delete,
                             contentDescription = null,
-                            tint = Color.Red,
                             modifier = Modifier.size(16.dp)
                         )
                     }
@@ -145,7 +142,7 @@ fun CommentItem(
                 Text(
                     text = "✓ Melhor resposta",
                     style = MaterialTheme.typography.labelLarge,
-                    color = Color(red = 10, green = 163, blue = 36, alpha = 255)
+                    color = Color(red = 10, green = 133, blue = 36, alpha = 255)
                 )
             }
         }
@@ -155,7 +152,7 @@ fun CommentItem(
         Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth().padding(top = 4.dp)
         ) {
             if (isReply == null) {
                 ScoreChip(
@@ -168,18 +165,6 @@ fun CommentItem(
 
             if (comment.replies.isNotEmpty()) {
                 CommentsChip(commentsQuantity = comment.replies.size)
-            }
-
-            if (showBestAnswerButton) {
-                Button(
-                    onClick = { onMarkBestAnswer(comment) },
-                    contentPadding = PaddingValues(0.dp),
-                    shape = RoundedCornerShape(5.dp),
-                    modifier = Modifier
-                        .height(32.dp)
-                ) {
-                    Text(text = "✓")
-                }
             }
 
             if (isReply == null) {
@@ -196,6 +181,22 @@ fun CommentItem(
                     Text(text = "Responder", modifier = Modifier.align(Alignment.CenterVertically))
                 }
             }
+
+            if (showBestAnswerButton) {
+                Button(
+                    onClick = { onMarkBestAnswer(comment) },
+                    contentPadding = PaddingValues(0.dp),
+                    shape = RoundedCornerShape(5.dp),
+                    modifier = Modifier
+                        .height(32.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Star,
+                        contentDescription = null,
+                        modifier = Modifier.size(18.dp)
+                    )
+                }
+            }
         }
 
         if (comment.replies.isNotEmpty()) {
@@ -207,7 +208,7 @@ fun CommentItem(
                 horizontalAlignment = Alignment.Start,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 32.dp)
+                    .padding(start = 32.dp, top = 8.dp)
                     .drawBehind {
                         drawLine(
                             color = lineColor,

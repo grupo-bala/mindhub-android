@@ -16,7 +16,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.mindhub.R
 import com.mindhub.ui.theme.MindHubTheme
 import com.mindhub.view.composables.NavBar
 import com.mindhub.view.composables.TopBar
@@ -28,11 +30,11 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 import com.ramcosta.composedestinations.spec.Direction
 
-enum class Views(val icon: ImageVector, val destination: Direction) {
-    ASK(Icons.Filled.Email, AskHomeDestination),
-    MATERIAL(Icons.Filled.Info, MaterialFeedDestination),
-    EVENT(Icons.Filled.Place, EventFeedDestination),
-    USER(Icons.Filled.AccountCircle, ProfileDestination())
+enum class Views(val icon: Int, val destination: Direction) {
+    ASK(R.drawable.baseline_question_answer_24, AskHomeDestination),
+    MATERIAL(R.drawable.baseline_auto_stories_24, MaterialFeedDestination),
+    EVENT(R.drawable.baseline_place_24, EventFeedDestination),
+    USER(R.drawable.baseline_account_circle_24, ProfileDestination())
 }
 
 @Composable

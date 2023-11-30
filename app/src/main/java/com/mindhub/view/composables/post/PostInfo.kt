@@ -67,12 +67,13 @@ fun PostInfo(
         spacing = 8,
         verticalAlignment = Alignment.CenterVertically,
         horizontalAlignment = Alignment.Start,
-        modifier = Modifier.padding(8.dp)
+        modifier = Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 4.dp)
     ) {
         Text(text = post.title, style = MaterialTheme.typography.titleLarge)
         Text(
             text = "por ${post.user.username}",
             style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.primary,
             modifier = Modifier
                 .clickable {
                     navigator.navigate(ProfileDestination(post.user.username))
@@ -142,8 +143,6 @@ fun PostInfo(
                     onScoreUpdate(-1)
                 },
             )
-
-            CommentsChip(commentsQuantity = howManyComments)
 
             if (post.instanceOf(Event::class)) {
                 val event = post as Event

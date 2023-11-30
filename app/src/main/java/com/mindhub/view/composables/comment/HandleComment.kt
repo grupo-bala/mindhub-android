@@ -41,10 +41,10 @@ fun HandleComment(
         onDismissRequest = { onDismissRequest() }
     ) {
         SpacedColumn(
-            spacing = 8,
+            spacing = 10,
             verticalAlignment = Alignment.CenterVertically,
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier.padding(top = 0.dp, start = 20.dp, end = 16.dp, bottom = 32.dp),
         ) {
             Text(
                 text = if (isUpdate) "Atualizar comentário" else "Adicionar comentário",
