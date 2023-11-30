@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mindhub.model.api.LoginRequest
 import com.mindhub.model.api.UserApi
-import com.mindhub.model.api.UserFakeApi
 import kotlinx.coroutines.launch
 
 class LoginViewModel : ViewModel() {

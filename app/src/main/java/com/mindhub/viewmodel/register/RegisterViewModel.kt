@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mindhub.model.api.RegisterRequest
 import com.mindhub.model.api.UserApi
-import com.mindhub.model.api.UserFakeApi
 import com.mindhub.model.entities.Expertise
 import kotlinx.coroutines.launch
 

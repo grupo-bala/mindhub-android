@@ -1,42 +1,58 @@
 package com.mindhub.viewmodel.profile
 
-import android.net.Uri
+import android.graphics.Bitmap
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mindhub.model.api.UpdateRequest
-import com.mindhub.model.api.UserFakeApi
 import com.mindhub.model.entities.Badge
 import com.mindhub.model.entities.Expertise
 import com.mindhub.common.services.CurrentUser
+import com.mindhub.common.services.ErrorParser
+import com.mindhub.model.api.UpdateInfoRequest
+import com.mindhub.model.api.UserApi
 import kotlinx.coroutines.launch
+import java.io.ByteArrayOutputStream
 
 class EditProfileViewModel() : ViewModel() {
     var name by mutableStateOf(CurrentUser.user!!.name)
     var email by mutableStateOf(CurrentUser.user!!.email)
-    var photo by mutableStateOf<Uri?>(null)
-    var isLoading by mutableStateOf(false)
+    var password by mutableStateOf("")
+    var photo by mutableStateOf<Bitmap?>(null)
+    var feedback by mutableStateOf("")
 
     fun update(
         selectedBadge: Badge,
         selectedExpertises: List<Expertise>,
         onSuccess: () -> Unit,
-        onFailure: (String?) -> Unit
     ) {
         viewModelScope.launch {
             try {
-                isLoading = true
-
-                UserFakeApi.update(UpdateRequest(name, email, selectedExpertises, selectedBadge, photo))
+                UserApi.update(
+                    UpdateInfoRequest(
+                        name,
+                        email,
+                        password,
+                        selectedExpertises
+                    ),
+                    bitMapToByteArray(photo)
+                )
 
                 onSuccess()
             } catch (e: Exception) {
-                onFailure(e.message)
+                feedback = ErrorParser.from(e.message)
             }
+        }
+    }
 
-            isLoading = false
+    private fun bitMapToByteArray(bitmap: Bitmap?): ByteArray? {
+        return if (bitmap == null) {
+            null
+        } else {
+            val stream = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.PNG, 90, stream)
+            stream.toByteArray()
         }
     }
 }
