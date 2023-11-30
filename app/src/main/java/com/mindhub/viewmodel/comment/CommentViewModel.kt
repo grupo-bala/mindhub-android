@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mindhub.model.entities.Comment
@@ -29,10 +30,13 @@ class CommentViewModel : ViewModel() {
                 isLoading = true
 
                 comments.clear()
-                comments.addAll(CommentApi.findAll(postId))
 
-                comments.sortedWith(
-                    compareByDescending<Comment> { it.isBestAnswer }.thenByDescending { it.score }
+                val responseComments = CommentApi.findAll(postId)
+
+                comments.addAll(
+                    responseComments.sortedWith(
+                        compareByDescending<Comment> { it.isBestAnswer }.thenByDescending { it.score }
+                    )
                 )
             } catch (e: Exception) {
                 feedback = ErrorParser.from(e.message)
@@ -54,7 +58,7 @@ class CommentViewModel : ViewModel() {
 
                 comments.add(addedComment)
 
-                comments.sortedWith(
+                comments.sortWith(
                     compareByDescending<Comment> { it.isBestAnswer }.thenByDescending { it.score }
                 )
             } catch (e: Exception) {
@@ -110,7 +114,7 @@ class CommentViewModel : ViewModel() {
                 comments.removeAt(index)
                 comments.add(index, targetComment)
 
-                comments.sortedWith(
+                comments.sortWith(
                     compareByDescending<Comment> { it.isBestAnswer }.thenByDescending { it.score }
                 )
             } catch (e: Exception) {
@@ -190,6 +194,16 @@ class CommentViewModel : ViewModel() {
                     oldBestAnswer.isBestAnswer = false
                 }
 
+                if (oldBestAnswer != null && oldBestAnswer.id == commentId) {
+                    val targetComment = comments.find { it.id == commentId } ?: throw Exception()
+                    val index = comments.indexOf(targetComment)
+
+                    comments.remove(targetComment)
+                    comments.add(index, targetComment)
+
+                    return@launch
+                }
+
                 val targetComment = comments.find { it.id == commentId } ?: throw Exception()
                 val index = comments.indexOf(targetComment)
 
@@ -198,6 +212,10 @@ class CommentViewModel : ViewModel() {
                 targetComment.isBestAnswer = true
 
                 comments.add(index, targetComment)
+
+                comments.sortWith(
+                    compareByDescending<Comment> { it.isBestAnswer }.thenByDescending { it.score }
+                )
             } catch (e: Exception) {
                 feedback = ErrorParser.from(e.message)
 
