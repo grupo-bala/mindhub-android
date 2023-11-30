@@ -26,7 +26,7 @@ abstract class GetPostViewModel : ViewModel() {
                 post!!.userScore = if (post!!.userScore == 0) userScore else 0
             }
 
-            ScoreApi.vote(ScorePostRequest(post!!.id, userScore))
+            ScoreApi.vote(ScorePostRequest(post!!.id, post!!.userScore))
         }
 
         post = post

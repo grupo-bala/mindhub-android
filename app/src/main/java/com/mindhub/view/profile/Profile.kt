@@ -68,7 +68,7 @@ fun Profile(
     val tabs = listOf("Perguntas", "Materiais", "Eventos")
 
     LaunchedEffect(key1 = true) {
-        profileViewModel.loadProfile(username)
+        profileViewModel.loadProfile(username ?: CurrentUser.user!!.username)
     }
 
     AppScaffold(

@@ -29,70 +29,38 @@ class ProfileViewModel(): ViewModel() {
     var isLoading by mutableStateOf(true)
     var feedback by mutableStateOf("")
 
-    fun loadProfile(usernameToLoad: String?) {
+    fun loadProfile(usernameToLoad: String) {
         askPosts.clear()
         materialPosts.clear()
         eventsPosts.clear()
 
-        if (usernameToLoad == username || username == CurrentUser.user!!.username) {
-            return
-        }
-
         isLoading = true
 
-        if (usernameToLoad == null) {
-            username = CurrentUser.user!!.username
-            badge = CurrentUser.user!!.currentBadge
-            xp = CurrentUser.user!!.xp
+        viewModelScope.launch {
+            try {
+                val user = ProfileApi.getUserInformation(usernameToLoad)
 
-            for (expertise in CurrentUser.user!!.expertises) {
-                expertises.add(expertise)
-            }
+                username = user.username
+                badge = user.currentBadge
+                xp = user.xp
 
-            viewModelScope.launch {
-                try {
-                    for (post in AskApi.getUserAsks(CurrentUser.user!!.username)) {
-                        askPosts.add(post)
-                    }
-
-                    for (post in MaterialApi.getUserMaterials(CurrentUser.user!!.username)) {
-                        materialPosts.add(post)
-                    }
-
-                    for (post in EventApi.getUserEvents(CurrentUser.user!!.username)) {
-                        eventsPosts.add(post)
-                    }
-                } catch (e: Exception) {
-                    e.printStackTrace()
+                for (post in AskApi.getUserAsks(username)) {
+                    askPosts.add(post)
                 }
-            }
-        } else {
-            viewModelScope.launch {
-                try {
-                    val user = ProfileApi.getUserInformation(usernameToLoad)
 
-                    username = user.username
-                    badge = user.currentBadge
-                    xp = user.xp
-
-                    for (post in AskApi.getUserAsks(username)) {
-                        askPosts.add(post)
-                    }
-
-                    for (post in MaterialApi.getUserMaterials(username)) {
-                        materialPosts.add(post)
-                    }
-
-                    for (post in EventApi.getUserEvents(username)) {
-                        eventsPosts.add(post)
-                    }
-
-                    for (expertise in user.expertises) {
-                        expertises.add(expertise)
-                    }
-                } catch (e: Exception) {
-                    feedback = ErrorParser.from(e.message)
+                for (post in MaterialApi.getUserMaterials(username)) {
+                    materialPosts.add(post)
                 }
+
+                for (post in EventApi.getUserEvents(username)) {
+                    eventsPosts.add(post)
+                }
+
+                for (expertise in user.expertises) {
+                    expertises.add(expertise)
+                }
+            } catch (e: Exception) {
+                feedback = ErrorParser.from(e.message)
             }
         }
 
