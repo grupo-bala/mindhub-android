@@ -93,7 +93,7 @@ fun Profile(
                     AsyncImage(
                         model = ImageRequest.Builder(LocalContext.current)
                             .data(
-                                "${BuildConfig.apiPrefix}/static/user/${CurrentUser.user!!.username}"
+                                "${BuildConfig.apiPrefix}/static/user/${username ?: CurrentUser.user!!.username}"
                             )
                             .memoryCachePolicy(CachePolicy.DISABLED)
                             .crossfade(true)

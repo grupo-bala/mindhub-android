@@ -76,7 +76,7 @@ fun CommentItem(
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
                         .data(
-                            "${BuildConfig.apiPrefix}/static/user/${CurrentUser.user!!.username}"
+                            "${BuildConfig.apiPrefix}/static/user/${comment.user}"
                         )
                         .memoryCachePolicy(CachePolicy.DISABLED)
                         .crossfade(true)
