@@ -1,5 +1,6 @@
 package com.mindhub.view.composables.post
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -19,9 +20,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.mindhub.R
 import com.mindhub.common.services.CurrentUser
 import com.mindhub.ui.theme.MindHubTheme
 import com.mindhub.view.composables.ErrorModal
@@ -153,7 +157,10 @@ fun PostView(
                             .padding(16.dp)
                             .align(Alignment.BottomEnd)
                     ) {
-                        Icon(imageVector = Icons.Outlined.Email, contentDescription = null)
+                        Image(imageVector = ImageVector
+                            .vectorResource(R.drawable.baseline_add_comment_24),
+                            contentDescription = null
+                        )
                     }
                 }
 

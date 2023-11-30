@@ -32,15 +32,6 @@ class MainActivity : ComponentActivity() {
             MindHubTheme {
                 val navHostEngine = rememberAnimatedNavHostEngine(
                     navHostContentAlignment = Alignment.TopCenter,
-                    rootDefaultAnimations = RootNavGraphDefaultAnimations.ACCOMPANIST_FADING,
-                    defaultAnimationsForNestedNavGraph = mapOf(
-                        NavGraphs.root to NestedNavGraphDefaultAnimations(
-                            enterTransition = {
-                                fadeIn(animationSpec = tween(1000))
-                            },
-                            exitTransition = { fadeOut(animationSpec = tween(1000)) }
-                        )
-                    )
                 )
 
                 DestinationsNavHost(navGraph = NavGraphs.root, engine = navHostEngine)

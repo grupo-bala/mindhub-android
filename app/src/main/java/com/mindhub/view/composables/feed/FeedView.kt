@@ -44,21 +44,19 @@ fun FeedView(
             Tabs(
                 tabs = listOf("Para você", "Mais recentes"),
                 tabsContent = listOf({
-                    Suspended(isLoading = viewModel.isLoadingForYou) {
-                        PostList(
-                            posts = viewModel.forYou,
-                            modifier = Modifier.padding(horizontal = 16.dp),
-                            onClick = onClickItem
-                        )
-                    }
+                    PostList(
+                        posts = viewModel.forYou,
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        isLoading = viewModel.isLoadingForYou,
+                        onClick = onClickItem
+                    )
                 }, {
-                    Suspended(isLoading = viewModel.isLoadingRecents) {
-                        PostList(
-                            posts = viewModel.recents,
-                            modifier = Modifier.padding(horizontal = 16.dp),
-                            onClick = onClickItem
-                        )
-                    }
+                    PostList(
+                        posts = viewModel.recents,
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        isLoading = viewModel.isLoadingRecents,
+                        onClick = onClickItem
+                    )
                 })
             )
 

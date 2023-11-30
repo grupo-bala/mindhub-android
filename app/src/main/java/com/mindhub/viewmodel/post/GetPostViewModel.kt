@@ -19,11 +19,10 @@ abstract class GetPostViewModel : ViewModel() {
             if (userScore == post!!.userScore) {
                 post!!.score += post!!.userScore * -1
                 post!!.userScore = 0
-
             } else {
                 post!!.score += post!!.userScore * -1
-                post!!.score += if (post!!.userScore == 0) userScore else 0
-                post!!.userScore = if (post!!.userScore == 0) userScore else 0
+                post!!.score += userScore
+                post!!.userScore = userScore
             }
 
             ScoreApi.vote(ScorePostRequest(post!!.id, post!!.userScore))

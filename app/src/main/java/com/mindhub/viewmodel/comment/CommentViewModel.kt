@@ -101,8 +101,8 @@ class CommentViewModel : ViewModel() {
                     targetComment.userScore = 0
                 } else {
                     targetComment.score += targetComment.userScore * -1
-                    targetComment.score += if (targetComment.userScore == 0) userScore else 0
-                    targetComment.userScore = if (targetComment.userScore == 0) userScore else 0
+                    targetComment.score += userScore
+                    targetComment.userScore = userScore
                 }
 
                 ScoreApi.vote(ScoreCommentRequest(commentId, targetComment.userScore))

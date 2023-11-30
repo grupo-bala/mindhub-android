@@ -135,7 +135,8 @@ fun AskResults(
                 } else {
                     PostList(
                         posts = searchViewModel.asks,
-                        onClick = { navigator.navigate(AskViewDestination(it.id)) }
+                        onClick = { navigator.navigate(AskViewDestination(it.id)) },
+                        isLoading = searchViewModel.isLoading
                     )
                 }
             }

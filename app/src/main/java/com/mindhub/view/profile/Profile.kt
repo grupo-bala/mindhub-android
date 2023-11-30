@@ -170,7 +170,8 @@ fun Profile(
                     Spacer(modifier = Modifier.height(16.dp))
 
                     Suspended(
-                        isLoading = profileViewModel.isLoading
+                        isLoading = profileViewModel.isLoading,
+                        loadingSize = 64.dp,
                     ) {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
@@ -197,29 +198,26 @@ fun Profile(
                 Tabs(
                     tabs = tabs,
                     tabsContent = listOf({
-                        Suspended(isLoading = profileViewModel.isLoading) {
-                            PostList(
-                                posts = profileViewModel.askPosts,
-                                modifier = Modifier.padding(horizontal = 16.dp),
-                                onClick = { navigator.navigate(AskViewDestination(it.id)) }
-                            )
-                        }
+                        PostList(
+                            posts = profileViewModel.askPosts,
+                            modifier = Modifier.padding(horizontal = 16.dp),
+                            isLoading = profileViewModel.isLoading,
+                            onClick = { navigator.navigate(AskViewDestination(it.id)) }
+                        )
                     }, {
-                        Suspended(isLoading = profileViewModel.isLoading) {
-                            PostList(
-                                posts = profileViewModel.materialPosts,
-                                modifier = Modifier.padding(horizontal = 16.dp),
-                                onClick = { navigator.navigate(MaterialViewDestination(it.id)) }
-                            )
-                        }
+                        PostList(
+                            posts = profileViewModel.materialPosts,
+                            modifier = Modifier.padding(horizontal = 16.dp),
+                            isLoading = profileViewModel.isLoading,
+                            onClick = { navigator.navigate(MaterialViewDestination(it.id)) }
+                        )
                     }, {
-                        Suspended(isLoading = profileViewModel.isLoading) {
-                            PostList(
-                                posts = profileViewModel.eventsPosts,
-                                modifier = Modifier.padding(horizontal = 16.dp),
-                                onClick = { navigator.navigate(EventViewDestination(it.id)) }
-                            )
-                        }
+                        PostList(
+                            posts = profileViewModel.eventsPosts,
+                            modifier = Modifier.padding(horizontal = 16.dp),
+                            isLoading = profileViewModel.isLoading,
+                            onClick = { navigator.navigate(EventViewDestination(it.id)) }
+                        )
                     })
                 )
             }
