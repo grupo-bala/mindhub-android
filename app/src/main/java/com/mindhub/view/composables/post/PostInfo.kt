@@ -1,6 +1,5 @@
 package com.mindhub.view.composables.post
 
-import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -12,16 +11,24 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
+import coil.request.ImageRequest
+import com.mindhub.BuildConfig
 import com.mindhub.common.ext.getRoute
 import com.mindhub.common.services.CurrentUser
 import com.mindhub.model.entities.Ask
@@ -64,7 +71,9 @@ fun PostInfo(
         Text(text = "por ${post.user.username}", style = MaterialTheme.typography.labelLarge)
 
         var destination: Direction? = null
-        var askFile: Uri? = null
+        var hasImage by remember {
+            mutableStateOf(false)
+        }
 
         Row {
             if (post.instanceOf(Ask::class)) {
@@ -75,7 +84,7 @@ fun PostInfo(
                     label = { Text(text = postWithExpertise.expertise.title) }
                 )
 
-                askFile = post.image
+                hasImage = post.hasImage
                 destination = AskUpdateDestination(post)
             } else if (post.instanceOf(Material::class)) {
                 val postWithExpertise = post as Material
@@ -94,9 +103,13 @@ fun PostInfo(
         Text(text = post.content)
         Spacer(modifier = Modifier.size(8.dp))
 
-        if (askFile != null) {
-            AsyncImage(
-                model = askFile,
+        if (hasImage) {
+            SubcomposeAsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data("${BuildConfig.apiPrefix}/static/ask/${post.id}")
+                    .crossfade(true)
+                    .build(),
+                loading = { CircularProgressIndicator() },
                 contentDescription = null,
                 modifier = Modifier
                     .height(200.dp)
@@ -172,7 +185,8 @@ fun PostInfoPreview() {
         score = 76,
         postDate = LocalDateTime.now(),
         userScore = 0,
-        user = user
+        user = user,
+        hasImage = false
     )
 
     MindHubTheme {
