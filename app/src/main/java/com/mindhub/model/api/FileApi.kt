@@ -11,8 +11,21 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
 
 object FileApi {
-    suspend fun upload(type: String, id: Int, image: ByteArray) {
+    suspend fun uploadPost(type: String, id: Int, image: ByteArray) {
         val response = Api.post("${BuildConfig.apiPrefix}/static/$type/$id") {
+            contentType(ContentType.Application.OctetStream)
+            setBody(image)
+            header("Authorization", "Bearer ${CurrentUser.token}")
+        }
+
+        if (response.status != HttpStatusCode.Created) {
+            println(response.body<ApiError>().message)
+            throw Exception(response.body<ApiError>().message)
+        }
+    }
+
+    suspend fun uploadUser(username: String, image: ByteArray) {
+        val response = Api.post("${BuildConfig.apiPrefix}/static/user/$username") {
             contentType(ContentType.Application.OctetStream)
             setBody(image)
             header("Authorization", "Bearer ${CurrentUser.token}")

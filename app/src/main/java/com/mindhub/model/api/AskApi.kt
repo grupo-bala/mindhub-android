@@ -52,7 +52,7 @@ object AskApi: AskProvider {
         val createdAsk = response.body<Ask>()
 
         if (img != null) {
-            FileApi.upload("ask", createdAsk.id, img)
+            FileApi.uploadPost("ask", createdAsk.id, img)
         }
 
         return createdAsk
