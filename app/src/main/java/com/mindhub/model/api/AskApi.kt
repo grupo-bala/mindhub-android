@@ -18,7 +18,7 @@ import kotlinx.serialization.Serializable
 
 interface AskProvider {
     suspend fun create(ask: AskRequest, img: ByteArray?): Ask
-    suspend fun update(askUpdated: Ask)
+    suspend fun update(askUpdated: AskRequest, askId: Int, img: ByteArray?)
     suspend fun remove(askId: Int)
     suspend fun getOne(askId: Int): Ask
     suspend fun get(askTitle: String): List<Ask>
@@ -32,7 +32,8 @@ data class AskRequest(
     val title: String,
     val content: String,
     val expertise: String,
-    val postDate: String
+    val postDate: String,
+    val hasImage: Boolean
 )
 
 object AskApi: AskProvider {
@@ -57,8 +58,8 @@ object AskApi: AskProvider {
         return createdAsk
     }
 
-    override suspend fun update(askUpdated: Ask) {
-        val response: HttpResponse = Api.patch("${BuildConfig.apiPrefix}/ask/${askUpdated.id}") {
+    override suspend fun update(askUpdated: AskRequest, askId: Int, img: ByteArray?) {
+        val response: HttpResponse = Api.patch("${BuildConfig.apiPrefix}/ask/$askId") {
             contentType(ContentType.Application.Json)
             setBody(askUpdated)
             header("Authorization", "Bearer ${CurrentUser.token}")
@@ -67,6 +68,11 @@ object AskApi: AskProvider {
         if (response.status != HttpStatusCode.OK) {
             println(response.body<ApiError>().message)
             throw Exception(response.body<ApiError>().message)
+        }
+
+        if (img != null) {
+            FileApi.upload("ask", askId, img)
+
         }
 
         return response.body()
