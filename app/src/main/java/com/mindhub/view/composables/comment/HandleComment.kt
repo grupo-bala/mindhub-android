@@ -68,6 +68,7 @@ fun HandleComment(
                         onSuccess()
                     },
                     shape = RoundedCornerShape(5.dp),
+                    enabled = handleCommentViewModel.commentText.isNotEmpty(),
                     modifier = Modifier.weight(1f),
                 ) {
                     Icon(imageVector = if (isUpdate) Icons.Filled.Create else Icons.Filled.Add, contentDescription = null)
@@ -80,7 +81,7 @@ fun HandleComment(
                 if (handleCommentViewModel.commentText.isNotEmpty()) {
                     Button(
                         onClick = { handleCommentViewModel.clear() },
-                        shape = RoundedCornerShape(5.dp)
+                        shape = RoundedCornerShape(5.dp),
                     ) {
                         Icon(imageVector = Icons.Filled.Delete, contentDescription = null)
                     }
