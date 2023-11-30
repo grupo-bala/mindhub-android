@@ -28,12 +28,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
+import coil.request.CachePolicy
 import coil.request.ImageRequest
 import com.mindhub.BuildConfig
 import com.mindhub.common.services.CurrentUser
@@ -93,9 +95,11 @@ fun Profile(
                             .data(
                                 "${BuildConfig.apiPrefix}/static/user/${CurrentUser.user!!.username}"
                             )
+                            .memoryCachePolicy(CachePolicy.DISABLED)
                             .crossfade(true)
                             .build(),
                         contentDescription = null,
+                        contentScale = ContentScale.Crop,
                         modifier = Modifier
                             .clip(CircleShape)
                             .width(128.dp)
@@ -114,14 +118,14 @@ fun Profile(
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             MeasureViewWidth(viewToMeasure = {
-                                Text(text = profileViewModel.username)
+                                Text(text = profileViewModel.name)
                             }) { width ->
                                 Box(
                                     modifier = Modifier
                                         .fillMaxWidth(),
                                     contentAlignment = Alignment.Center
                                 ) {
-                                    Text(text = profileViewModel.username)
+                                    Text(text = profileViewModel.name)
 
                                     if (username == null) {
                                         IconButton(

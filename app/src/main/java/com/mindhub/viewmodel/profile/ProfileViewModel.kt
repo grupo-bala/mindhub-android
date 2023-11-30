@@ -8,7 +8,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mindhub.common.services.ErrorParser
-import com.mindhub.common.services.CurrentUser
 import com.mindhub.model.api.AskApi
 import com.mindhub.model.api.EventApi
 import com.mindhub.model.api.MaterialApi
@@ -20,6 +19,7 @@ import kotlinx.coroutines.launch
 
 class ProfileViewModel(): ViewModel() {
     var username by mutableStateOf("carregando...")
+    var name by mutableStateOf("carregando...")
     var askPosts: MutableList<Post> = mutableStateListOf<Post>()
     var materialPosts: MutableList<Post> = mutableStateListOf<Post>()
     var eventsPosts: MutableList<Post> = mutableStateListOf<Post>()
@@ -41,6 +41,7 @@ class ProfileViewModel(): ViewModel() {
                 val user = ProfileApi.getUserInformation(usernameToLoad)
 
                 username = user.username
+                name = user.name
                 badge = user.currentBadge
                 xp = user.xp
 

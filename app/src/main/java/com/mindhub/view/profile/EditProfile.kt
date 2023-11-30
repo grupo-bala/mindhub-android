@@ -54,6 +54,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
+import coil.request.CachePolicy
 import coil.request.ImageRequest
 import com.mindhub.BuildConfig
 import com.mindhub.model.entities.Badge
@@ -151,6 +152,7 @@ fun EditProfile(
                                 ?: "${BuildConfig.apiPrefix}/static/user/${CurrentUser.user!!.username}"
                         )
                         .crossfade(true)
+                        .memoryCachePolicy(CachePolicy.DISABLED)
                         .build(),
                     contentDescription = null,
                     modifier = Modifier

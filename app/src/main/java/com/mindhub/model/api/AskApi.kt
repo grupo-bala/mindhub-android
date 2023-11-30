@@ -71,7 +71,7 @@ object AskApi: AskProvider {
         }
 
         if (img != null) {
-            FileApi.upload("ask", askId, img)
+            FileApi.uploadPost("ask", askId, img)
 
         }
 
