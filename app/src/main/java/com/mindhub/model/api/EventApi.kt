@@ -54,13 +54,15 @@ object EventApi : EventProvider {
             LatLng(event.latitude, event.longitude)
         ).await()
 
-        val component = results[0].addressComponents.first {
-            it.types.any { localType ->
-                localType.name.lowercase() == "administrative_area_level_2"
-            }
+        try {
+            event.localName = results[0].addressComponents.first {
+                it.types.any { localType ->
+                    localType.name.lowercase() == "administrative_area_level_2"
+                }
+            }.longName
+        } catch (e: Exception) {
+            event.localName = "Desconhecido"
         }
-
-        event.localName = component.longName
     }
 
     override suspend fun create(event: EventRequest): Event {
