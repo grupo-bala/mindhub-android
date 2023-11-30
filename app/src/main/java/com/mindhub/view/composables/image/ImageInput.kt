@@ -41,8 +41,13 @@ import com.mindhub.view.layouts.SpacedColumn
 
 @Composable
 fun ImageInput(
+    urlImage: String? = null,
     setImage: (Bitmap?) -> Unit
 ) {
+    var currentUrl by remember {
+        mutableStateOf(urlImage)
+    }
+
     var image by remember {
         mutableStateOf<Bitmap?>(null)
     }
@@ -99,13 +104,14 @@ fun ImageInput(
                 Text(text = buttonLabelFile)
             }
 
-            if (image != null) {
+            if (currentUrl != null || image != null) {
                 buttonLabelFile = "Editar foto"
 
                 Spacer(modifier = Modifier.width(8.dp))
 
                 Button(
                     onClick = {
+                        currentUrl = null
                         image = null
                         buttonLabelFile = "Adicionar foto"
                         setImage(image)
@@ -123,9 +129,9 @@ fun ImageInput(
             }
         }
 
-        if (image != null) {
+        if (currentUrl != null || image != null) {
             AsyncImage(
-                model = image!!,
+                model = image ?: currentUrl,
                 contentDescription = null,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -150,6 +156,6 @@ fun ImageInputPreview() {
     var image: Bitmap? = null
 
     MindHubTheme {
-        ImageInput { image = it }
+        ImageInput() { image = it }
     }
 }
