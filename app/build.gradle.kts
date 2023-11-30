@@ -93,5 +93,5 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
     implementation("io.coil-kt:coil-compose:2.5.0")
-
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.0-beta01")
 }
