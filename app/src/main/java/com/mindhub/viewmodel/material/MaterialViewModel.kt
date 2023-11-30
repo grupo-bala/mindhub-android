@@ -21,7 +21,7 @@ class MaterialViewModel: ViewModel(), PostViewModelInterface {
     override var title by mutableStateOf("")
     override var content by mutableStateOf("")
     override var feedback: String? by mutableStateOf("")
-    override var expertise: Expertise? by mutableStateOf(Expertise(""))
+    override var expertise: Expertise? by mutableStateOf(null)
 
     override fun create(
         onSuccess: (Post) -> Unit,

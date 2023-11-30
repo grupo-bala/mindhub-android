@@ -23,7 +23,7 @@ class AskViewModel: ViewModel(), PostViewModelInterface {
     override var title by mutableStateOf("")
     override var content by mutableStateOf("")
     override var feedback: String? by mutableStateOf("")
-    override var expertise: Expertise? by mutableStateOf(Expertise(""))
+    override var expertise: Expertise? by mutableStateOf(null)
     var hasImage by mutableStateOf(false)
     var tempImage by mutableStateOf<Bitmap?>(null)
 

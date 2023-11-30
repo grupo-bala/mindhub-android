@@ -85,7 +85,7 @@ fun PostInputs(
                         onExpandedChange = { }
                     ) {
                         OutlinedTextField(
-                            value = viewModel.expertise!!.title ?: "",
+                            value = viewModel.expertise?.title ?: "",
                             readOnly = true,
                             label = { Text(text = "Categoria*") },
                             onValueChange = {},
