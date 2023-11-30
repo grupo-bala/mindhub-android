@@ -17,6 +17,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -44,11 +45,12 @@ fun AskResults(
     navigator: DestinationsNavigator
 ) {
     val searchViewModel: SearchAskViewModel = viewModel()
+    val input = searchViewModel.inputText.collectAsState()
 
     LaunchedEffect(key1 = true) {
-        if (searchViewModel.inputTitle != "") {
-            searchViewModel.get {  }
-        }
+        val lastInput = input.value
+        searchViewModel.updateInput("")
+        searchViewModel.updateInput(lastInput)
     }
 
     AppScaffold(
@@ -80,7 +82,7 @@ fun AskResults(
                             )
                         }
 
-                        IconButton(onClick = { navigator.navigate(AskCreateDestination(title = searchViewModel.inputTitle)) }) {
+                        IconButton(onClick = { navigator.navigate(AskCreateDestination(title = input.value)) }) {
                             Icon(
                                 imageVector = Icons.Filled.AddCircle,
                                 contentDescription = null,
@@ -103,11 +105,9 @@ fun AskResults(
             OutlinedTextField(
                 leadingIcon = { Icon(imageVector = Icons.Filled.Search, contentDescription = null) },
                 placeholder = { Text(text = "Digite a sua dúvida") },
-                value = searchViewModel.inputTitle,
+                value = input.value,
                 onValueChange = {
-                    searchViewModel.inputTitle = it
-                    searchViewModel.isFirstSearch = false
-                    searchViewModel.get {  }
+                    searchViewModel.updateInput(it)
                 },
                 modifier = Modifier.fillMaxWidth()
             )

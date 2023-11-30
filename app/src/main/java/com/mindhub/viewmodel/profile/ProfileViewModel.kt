@@ -30,6 +30,10 @@ class ProfileViewModel(): ViewModel() {
     var feedback by mutableStateOf("")
 
     fun loadProfile(usernameToLoad: String?) {
+        askPosts.clear()
+        materialPosts.clear()
+        eventsPosts.clear()
+
         if (usernameToLoad == username || username == CurrentUser.user!!.username) {
             return
         }

@@ -8,27 +8,50 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mindhub.model.api.AskApi
 import com.mindhub.model.entities.Ask
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+@OptIn(FlowPreview::class)
 class SearchAskViewModel : ViewModel() {
     var asks = mutableStateListOf<Ask>()
-    var inputTitle by mutableStateOf("")
     var isLoading by mutableStateOf(false)
     var isFirstSearch by mutableStateOf(true)
 
-    fun get(
-        onFailure: (String?) -> Unit
-    ) {
+    private val _input = MutableStateFlow("")
+    val inputText: StateFlow<String> = _input
+
+    fun updateInput(input: String) {
+        _input.update { input }
+    }
+
+    init {
         viewModelScope.launch {
             try {
-                isLoading = true
-                asks.clear()
-                asks.addAll(AskApi.get(inputTitle))
-            } catch (e: Exception) {
-                onFailure(e.message)
-            }
+                inputText.debounce(500).collectLatest {
+                    if (it.isNotEmpty()) {
+                        isLoading = true
+                        isFirstSearch = false
 
-            isLoading = false
+                        val result = AskApi.get(it)
+
+                        println(it)
+                        println(result)
+
+                        asks.clear()
+                        asks.addAll(result)
+
+                        println(asks)
+                        isLoading = false
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
 }
