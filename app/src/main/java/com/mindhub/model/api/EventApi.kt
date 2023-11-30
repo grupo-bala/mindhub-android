@@ -121,11 +121,29 @@ object EventApi : EventProvider {
     }
 
     override suspend fun getForYou(page: Int): List<Event> {
-        return listOf()
+        val response: HttpResponse = Api.get("${BuildConfig.apiPrefix}/events/for-you") {
+            header("Authorization", "Bearer ${CurrentUser.token}")
+        }
+
+        if (response.status != HttpStatusCode.OK) {
+            println(response.body<ApiError>().message)
+            throw Exception(response.body<ApiError>().message)
+        }
+
+        return response.body()
     }
 
     override suspend fun getRecents(page: Int): List<Event> {
-        return listOf()
+        val response: HttpResponse = Api.get("${BuildConfig.apiPrefix}/events/recents") {
+            header("Authorization", "Bearer ${CurrentUser.token}")
+        }
+
+        if (response.status != HttpStatusCode.OK) {
+            println(response.body<ApiError>().message)
+            throw Exception(response.body<ApiError>().message)
+        }
+
+        return response.body()
     }
 
     override suspend fun getUserEvents(username: String): List<Event> {
@@ -141,91 +159,3 @@ object EventApi : EventProvider {
         return response.body()
     }
 }
-
-//object EventFakeApi : EventProvider {
-//    val events = mutableListOf<Event>().also {
-//        val user = User(
-//            "João",
-//            "joaum123@gmail.com",
-//            "jjaum",
-//            0,
-//            Badge("", 0),
-//            listOf(),
-//            listOf(),
-//            null
-//        )
-//        it.add(Event(IdManager.id++, user, "Teste 1", userScore = 0, "teste", 2, LocalDateTime.now(), LocalDateTime.now(), 0.0, 0.0, "Quixadá"))
-//        it.add(Event(IdManager.id++, user, "Teste 2", userScore = 0, "teste", 2, LocalDateTime.now(), LocalDateTime.now(), 0.0, 0.0, "Fortaleza"))
-//        it.add(Event(IdManager.id++, user, "Teste 3", userScore = 0, "teste", 2, LocalDateTime.now(), LocalDateTime.now(), 0.0, 0.0, "Quixeramobim"))
-//    }
-//
-//    override suspend fun create(event: Event): Event {
-//        setLocalName(event)
-//
-//        events.add(
-//            event.apply { this.id = IdManager.id++ }
-//        )
-//
-//        return event
-//    }
-//
-//    private fun setLocalName(event: Event) {
-//        val context = GeoApiContext.Builder()
-//            .apiKey(BuildConfig.apiKey)
-//            .build()
-//
-//        val results = GeocodingApi.reverseGeocode(
-//            context,
-//            LatLng(event.latitude, event.longitude)
-//        ).await()
-//
-//        val component = results[0].addressComponents.first {
-//            it.types.any { localType ->
-//                localType.name.lowercase() == "administrative_area_level_2"
-//            }
-//        }
-//
-//        event.localName = component.longName
-//    }
-//
-//    override suspend fun update(eventUpdated: Event) {
-//        val event = events.find { it.id == eventUpdated.id} ?: throw Exception()
-//
-//        event.title = eventUpdated.title
-//        event.content = eventUpdated.content
-//        event.latitude = eventUpdated.latitude
-//        event.longitude = eventUpdated.longitude
-//        event.date = eventUpdated.date
-//        setLocalName(event)
-//    }
-//
-//    override suspend fun remove(eventId: Int) {
-//        if(!events.removeIf { it.id == eventId }) {
-//            throw Exception()
-//        }
-//    }
-//
-//    override suspend fun get(id: Int): Event {
-//        return events.find { it.id == id } ?: throw Exception()
-//    }
-//
-//    override suspend fun getUserEvents(username: String): List<Event> {
-//        val filtered = events.filter {
-//            it.user.username == username
-//        }
-//
-//        return filtered.reversed()
-//    }
-//
-//    override suspend fun getForYou(page: Int): List<Event> {
-//        return events.filter {
-//            it.user.username != CurrentUser.user!!.username
-//        }.sortedBy { it.score }
-//    }
-//
-//    override suspend fun getRecents(page: Int): List<Event> {
-//        return events.filter {
-//            it.user.username != CurrentUser.user!!.username
-//        }.sortedBy { it.postDate }
-//    }
-//}
