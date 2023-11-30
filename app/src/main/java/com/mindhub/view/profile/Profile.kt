@@ -23,6 +23,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.InputChip
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -66,7 +67,9 @@ fun Profile(
 
     val tabs = listOf("Perguntas", "Materiais", "Eventos")
 
-    profileViewModel.loadProfile(username)
+    LaunchedEffect(key1 = true) {
+        profileViewModel.loadProfile(username)
+    }
 
     AppScaffold(
         currentView = Views.USER,
@@ -226,7 +229,9 @@ fun Profile(
                     Icon(
                         imageVector = ImageVector.vectorResource(R.drawable.podium),
                         contentDescription = null,
-                        modifier = Modifier.height(32.dp).width(32.dp)
+                        modifier = Modifier
+                            .height(32.dp)
+                            .width(32.dp)
                     )
                 }
             }
