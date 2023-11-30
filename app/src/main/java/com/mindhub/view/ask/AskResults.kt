@@ -21,6 +21,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -82,7 +84,12 @@ fun AskResults(
                             )
                         }
 
-                        IconButton(onClick = { navigator.navigate(AskCreateDestination(title = input.value)) }) {
+                        IconButton(
+                            onClick = { navigator.navigate(AskCreateDestination(title = input.value)) },
+                            modifier = Modifier.semantics {
+                                contentDescription = "AddAskButton"
+                            }
+                        ) {
                             Icon(
                                 imageVector = Icons.Filled.AddCircle,
                                 contentDescription = null,

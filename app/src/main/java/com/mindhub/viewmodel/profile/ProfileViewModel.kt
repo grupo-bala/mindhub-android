@@ -58,10 +58,13 @@ class ProfileViewModel(): ViewModel() {
                     eventsPosts.add(post)
                 }
 
+                println(eventsPosts)
+
                 for (expertise in user.expertises) {
                     expertises.add(expertise)
                 }
             } catch (e: Exception) {
+                e.printStackTrace()
                 feedback = ErrorParser.from(e.message)
             }
         }

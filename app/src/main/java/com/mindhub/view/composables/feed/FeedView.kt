@@ -11,6 +11,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.mindhub.model.entities.Post
 import com.mindhub.view.composables.Suspended
@@ -65,6 +67,9 @@ fun FeedView(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .padding(16.dp)
+                    .semantics {
+                        contentDescription = "AddPostButton"
+                    }
             ) {
                 Icon(imageVector = Icons.Outlined.Add, contentDescription = null)
             }

@@ -23,7 +23,9 @@ class FeedAskViewModel : ViewModel(), FeedPostViewModel {
                 isLoadingForYou = true
                 forYou.clear()
                 forYou.addAll(AskApi.getForYou())
-            } catch (_: Exception) { }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
 
             isLoadingForYou = false
         }
@@ -35,7 +37,9 @@ class FeedAskViewModel : ViewModel(), FeedPostViewModel {
                 isLoadingRecents = true
                 recents.clear()
                 recents.addAll(AskApi.getRecents())
-            } catch (_: Exception) { }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
 
             isLoadingRecents = false
         }
