@@ -39,8 +39,6 @@ class MaterialViewModel: ViewModel(), PostViewModelInterface {
                     )
                 )
 
-                println(post.id)
-
                 onSuccess(post)
             } catch (e: Exception) {
                 e.printStackTrace()

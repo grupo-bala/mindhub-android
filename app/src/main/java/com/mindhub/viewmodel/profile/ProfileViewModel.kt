@@ -24,7 +24,7 @@ class ProfileViewModel(): ViewModel() {
     var materialPosts: MutableList<Post> = mutableStateListOf<Post>()
     var eventsPosts: MutableList<Post> = mutableStateListOf<Post>()
     var xp by mutableIntStateOf(0)
-    var badge by mutableStateOf<Badge>(Badge("", 0))
+    var badge by mutableStateOf<Badge>(Badge("", 0, 0))
     var expertises = mutableStateListOf<Expertise>()
     var isLoading by mutableStateOf(true)
     var feedback by mutableStateOf("")

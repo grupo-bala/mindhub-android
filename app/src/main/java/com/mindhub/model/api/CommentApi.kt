@@ -65,8 +65,6 @@ object CommentApi : CommentProvider {
             throw Exception(response.body<ApiError>().message)
         }
 
-        println(response.bodyAsText())
-
         return response.body()
     }
 

@@ -45,7 +45,7 @@ fun EventUpdate(
 @Composable
 fun EventUpdatePreview() {
     MindHubTheme {
-        val userInfo = User("João", "joaum123@gmail.com", "jjaum", 0, Badge("", 0), listOf(), listOf(), null)
+        val userInfo = User("João", "joaum123@gmail.com", "jjaum", 0, Badge("", 0, 0), listOf(), listOf(), null)
 
         EventUpdate(
             navigator = EmptyDestinationsNavigator,

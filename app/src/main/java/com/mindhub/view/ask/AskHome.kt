@@ -90,7 +90,7 @@ fun AskHomePreview() {
         email = "pedro@gmail.com",
         username = "pedro123",
         xp = 0,
-        currentBadge = Badge("Teste", 0),
+        currentBadge = Badge("Teste", 0, 0),
         badges = listOf(),
         expertises = listOf()
     )

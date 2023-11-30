@@ -34,7 +34,6 @@ class RegisterViewModel : ViewModel() {
                 UserApi.register(RegisterRequest(name, email, username, password, selectedExpertises.map { it.title }))
                 onSuccess()
             } catch (e: Exception) {
-                println(e)
                 onFailure(e.message)
             }
 

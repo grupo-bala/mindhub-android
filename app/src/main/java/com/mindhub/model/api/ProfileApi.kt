@@ -34,7 +34,7 @@ object ProfileFakeApi: ProfileProvider {
                 email = "admin@admin.com",
                 username = "admin",
                 xp = 0,
-                currentBadge = Badge("Aprendiz", 0),
+                currentBadge = Badge("Aprendiz", 0, 0),
                 badges = listOf(),
                 expertises = listOf(
                     Expertise("Matemática"),
@@ -50,7 +50,7 @@ object ProfileFakeApi: ProfileProvider {
                 email = "ana@gmail.com",
                 username = "anamaria",
                 xp = 100,
-                currentBadge = Badge("Aprendiz", 0),
+                currentBadge = Badge("Aprendiz", 0, 0),
                 badges = listOf(),
                 expertises = listOf(
                     Expertise("Geografia"),

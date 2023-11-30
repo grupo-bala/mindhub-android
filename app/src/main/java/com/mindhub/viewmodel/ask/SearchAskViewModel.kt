@@ -39,13 +39,9 @@ class SearchAskViewModel : ViewModel() {
 
                         val result = AskApi.get(it)
 
-                        println(it)
-                        println(result)
-
                         asks.clear()
                         asks.addAll(result)
 
-                        println(asks)
                         isLoading = false
                     }
                 }

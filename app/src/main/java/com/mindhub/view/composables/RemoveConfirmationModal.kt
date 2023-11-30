@@ -39,7 +39,7 @@ fun RemoveConfirmationModalPreview() {
 
         Surface(modifier = Modifier.fillMaxSize()) {
             RemoveConfirmationModal(
-                onConfirmation = { println("removed") },
+                onConfirmation = { },
                 onDismissRequest = {  }
             )
         }

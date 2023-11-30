@@ -17,5 +17,6 @@ data class Ask(
     @Serializable(DateSerializer::class)
     override var postDate: LocalDateTime,
     var expertise: Expertise,
-    var hasImage: Boolean
+    var hasImage: Boolean,
+    var hasBestAnswer: Boolean,
 ) : Post

@@ -23,7 +23,6 @@ class LoginViewModel : ViewModel() {
                 UserApi.login(LoginRequest(email, password))
                 onSuccess()
             } catch (e: Exception) {
-                println(e)
                 onFailure(e.message)
             }
 

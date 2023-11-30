@@ -53,7 +53,7 @@ fun AskUpdatePreview() {
         username = "username",
         email = "user@gmail.com",
         xp = 727,
-        currentBadge = Badge("Aprendiz", 0),
+        currentBadge = Badge("Aprendiz", 0, 0),
         badges = listOf(),
         expertises = listOf(Expertise("Matemática"), Expertise("Geografia"), Expertise("Química"))
     )
@@ -67,7 +67,8 @@ fun AskUpdatePreview() {
         postDate = LocalDateTime.now(),
         score = 0,
         userScore = 0,
-        hasImage = false
+        hasImage = false,
+        hasBestAnswer = false,
     )
 
     MaterialTheme {

@@ -163,7 +163,7 @@ fun RankingPreview() {
         email = "admin@admin.com",
         username = "admin",
         xp = 0,
-        currentBadge = Badge("Aprendiz", 0),
+        currentBadge = Badge("Aprendiz", 0, 0),
         badges = listOf(),
         expertises = listOf(
             Expertise("Matemática"),

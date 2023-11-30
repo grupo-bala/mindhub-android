@@ -180,7 +180,7 @@ fun PostInfo(
 @Preview(showBackground = true)
 @Composable
 fun PostInfoPreview() {
-    val user = User("", "", "teste76", 0, Badge("", 0), listOf(), listOf(), null)
+    val user = User("", "", "teste76", 0, Badge("", 0, 0), listOf(), listOf(), null)
     val ask = Ask(
         id = 0,
         title = "Produto das raízes com equação de 2 grau",
@@ -194,7 +194,8 @@ fun PostInfoPreview() {
         postDate = LocalDateTime.now(),
         userScore = 0,
         user = user,
-        hasImage = false
+        hasImage = false,
+        hasBestAnswer = true,
     )
 
     MindHubTheme {

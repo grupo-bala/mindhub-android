@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material3.Divider
@@ -20,10 +21,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.mindhub.R
 import com.mindhub.common.ext.ellipsis
 import com.mindhub.common.ext.toBrazilianDateFormat
+import com.mindhub.model.entities.Ask
 import com.mindhub.model.entities.Badge
 import com.mindhub.model.entities.Event
 import com.mindhub.model.entities.Post
@@ -52,6 +58,47 @@ fun PostItem(
             Column(
                 modifier = Modifier.weight(1.0f)
             ) {
+                if (post.instanceOf(Ask::class)) {
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        val askPost = post as Ask
+
+                        if (askPost.hasBestAnswer) {
+                            Icon(
+                                imageVector = Icons.Outlined.Check,
+                                contentDescription = null,
+                                tint = Color.Green,
+                                modifier = Modifier.size(16.dp)
+                            )
+
+                            Spacer(modifier = Modifier.width(2.dp))
+
+                            Text(
+                                text = "Respondida",
+                                style = MaterialTheme.typography.labelSmall,
+                                color = Color.Green,
+                            )
+                        } else {
+                            Icon(
+                                imageVector = ImageVector.vectorResource(R.drawable.clock),
+                                tint = Color.Gray,
+                                contentDescription = null,
+                                modifier = Modifier.size(16.dp)
+                            )
+
+                            Text(
+                                text = "Aguardando resposta...",
+                                style = MaterialTheme.typography.labelSmall,
+                                color = Color.Gray
+                            )
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(2.dp))
+
                 Text(
                     text = post.title,
                     style = MaterialTheme.typography.titleMedium
@@ -115,7 +162,7 @@ fun PostItem(
 @Preview(showBackground = true)
 @Composable
 fun PostItemPreview() {
-    val user = User("", "", "teste76", 0, Badge("", 0), listOf(), listOf(), null)
+    val user = User("", "", "teste76", 0, Badge("", 0, 0), listOf(), listOf(), null)
     val event = Event(
         id = 0,
         title = "Produto das raízes com equação de 2 grau",
