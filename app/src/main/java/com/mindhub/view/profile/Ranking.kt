@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.mindhub.BuildConfig
 import com.mindhub.common.services.CurrentUser
 import com.mindhub.model.entities.Badge
 import com.mindhub.model.entities.Expertise
@@ -67,7 +68,9 @@ fun Ranking(
             ) {
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data(CurrentUser.user!!.profilePicture ?: "https://picsum.photos/200") // TODO: change with the user profile picture
+                        .data(
+                            "${BuildConfig.apiPrefix}/static/user/${CurrentUser.user!!.username}"
+                        )
                         .crossfade(true)
                         .build(),
                     contentDescription = null,
@@ -88,59 +91,65 @@ fun Ranking(
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            Button(
-                onClick = {
-                    navigator.navigate(ProfileDestination(rankingViewModel.leaderboardEntries[0].name))
-                },
-                shape = RoundedCornerShape(5.dp),
+            Suspended(
+                isLoading = rankingViewModel.isLoading
             ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                ) {
-                    Text(text = "1. ${rankingViewModel.leaderboardEntries[0].name}")
-
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween,
+                if (rankingViewModel.hasLoaded) {
+                    Button(
+                        onClick = {
+                            navigator.navigate(ProfileDestination(rankingViewModel.leaderboardEntries[0].username))
+                        },
+                        shape = RoundedCornerShape(5.dp),
                     ) {
-                        Text(text = "${rankingViewModel.leaderboardEntries[0].xp} XP")
-                        Spacer(modifier = Modifier.width(4.dp))
-                        Icon(imageVector = Icons.Filled.Star, contentDescription = null)
-                    }
-                }
-            }
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                        ) {
+                            Text(text = "1. ${rankingViewModel.leaderboardEntries[0].name}")
 
-            Spacer(modifier = Modifier.height(8.dp))
-
-            if (!rankingViewModel.isLoading) {
-                SpacedColumn(
-                    spacing = 8,
-                    verticalAlignment = Alignment.Top,
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.padding(horizontal = 16.dp)
-                ) {
-                    rankingViewModel.leaderboardEntries.forEachIndexed { index, e ->
-                        if (index != 0) {
-                            OutlinedButton(
-                                onClick = {
-                                    navigator.navigate(ProfileDestination(e.name))
-                                },
-                                shape = RoundedCornerShape(5.dp),
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceBetween,
                             ) {
-                                Row(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                Text(text = "${rankingViewModel.leaderboardEntries[0].xp} XP")
+                                Spacer(modifier = Modifier.width(4.dp))
+                                Icon(imageVector = Icons.Filled.Star, contentDescription = null)
+                            }
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    SpacedColumn(
+                        spacing = 8,
+                        verticalAlignment = Alignment.Top,
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier.padding(horizontal = 16.dp)
+                    ) {
+                        rankingViewModel.leaderboardEntries.forEachIndexed { index, e ->
+                            if (index != 0) {
+                                OutlinedButton(
+                                    onClick = {
+                                        navigator.navigate(ProfileDestination(e.username))
+                                    },
+                                    shape = RoundedCornerShape(5.dp),
                                 ) {
-                                    Text(text = "${index + 1}. ${e.name}")
-                                    Text(text = "${e.xp} XP")
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.SpaceBetween,
+                                    ) {
+                                        Text(text = "${index + 1}. ${e.name}")
+                                        Text(text = "${e.xp} XP")
+                                    }
                                 }
                             }
                         }
                     }
                 }
+
+
             }
         }
     }
