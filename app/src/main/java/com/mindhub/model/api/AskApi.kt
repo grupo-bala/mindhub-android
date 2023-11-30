@@ -105,7 +105,7 @@ object AskApi: AskProvider {
     }
 
     override suspend fun get(askTitle: String): List<Ask> {
-        val response: HttpResponse = Api.get("${BuildConfig.apiPrefix}/ask/$askTitle") {
+        val response: HttpResponse = Api.get("${BuildConfig.apiPrefix}/ask/search/$askTitle") {
             header("Authorization", "Bearer ${CurrentUser.token}")
         }
 
