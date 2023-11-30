@@ -1,72 +1,44 @@
 package com.mindhub.model.api
 
+import com.mindhub.BuildConfig
 import com.mindhub.common.services.CurrentUser
-import com.mindhub.model.entities.Badge
-import com.mindhub.model.entities.Expertise
 import com.mindhub.model.entities.LeaderboardEntry
-import com.mindhub.model.entities.User
+import io.ktor.client.call.body
+import io.ktor.client.request.get
+import io.ktor.client.request.header
+import io.ktor.client.statement.HttpResponse
+import io.ktor.client.statement.bodyAsText
+import io.ktor.http.HttpStatusCode
 
 interface RankingProvider {
     suspend fun getUserPosition(): Int
     suspend fun getLeaderboard(): List<LeaderboardEntry>
 }
 
-object RankingFakeApi: RankingProvider {
-    private val users = mutableListOf<User>().also {
-        it.add(
-            User(
-                name = "Administrador",
-                email = "admin@admin.com",
-                username = "admin",
-                xp = 0,
-                currentBadge = Badge("Aprendiz", 0),
-                badges = listOf(),
-                expertises = listOf(
-                    Expertise("Matemática"),
-                    Expertise("Física"),
-                    Expertise("Inglês")
-                )
-            )
-        )
-
-        it.add(
-            User(
-                name = "Ana Maria",
-                email = "ana@gmail.com",
-                username = "anamaria",
-                xp = 100,
-                currentBadge = Badge("Aprendiz", 0),
-                badges = listOf(),
-                expertises = listOf(
-                    Expertise("Geografia"),
-                    Expertise("Física"),
-                    Expertise("Inglês")
-                )
-            )
-        )
-    }
-
+object RankingApi : RankingProvider {
     override suspend fun getUserPosition(): Int {
-        users.sortByDescending { it.xp }
-
-        users.forEachIndexed { index, e ->
-            if (CurrentUser.user!!.username == e.username) {
-                return index + 1
-            }
+        val response: HttpResponse = Api.get("${BuildConfig.apiPrefix}/ranking/rank/${CurrentUser.user!!.username}") {
+            header("Authorization", "Bearer ${CurrentUser.token}")
         }
 
-        return -1
+        if (response.status != HttpStatusCode.OK) {
+            println(response.body<ApiError>().message)
+            throw Exception(response.body<ApiError>().message)
+        }
+
+        return response.body()
     }
 
     override suspend fun getLeaderboard(): List<LeaderboardEntry> {
-        users.sortByDescending { it.xp }
-
-        val leaderboardEntries = mutableListOf<LeaderboardEntry>()
-
-        for (user in  users) {
-            leaderboardEntries.add(LeaderboardEntry(user.username, user.xp))
+        val response: HttpResponse = Api.get("${BuildConfig.apiPrefix}/ranking") {
+            header("Authorization", "Bearer ${CurrentUser.token}")
         }
 
-        return leaderboardEntries
+        if (response.status != HttpStatusCode.OK) {
+            println(response.body<ApiError>().message)
+            throw Exception(response.body<ApiError>().message)
+        }
+
+        return response.body()
     }
 }
