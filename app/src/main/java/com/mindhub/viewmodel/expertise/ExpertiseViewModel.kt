@@ -16,7 +16,7 @@ class ExpertiseViewModel() : ViewModel() {
 
     fun loadExpertises() {
         if (!isExpertisesLoaded) {
-            selectedExpertises.addAll(CurrentUser.user!!.expertises)
+            selectedExpertises.addAll(CurrentUser.user?.expertises ?: listOf())
 
             viewModelScope.launch {
                 try {

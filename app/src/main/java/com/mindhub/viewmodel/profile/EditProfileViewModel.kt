@@ -51,7 +51,7 @@ class EditProfileViewModel() : ViewModel() {
             null
         } else {
             val stream = ByteArrayOutputStream()
-            bitmap.compress(Bitmap.CompressFormat.PNG, 90, stream)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 75, stream)
             stream.toByteArray()
         }
     }
