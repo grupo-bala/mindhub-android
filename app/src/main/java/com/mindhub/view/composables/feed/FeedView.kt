@@ -30,7 +30,6 @@ fun FeedView(
     onClickAdd: () -> Unit
 ) {
     LaunchedEffect(key1 = true) {
-        println("DENTROOOOOO")
         viewModel.getRecents()
         viewModel.getForYou()
     }
