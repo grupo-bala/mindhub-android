@@ -1,5 +1,6 @@
 package com.mindhub.view.composables.post
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -26,6 +27,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -42,6 +44,8 @@ fun PostUpdate(
     onSuccess: () -> Unit,
     extraFields: @Composable () -> Unit = {}
 ) {
+    val context = LocalContext.current
+
     var isRemoveModalOpen by remember {
         mutableStateOf(false)
     }
@@ -65,9 +69,13 @@ fun PostUpdate(
                 actions = {
                     Button(onClick = {
                             viewModel.update(
-                                onSuccess = onSuccess,
+                                onSuccess = {
+                                    onSuccess()
+                                    Toast.makeText(context, "Postagem editada", Toast.LENGTH_SHORT).show()
+                                },
                                 onFailure = {
                                     viewModel.feedback = it
+                                    Toast.makeText(context, "Algo deu errado", Toast.LENGTH_SHORT).show()
                                 },
                                 postId = postId
                             )
@@ -121,9 +129,11 @@ fun PostUpdate(
                                 onSuccess = {
                                     navigator.popBackStack()
                                     navigator.popBackStack()
+                                    Toast.makeText(context, "Postagem removida", Toast.LENGTH_SHORT).show()
                                 },
                                 onFailure = {
                                     viewModel.feedback = it
+                                    Toast.makeText(context, "Algo deu errado", Toast.LENGTH_SHORT).show()
                                 }
                             )
                             isRemoveModalOpen = false

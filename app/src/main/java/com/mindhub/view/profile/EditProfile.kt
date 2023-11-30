@@ -3,6 +3,7 @@ package com.mindhub.view.profile
 import android.graphics.ImageDecoder
 import android.os.Build
 import android.provider.MediaStore
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -327,6 +328,8 @@ fun EditProfile(
                             CurrentUser.user!!.expertises = expertiseViewModel.selectedExpertises
 
                             navigator.popBackStack()
+
+                            Toast.makeText(context, "Dados alterados", Toast.LENGTH_SHORT).show()
                         },
                     )
                 },

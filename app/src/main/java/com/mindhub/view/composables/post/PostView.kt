@@ -1,6 +1,7 @@
 package com.mindhub.view.composables.post
 
 import androidx.compose.foundation.Image
+import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -22,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -51,6 +53,8 @@ fun PostView(
     viewModel: GetPostViewModel,
     navigator: DestinationsNavigator
 ) {
+    val context = LocalContext.current
+
     val handleCommentCreationViewModel: HandleCommentCreationViewModel = viewModel()
     val commentViewModel: CommentViewModel = viewModel()
 
@@ -122,9 +126,17 @@ fun PostView(
                             postId = postId,
                             onRemove = { commentId, replyTo ->
                                 handleRemove = {
-                                    commentViewModel.removeComment(commentId, replyTo) {
-                                        isErrorModalToggle = true
-                                    }
+                                    commentViewModel.removeComment(
+                                        commentId,
+                                        replyTo,
+                                        onFailure = {
+                                            isErrorModalToggle = true
+                                            Toast.makeText(context, "Algo deu errado", Toast.LENGTH_SHORT).show()
+                                        },
+                                        onSucces = {
+                                            Toast.makeText(context, "Comentário removido", Toast.LENGTH_SHORT).show()
+                                        }
+                                    )
                                 }
 
                                 isRemoveModalToggle = true
@@ -184,10 +196,14 @@ fun PostView(
                             }
 
                             handleCommentCreationViewModel.clear()
+
+                            Toast.makeText(context, "Comentário adicionado", Toast.LENGTH_SHORT).show()
                         },
                         onDismissRequest = {
                             isCreateCommentMenuExpanded = false
                             commentIdToReply = null
+
+                            Toast.makeText(context, "Algo deu errado", Toast.LENGTH_SHORT).show()
                         },
                     )
                 }
@@ -210,11 +226,15 @@ fun PostView(
                             commentToUpdate = null
 
                             handleCommentCreationViewModel.clear()
+
+                            Toast.makeText(context, "Comentário alterado", Toast.LENGTH_SHORT).show()
                         },
                         onDismissRequest = {
                             isUpdateCommentMenuExpanded = false
                             commentToUpdate = null
                             handleCommentCreationViewModel.clear()
+
+                            Toast.makeText(context, "Algo deu errado", Toast.LENGTH_SHORT).show()
                         }
                     )
                 }

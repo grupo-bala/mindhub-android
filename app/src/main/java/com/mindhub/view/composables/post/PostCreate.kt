@@ -1,5 +1,6 @@
 package com.mindhub.view.composables.post
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -20,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -35,6 +37,8 @@ fun PostCreate(
     onSuccess: (Post) -> Unit,
     extraFields: @Composable () -> Unit = {}
 ) {
+    val context = LocalContext.current
+
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -57,9 +61,11 @@ fun PostCreate(
                                 onSuccess = {
                                     navigator.popBackStack()
                                     onSuccess(it)
+                                    Toast.makeText(context, "Postagem criada", Toast.LENGTH_SHORT).show()
                                 },
                                 onFailure = {
                                     viewModel.feedback = it
+                                    Toast.makeText(context, "Algo deu errado", Toast.LENGTH_SHORT).show()
                                 }
                             )
                         },
