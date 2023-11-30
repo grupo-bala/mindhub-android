@@ -3,6 +3,7 @@ package com.mindhub.view.ask
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import com.mindhub.BuildConfig
 import com.mindhub.common.services.CurrentUser
 import com.mindhub.model.entities.Ask
 import com.mindhub.model.entities.Badge
@@ -26,7 +27,7 @@ fun AskUpdate(
     viewModel.title = ask.title
     viewModel.content = ask.content
     viewModel.expertise = ask.expertise
-    viewModel.image = ask.image
+    viewModel.hasImage = ask.hasImage
 
     PostUpdate(
         navigator = navigator,
@@ -34,7 +35,13 @@ fun AskUpdate(
         postId = ask.id,
         onSuccess = { navigator.popBackStack() }
     ) {
-        ImageInput { viewModel.tempImage = it }
+        var url: String? = null
+
+        if (viewModel.hasImage) {
+            url = "${BuildConfig.apiPrefix}/static/ask/${ask.id}"
+        }
+
+        ImageInput(urlImage = url) { viewModel.tempImage = it }
     }
 }
 
@@ -60,6 +67,7 @@ fun AskUpdatePreview() {
         postDate = LocalDateTime.now(),
         score = 0,
         userScore = 0,
+        hasImage = false
     )
 
     MaterialTheme {
