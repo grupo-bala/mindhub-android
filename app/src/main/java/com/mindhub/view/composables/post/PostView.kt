@@ -24,6 +24,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -168,6 +170,9 @@ fun PostView(
                         modifier = Modifier
                             .padding(16.dp)
                             .align(Alignment.BottomEnd)
+                            .semantics {
+                                contentDescription = "AddCommentButton"
+                            }
                     ) {
                         Image(imageVector = ImageVector
                             .vectorResource(R.drawable.baseline_add_comment_24),
