@@ -77,8 +77,8 @@ fun Profile(
     AppScaffold(
         currentView = Views.USER,
         navigator = navigator,
-        hasLogout = username == null,
-        hasBackArrow = username != null,
+        hasLogout = username == null || username == CurrentUser.user!!.username,
+        hasBackArrow = username != null && username != CurrentUser.user!!.username,
     ) {
         Box(
             modifier = Modifier.fillMaxSize()
@@ -127,7 +127,7 @@ fun Profile(
                                 ) {
                                     Text(text = profileViewModel.name)
 
-                                    if (username == null) {
+                                    if (username == null || username == CurrentUser.user!!.username) {
                                         IconButton(
                                             onClick = { navigator.navigate(EditProfileDestination) },
                                             modifier = Modifier
