@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.mindhub.BuildConfig
 import com.mindhub.common.services.CurrentUser
 import com.mindhub.model.entities.Badge
 import com.mindhub.model.entities.Expertise
@@ -89,7 +90,9 @@ fun Profile(
                 ) {
                     AsyncImage(
                         model = ImageRequest.Builder(LocalContext.current)
-                            .data(CurrentUser.user!!.profilePicture ?: "https://picsum.photos/200")
+                            .data(
+                                "${BuildConfig.apiPrefix}/static/user/${CurrentUser.user!!.username}"
+                            )
                             .crossfade(true)
                             .build(),
                         contentDescription = null,

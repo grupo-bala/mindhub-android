@@ -1,8 +1,12 @@
 package com.mindhub.view.profile
 
+import android.graphics.ImageDecoder
+import android.os.Build
+import android.provider.MediaStore
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.launch
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
@@ -16,7 +20,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Create
@@ -43,17 +49,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.mindhub.BuildConfig
 import com.mindhub.model.entities.Badge
 import com.mindhub.model.entities.Expertise
 import com.mindhub.model.entities.User
 import com.mindhub.common.services.CurrentUser
 import com.mindhub.ui.theme.MindHubTheme
 import com.mindhub.view.composables.Suspended
+import com.mindhub.view.composables.image.ImageChoicePickerModal
+import com.mindhub.view.composables.image.ImageInput
 import com.mindhub.view.layouts.AppScaffold
 import com.mindhub.view.layouts.SpacedColumn
 import com.mindhub.view.layouts.Views
@@ -73,6 +83,7 @@ fun EditProfile(
     val editProfileViewModel: EditProfileViewModel = viewModel()
     val expertiseViewModel: ExpertiseViewModel = viewModel()
     val badgeViewModel: BadgeViewModel = viewModel()
+    val context = LocalContext.current
 
     var isBadgesMenuExpanded by remember {
         mutableStateOf(false)
@@ -80,13 +91,10 @@ fun EditProfile(
     var isExpertisesMenuExpanded by remember {
         mutableStateOf(false)
     }
-
-    val photoPickerLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.PickVisualMedia(),
-        onResult = {
-            editProfileViewModel.photo = it
-        }
-    )
+    
+    var isImagePickerModalOpen by remember {
+        mutableStateOf(false)
+    }
 
     val badgesMenuInteraction = remember { MutableInteractionSource() }.also {
         if (it.collectIsPressedAsState().value) {
@@ -98,6 +106,25 @@ fun EditProfile(
             isExpertisesMenuExpanded = true
         }
     }
+
+    val galleryLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia(),
+        onResult = {
+            editProfileViewModel.photo = if (Build.VERSION.SDK_INT < 28) {
+                MediaStore.Images.Media.getBitmap(context.contentResolver, it)
+            } else {
+                val source = ImageDecoder.createSource(context.contentResolver, it!!)
+                ImageDecoder.decodeBitmap(source)
+            }
+        }
+    )
+
+    val cameraLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.TakePicturePreview(),
+        onResult = {
+            editProfileViewModel.photo = it
+        }
+    )
 
     expertiseViewModel.loadExpertises()
     badgeViewModel.loadBadges()
@@ -114,18 +141,14 @@ fun EditProfile(
             modifier = Modifier
                 .fillMaxHeight()
                 .padding(32.dp)
+                .verticalScroll(rememberScrollState())
         ) {
             Box {
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
                         .data(
-                            if (editProfileViewModel.photo != null) {
-                                editProfileViewModel.photo
-                            } else if (CurrentUser.user!!.profilePicture == null) {
-                                "https://picsum.photos/200"
-                            } else {
-                                CurrentUser.user!!.profilePicture
-                            }
+                            editProfileViewModel.photo
+                                ?: "${BuildConfig.apiPrefix}/static/user/${CurrentUser.user!!.username}"
                         )
                         .crossfade(true)
                         .build(),
@@ -143,9 +166,7 @@ fun EditProfile(
                             containerColor = MaterialTheme.colorScheme.primaryContainer
                         ),
                     onClick = {
-                        photoPickerLauncher.launch(
-                            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
-                        )
+                        isImagePickerModalOpen = true
                     },
                     modifier = Modifier
                         .align(alignment = Alignment.BottomEnd)
@@ -172,6 +193,17 @@ fun EditProfile(
                 label = { Text(text = "Email") },
                 placeholder = { Text(text = "Digite o seu email") },
                 onValueChange = { editProfileViewModel.email = it },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            OutlinedTextField(
+                value = editProfileViewModel.password,
+                label = { Text(text = "Senha") },
+                placeholder = { Text(text = "Digite o sua nova senha") },
+                onValueChange = { editProfileViewModel.password = it },
+                visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -229,7 +261,12 @@ fun EditProfile(
                 readOnly = true,
                 label = { Text(text = "Expertises") },
                 onValueChange = {},
-                trailingIcon = { Icon(imageVector = Icons.Default.Create, contentDescription = null) },
+                trailingIcon = {
+                    Icon(
+                        imageVector = Icons.Default.Create,
+                        contentDescription = null
+                    )
+                },
                 interactionSource = expertisesMenuInteraction,
                 modifier = Modifier.fillMaxWidth()
             )
@@ -272,6 +309,8 @@ fun EditProfile(
                 }
             }
 
+            Text(text = editProfileViewModel.feedback)
+
             Spacer(modifier = Modifier.height(32.dp))
 
             Button(
@@ -280,11 +319,13 @@ fun EditProfile(
                         badgeViewModel.selectedBadge,
                         expertiseViewModel.selectedExpertises,
                         onSuccess = {
+                            CurrentUser.user!!.name = editProfileViewModel.name
+                            CurrentUser.user!!.email = editProfileViewModel.email
+                            CurrentUser.user!!.currentBadge = badgeViewModel.selectedBadge
+                            CurrentUser.user!!.expertises = expertiseViewModel.selectedExpertises
+
                             navigator.popBackStack()
                         },
-                        onFailure = {
-                            TODO("No errors are defined in the fake api")
-                        }
                     )
                 },
                 modifier = Modifier.fillMaxWidth()
@@ -297,6 +338,14 @@ fun EditProfile(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(text = "Cancelar")
+            }
+
+            if (isImagePickerModalOpen) {
+                ImageChoicePickerModal(
+                    galleryLauncher = { galleryLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) },
+                    cameraLauncher = { cameraLauncher.launch() },
+                    modalController = { isImagePickerModalOpen = it }
+                )
             }
         }
     }
