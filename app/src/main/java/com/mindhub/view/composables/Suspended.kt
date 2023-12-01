@@ -24,7 +24,7 @@ fun Suspended(
 ) {
     if (isLoading) {
         Row(
-            modifier = Modifier.fillMaxWidth().fillMaxHeight(),
+            modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
