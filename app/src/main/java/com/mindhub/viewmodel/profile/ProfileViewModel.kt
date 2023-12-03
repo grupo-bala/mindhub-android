@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mindhub.common.services.CurrentUser
 import com.mindhub.common.services.ErrorParser
 import com.mindhub.model.api.AskApi
 import com.mindhub.model.api.EventApi
@@ -41,6 +42,10 @@ class ProfileViewModel(): ViewModel() {
             try {
                 val user = ProfileApi.getUserInformation(usernameToLoad)
 
+                if (user.username == CurrentUser.user!!.username) {
+                    CurrentUser.user!!.badges = user.badges
+                }
+
                 username = user.username
                 name = user.name
                 badge = user.currentBadge
@@ -57,8 +62,6 @@ class ProfileViewModel(): ViewModel() {
                 for (post in EventApi.getUserEvents(username)) {
                     eventsPosts.add(post)
                 }
-
-                println(eventsPosts)
 
                 for (expertise in user.expertises) {
                     expertises.add(expertise)
