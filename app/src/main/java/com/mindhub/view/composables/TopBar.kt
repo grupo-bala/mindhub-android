@@ -17,16 +17,20 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.mindhub.common.services.StoreData
 import com.mindhub.ui.theme.MindHubTheme
 import com.mindhub.view.NavGraphs
 import com.mindhub.view.destinations.LoginDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -35,6 +39,10 @@ fun TopBar(
     hasBackArrow: Boolean = false,
     hasLogout: Boolean = false,
 ) {
+
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+
     Column {
         CenterAlignedTopAppBar(
             title = {
@@ -54,8 +62,12 @@ fun TopBar(
             actions = if (hasLogout) {
                 {
                     IconButton(onClick = {
-                        navigator.popBackStack(NavGraphs.root, false, false)
-                        navigator.navigate(LoginDestination)
+                        scope.launch {
+                            val storeData = StoreData(context)
+                            storeData.saveData("", "")
+                            navigator.popBackStack(NavGraphs.root, false, false)
+                            navigator.navigate(LoginDestination)
+                        }
                     }) {
                         Icon(imageVector = Icons.Filled.ExitToApp, contentDescription = null)
                     }

@@ -79,6 +79,8 @@ dependencies {
     implementation("org.slf4j:slf4j-simple:1.7.25")
 
     implementation("com.google.accompanist:accompanist-permissions:0.33.2-alpha")
+    implementation("androidx.biometric:biometric:1.2.0-alpha05")
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
 
     implementation("io.github.raamcosta.compose-destinations:animations-core:1.9.53")
     ksp("io.github.raamcosta.compose-destinations:ksp:1.9.53")
