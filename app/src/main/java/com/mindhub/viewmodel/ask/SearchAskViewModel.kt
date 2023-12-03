@@ -31,22 +31,23 @@ class SearchAskViewModel : ViewModel() {
 
     init {
         viewModelScope.launch {
-            try {
-                inputText.debounce(500).collectLatest {
-                    if (it.isNotEmpty()) {
-                        isLoading = true
-                        isFirstSearch = false
+            inputText.debounce(500).collectLatest {
+                if (it.isNotEmpty()) {
+                    isLoading = true
+                    isFirstSearch = false
 
+                    try {
                         val result = AskApi.get(it)
-
                         asks.clear()
                         asks.addAll(result)
-
-                        isLoading = false
+                    } catch (e: Exception) {
+                        e.printStackTrace()
                     }
+
+                    isLoading = false
+                } else {
+                    asks.clear()
                 }
-            } catch (e: Exception) {
-                e.printStackTrace()
             }
         }
     }
