@@ -129,7 +129,6 @@ fun EditProfile(
     )
 
     expertiseViewModel.loadExpertises()
-    badgeViewModel.loadBadges()
 
     AppScaffold(
         currentView = Views.USER,
