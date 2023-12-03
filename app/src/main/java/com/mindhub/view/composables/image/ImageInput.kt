@@ -61,13 +61,15 @@ fun ImageInput(
     val galleryLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
         onResult = {
-            image = if (Build.VERSION.SDK_INT < 28) {
-                MediaStore.Images.Media.getBitmap(context.contentResolver, it)
-            } else {
-                val source = ImageDecoder.createSource(context.contentResolver, it!!)
-                ImageDecoder.decodeBitmap(source)
+            if (it != null) {
+                image = if (Build.VERSION.SDK_INT < 28) {
+                    MediaStore.Images.Media.getBitmap(context.contentResolver, it)
+                } else {
+                    val source = ImageDecoder.createSource(context.contentResolver, it!!)
+                    ImageDecoder.decodeBitmap(source)
+                }
+                setImage(image)
             }
-            setImage(image)
         }
     )
 

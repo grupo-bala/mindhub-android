@@ -112,11 +112,13 @@ fun EditProfile(
     val galleryLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
         onResult = {
-            editProfileViewModel.photo = if (Build.VERSION.SDK_INT < 28) {
-                MediaStore.Images.Media.getBitmap(context.contentResolver, it)
-            } else {
-                val source = ImageDecoder.createSource(context.contentResolver, it!!)
-                ImageDecoder.decodeBitmap(source)
+            if (it != null) {
+                editProfileViewModel.photo = if (Build.VERSION.SDK_INT < 28) {
+                    MediaStore.Images.Media.getBitmap(context.contentResolver, it)
+                } else {
+                    val source = ImageDecoder.createSource(context.contentResolver, it)
+                    ImageDecoder.decodeBitmap(source)
+                }
             }
         }
     )
