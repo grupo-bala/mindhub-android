@@ -32,7 +32,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mindhub.R
 import com.mindhub.common.services.CurrentUser
 import com.mindhub.ui.theme.MindHubTheme
-import com.mindhub.view.composables.ErrorModal
 import com.mindhub.view.composables.RemoveConfirmationModal
 import com.mindhub.view.composables.Suspended
 import com.mindhub.view.composables.comment.CommentsView
@@ -69,10 +68,6 @@ fun PostView(
     }
 
     var isRemoveModalToggle by remember {
-        mutableStateOf(false)
-    }
-
-    var isErrorModalToggle by remember {
         mutableStateOf(false)
     }
 
@@ -121,8 +116,11 @@ fun PostView(
                         CommentsView(
                             getCommentViewModel = commentViewModel,
                             onScoreUpdate = { commentId, score ->
-                                commentViewModel.updateScore(commentId, score) {
-                                    isErrorModalToggle = true
+                                commentViewModel.updateScore(
+                                    commentId,
+                                    score,
+                                ) {
+                                    Toast.makeText(context, "Algo deu errado", Toast.LENGTH_SHORT).show()
                                 }
                             },
                             postId = postId,
@@ -132,12 +130,8 @@ fun PostView(
                                         commentId,
                                         replyTo,
                                         onFailure = {
-                                            isErrorModalToggle = true
                                             Toast.makeText(context, "Algo deu errado", Toast.LENGTH_SHORT).show()
                                         },
-                                        onSucces = {
-                                            Toast.makeText(context, "Comentário removido", Toast.LENGTH_SHORT).show()
-                                        }
                                     )
                                 }
 
@@ -159,7 +153,7 @@ fun PostView(
                                 navigator.navigate(ProfileDestination(it))
                             },
                         ) {
-                            isErrorModalToggle = true
+                            Toast.makeText(context, "Algo deu errado", Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
@@ -190,25 +184,24 @@ fun PostView(
 
                             if (commentIdToReply != null) {
                                 commentViewModel.addReply(postId, commentIdToReply!!, handleCommentCreationViewModel.commentText) {
-                                    isErrorModalToggle = true
+                                    Toast.makeText(context, "Algo deu errado", Toast.LENGTH_SHORT).show()
                                 }
 
                                 commentIdToReply = null
                             } else {
-                                commentViewModel.addComment(postId, handleCommentCreationViewModel.commentText) {
-                                    isErrorModalToggle = true
+                                commentViewModel.addComment(
+                                    postId,
+                                    handleCommentCreationViewModel.commentText,
+                                ) {
+                                    Toast.makeText(context, "Algo deu errado", Toast.LENGTH_SHORT).show()
                                 }
                             }
 
                             handleCommentCreationViewModel.clear()
-
-                            Toast.makeText(context, "Comentário adicionado", Toast.LENGTH_SHORT).show()
                         },
                         onDismissRequest = {
                             isCreateCommentMenuExpanded = false
                             commentIdToReply = null
-
-                            Toast.makeText(context, "Algo deu errado", Toast.LENGTH_SHORT).show()
                         },
                     )
                 }
@@ -225,7 +218,7 @@ fun PostView(
                                 commentToUpdate!!.second,
                                 handleCommentCreationViewModel.commentText
                             ) {
-                                isErrorModalToggle = true
+                                Toast.makeText(context, "Algo deu errado", Toast.LENGTH_SHORT).show()
                             }
 
                             commentToUpdate = null
@@ -238,8 +231,6 @@ fun PostView(
                             isUpdateCommentMenuExpanded = false
                             commentToUpdate = null
                             handleCommentCreationViewModel.clear()
-
-                            Toast.makeText(context, "Algo deu errado", Toast.LENGTH_SHORT).show()
                         }
                     )
                 }
@@ -254,16 +245,6 @@ fun PostView(
                         onDismissRequest = {
                             handleRemove = {}
                             isRemoveModalToggle = false
-                        }
-                    )
-                }
-
-                if (isErrorModalToggle) {
-                    ErrorModal(
-                        text = commentViewModel.feedback,
-                        onConfirmation = {
-                            isErrorModalToggle = false
-                            commentViewModel.feedback = ""
                         }
                     )
                 }

@@ -125,7 +125,7 @@ class CommentViewModel : ViewModel() {
         }
     }
 
-    fun removeComment(commentId: Int, replyTo: Int?, onFailure: () -> Unit, onSucces: () -> Unit = {}) {
+    fun removeComment(commentId: Int, replyTo: Int?, onFailure: () -> Unit) {
         viewModelScope.launch {
             try {
                 feedback = ""
@@ -144,8 +144,6 @@ class CommentViewModel : ViewModel() {
                 } else {
                     comments.removeIf { it.id == commentId }
                 }
-
-                onSucces()
             } catch (e: Exception) {
                 feedback = ErrorParser.from(e.message)
 
