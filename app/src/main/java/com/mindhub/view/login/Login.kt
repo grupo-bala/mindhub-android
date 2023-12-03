@@ -54,6 +54,9 @@ import com.mindhub.viewmodel.login.LoginViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Destination(start = true)
@@ -63,6 +66,7 @@ fun Login(
 ) {
     val viewModel: LoginViewModel = viewModel()
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
 
     val executor = remember {
         ContextCompat.getMainExecutor(context)
@@ -101,14 +105,15 @@ fun Login(
         .build()
 
     LaunchedEffect(key1 = true) {
-        val storeData = StoreData(context)
-        storeData.getToken.collect {
-            if (!it.isNullOrEmpty()) {
-                biometricPrompt.authenticate(promptInfo)
+        scope.launch {
+            val storeData = StoreData(context)
+            storeData.getToken.collect {
+                if (!it.isNullOrEmpty()) {
+                    biometricPrompt.authenticate(promptInfo)
+                }
             }
         }
     }
-
 
     Surface(
         modifier = Modifier
@@ -164,6 +169,7 @@ fun Login(
 
             Button(
                 onClick = {
+                    scope.cancel()
                     viewModel.login(
                         context = context,
                         onSuccess = {
