@@ -4,6 +4,7 @@ import com.mindhub.BuildConfig
 import com.mindhub.model.entities.Expertise
 import com.mindhub.common.services.CurrentUser
 import com.mindhub.common.services.UserInfo
+import com.mindhub.model.entities.Badge
 import io.ktor.client.call.body
 import io.ktor.client.request.headers
 import io.ktor.client.request.patch
@@ -36,6 +37,7 @@ data class UpdateInfoRequest(
     val email: String,
     val password: String,
     val expertises: List<Expertise>,
+    val badge: Badge,
 )
 
 interface UserProvider {
