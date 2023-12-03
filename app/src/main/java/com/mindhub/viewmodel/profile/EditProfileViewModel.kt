@@ -15,7 +15,7 @@ import com.mindhub.model.api.UserApi
 import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
 
-class EditProfileViewModel() : ViewModel() {
+class EditProfileViewModel : ViewModel() {
     var name by mutableStateOf(CurrentUser.user!!.name)
     var email by mutableStateOf(CurrentUser.user!!.email)
     var password by mutableStateOf("")
@@ -34,7 +34,8 @@ class EditProfileViewModel() : ViewModel() {
                         name,
                         email,
                         password,
-                        selectedExpertises
+                        selectedExpertises,
+                        selectedBadge,
                     ),
                     bitMapToByteArray(photo)
                 )
