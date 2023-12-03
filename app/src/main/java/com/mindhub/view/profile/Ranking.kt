@@ -8,8 +8,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Button
@@ -32,6 +37,7 @@ import com.mindhub.model.entities.Badge
 import com.mindhub.model.entities.Expertise
 import com.mindhub.model.entities.User
 import com.mindhub.ui.theme.MindHubTheme
+import com.mindhub.view.composables.ScoreEntry
 import com.mindhub.view.composables.Suspended
 import com.mindhub.view.destinations.ProfileDestination
 import com.mindhub.view.layouts.AppScaffold
@@ -95,61 +101,22 @@ fun Ranking(
                 isLoading = rankingViewModel.isLoading
             ) {
                 if (rankingViewModel.hasLoaded) {
-                    Button(
-                        onClick = {
-                            navigator.navigate(ProfileDestination(rankingViewModel.leaderboardEntries[0].username))
-                        },
-                        shape = RoundedCornerShape(5.dp),
-                    ) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                        ) {
-                            Text(text = "1. ${rankingViewModel.leaderboardEntries[0].name}")
-
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                            ) {
-                                Text(text = "${rankingViewModel.leaderboardEntries[0].xp} XP")
-                                Spacer(modifier = Modifier.width(4.dp))
-                                Icon(imageVector = Icons.Filled.Star, contentDescription = null)
-                            }
-                        }
-                    }
-
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    SpacedColumn(
-                        spacing = 8,
-                        verticalAlignment = Alignment.Top,
+                    LazyColumn(
+                        verticalArrangement = Arrangement
+                            .spacedBy(8.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.padding(horizontal = 16.dp)
                     ) {
-                        rankingViewModel.leaderboardEntries.forEachIndexed { index, e ->
-                            if (index != 0) {
-                                OutlinedButton(
-                                    onClick = {
-                                        navigator.navigate(ProfileDestination(e.username))
-                                    },
-                                    shape = RoundedCornerShape(5.dp),
-                                ) {
-                                    Row(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        verticalAlignment = Alignment.CenterVertically,
-                                        horizontalArrangement = Arrangement.SpaceBetween,
-                                    ) {
-                                        Text(text = "${index + 1}. ${e.name}")
-                                        Text(text = "${e.xp} XP")
-                                    }
-                                }
-                            }
+                        itemsIndexed(
+                            rankingViewModel.leaderboardEntries
+                        ) { index, e ->
+                            ScoreEntry(
+                                position = index + 1,
+                                leaderboardEntry = e,
+                                navigator = navigator
+                            )
                         }
                     }
                 }
-
-
             }
         }
     }
