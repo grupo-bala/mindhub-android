@@ -155,8 +155,10 @@ fun Login(
 
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Checkbox(checked = viewModel.rememberMe, onCheckedChange = { viewModel.rememberMe = it })
-                Text(text = "Lembrar acesso")
+                Text(text = "Usar biometria depois")
             }
+
+            Spacer(modifier = Modifier.height(16.dp))
 
             if (viewModel.feedback != "") {
                 Text(
