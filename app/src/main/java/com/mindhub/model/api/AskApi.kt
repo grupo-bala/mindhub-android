@@ -14,7 +14,10 @@ import io.ktor.client.statement.HttpResponse
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
+import java.net.URLEncoder
 
 interface AskProvider {
     suspend fun create(ask: AskRequest, img: ByteArray?): Ask
@@ -105,7 +108,13 @@ object AskApi: AskProvider {
     }
 
     override suspend fun get(askTitle: String): List<Ask> {
-        val response: HttpResponse = Api.get("${BuildConfig.apiPrefix}/ask/search/$askTitle") {
+        var encodedTitle = withContext(Dispatchers.IO) {
+            URLEncoder.encode(askTitle.trim(), "UTF-8")
+        }
+
+        encodedTitle = encodedTitle.replace("+", "%20")
+
+        val response: HttpResponse = Api.get("${BuildConfig.apiPrefix}/ask/search/$encodedTitle") {
             header("Authorization", "Bearer ${CurrentUser.token}")
         }
 
