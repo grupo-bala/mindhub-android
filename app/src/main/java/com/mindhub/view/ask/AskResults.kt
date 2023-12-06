@@ -61,7 +61,7 @@ fun AskResults(
         navigator = navigator,
         bottomAppBar = {
             Column {
-                if (searchViewModel.asks.isEmpty() && !searchViewModel.isFirstSearch) {
+                if (!searchViewModel.isFirstSearch) {
                     Row(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically,
